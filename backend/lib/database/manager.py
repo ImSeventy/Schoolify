@@ -1,10 +1,15 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from databases import Database
 from sqlalchemy import create_engine, MetaData
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
-from models.admins_models import Admin, AdminEdit, AdminIn, AdminOut
-from models.majors_models import MajorEdit, MajorIn, MajorOut
+
+if TYPE_CHECKING:
+    from models.admins_models import Admin, AdminEdit, AdminIn, AdminOut
+    from models.majors_models import MajorEdit, MajorIn, MajorOut
+    from models.students_models import Student, StudentIn
 
 
 class DataBaseManager(metaclass=Singleton):
@@ -64,5 +69,25 @@ class DataBaseManager(metaclass=Singleton):
 
     async def update_admin(self, id: int, **fields) -> None:
         query = self.models_manager.admins.update().where(self.models_manager.admins.c.id == id).values(**fields)
+        return await self.db.execute(query)
+
+    async def get_student(self, id_or_email: str | int) -> Student | None:
+        if isinstance(id_or_email, int):
+            query = "SELECT *, (SELECT name from majors WHERE majors.id = students.major_id) as major_name FROM students where students.id = :id_or_email"
+        else:
+            query = "SELECT *, (SELECT name from majors WHERE majors.id = students.major_id) as major_name FROM students where students.email = :id_or_email"
+
+        return await self.db.fetch_one(query, values={"id_or_email": id_or_email})
+
+    async def get_major_students(self, id: int) -> list[Student]:
+        query = self.models_manager.students.select().where(self.models_manager.students.c.major_id == id)
+        return await self.db.fetch_all(query)
+
+    async def create_studnet(self, student: StudentIn) -> int:
+        query = self.models_manager.students.insert().values(**student.dict())
+        return await self.db.execute(query)
+
+    async def update_student(self, id: int, **fields) -> None:
+        query = self.models_manager.students.update().where(self.models_manager.students.c.id == id).values(**fields)
         return await self.db.execute(query)
 

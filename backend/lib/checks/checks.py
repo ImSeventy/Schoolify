@@ -7,3 +7,7 @@ async def major_exists(id_or_name: int | str) -> bool:
 async def admin_exists(id_or_email: int | str) -> bool:
     admin = await DataBaseManager().get_admin(id_or_email)
     return True if admin else False
+
+async def student_exists(id_or_email: int | str) -> bool:
+    student = await DataBaseManager().get_student(id_or_email)
+    return True if student else False

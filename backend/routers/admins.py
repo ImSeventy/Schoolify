@@ -52,7 +52,7 @@ async def reset_password(id: int, passwords_scheme: AdminResetPassword):
     if admin is None:
         raise AdminNotFound()
 
-    if not Authentication.verify_password(passwords_scheme.old_password, admin.password):
+    if not Authentication().verify_password(passwords_scheme.old_password, admin.password):
         raise WrongPassowrd()
 
     await DataBaseManager().update_admin(id, password=passwords_scheme.new_password)
