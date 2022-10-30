@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, MetaData
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
+from models.admins_models import Admin, AdminEdit, AdminIn, AdminOut
 from models.majors_models import MajorEdit, MajorIn, MajorOut
 
 
@@ -44,3 +45,24 @@ class DataBaseManager(metaclass=Singleton):
     async def query_majors(self) -> list[MajorOut]:
         query = self.models_manager.majors.select()
         return await self.db.fetch_all(query)
+
+    async def create_admin(self, admin: AdminIn) -> int:
+        query = self.models_manager.admins.insert().values(**admin.dict())
+        return await self.db.execute(query)
+
+    async def get_admin(self, id_or_email: str | int) -> Admin | None:
+        if isinstance(id_or_email, int):
+            query = self.models_manager.admins.select().where(self.models_manager.admins.c.id == id_or_email)
+        else:
+            query = self.models_manager.admins.select().where(self.models_manager.admins.c.name == id_or_email)
+
+        return await self.db.fetch_one(query)
+
+    async def query_admins(self) -> list[Admin]:
+        query = self.models_manager.admins.select()
+        return await self.db.fetch_all(query)
+
+    async def update_admin(self, id: int, **fields) -> None:
+        query = self.models_manager.admins.update().where(self.models_manager.admins.c.id == id).values(**fields)
+        return await self.db.execute(query)
+

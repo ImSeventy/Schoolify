@@ -2,7 +2,7 @@ from sqlalchemy import MetaData, Table, Column, Integer, Float,String, ForeignKe
 
 
 class DbModelsManager:
-    __slots__ = ("meta_data", "students", "subjects", "grades", "absences", "majors", "admins")
+    __slots__ = ("meta_data", "students", "subjects", "grades", "absences", "majors", "admins", "owners")
     def __init__(self, meta_data: MetaData) -> None:
         self.meta_data = meta_data
         self._create_all_tables()
@@ -14,6 +14,7 @@ class DbModelsManager:
         self._create_grades_table()
         self._create_absences_table()
         self._create_admins_table()
+        self._create_owners_table()
 
     def _create_students_table(self) -> None:
         self.students = Table(
@@ -75,6 +76,16 @@ class DbModelsManager:
             Column("id", Integer, primary_key=True),
             Column("name", String),
             Column("role", String),
+            Column("email", String, unique=True),
+            Column("password", String)
+        )
+
+    def _create_owners_table(self) -> None:
+        self.owners = Table(
+            "owners",
+            self.meta_data,
+            Column("id", Integer, primary_key=True),
+            Column("name", String),
             Column("email", String, unique=True),
             Column("password", String)
         )
