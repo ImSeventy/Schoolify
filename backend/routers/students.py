@@ -3,7 +3,7 @@ from sqlite3 import IntegrityError
 from lib.authentication.authentication import Authentication
 from lib.checks.checks import student_exists
 from lib.database.manager import DataBaseManager
-from lib.exceptions.students import MajorDoesnotExist, StudentNotFound, WrongPassword
+from lib.exceptions.students import EmailAlreadyExists, MajorDoesnotExist, StudentNotFound, WrongPassword
 
 from models.students_models import StudentEdit, StudentIn, StudentOut, StudentResetPassword
 
@@ -12,6 +12,11 @@ students = APIRouter(
     prefix="/students",
     tags=["students"]
 )
+
+
+# @students.get("/class", response_model=list[StudentOut], status_code=status.HTTP_200_OK)
+# async def get_class_students(major_id: int, grade: int):
+#     return await DataBaseManager().query_class_students(major_id, grade)
 
 
 @students.get("/{id}", response_model=StudentOut, status_code=status.HTTP_200_OK)
@@ -37,7 +42,7 @@ async def create_student(student: StudentIn):
     try:
         id = await DataBaseManager().create_studnet(student)
     except IntegrityError:
-        raise MajorDoesnotExist()
+        raise EmailAlreadyExists()
 
 
     return {**student.dict(), "id": id, "major_name": major.name}
@@ -61,4 +66,12 @@ async def reset_password(id: int, passwords_scheme: StudentResetPassword):
         raise WrongPassword()
 
     await DataBaseManager().update_student(id, password=passwords_scheme.new_password)
+
+
+@students.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_student(id: int):
+    if not await student_exists(id):
+        raise StudentNotFound()
+
+    await DataBaseManager().delete_student(id)
 

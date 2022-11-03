@@ -9,6 +9,14 @@ class StudentNotFound(HTTPException):
         )
 
 
+class EmailAlreadyExists(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_409_CONFLICT,
+            "This email is already taken by another student"
+        )
+
+
 class MajorDoesnotExist(HTTPException):
     def __init__(self):
         super().__init__(

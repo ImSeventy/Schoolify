@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, MetaData
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
+from models.subjects_models import Subject, SubjectIn
 
 if TYPE_CHECKING:
     from models.admins_models import Admin, AdminEdit, AdminIn, AdminOut
@@ -83,6 +84,13 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.students.select().where(self.models_manager.students.c.major_id == id)
         return await self.db.fetch_all(query)
 
+    # async def query_class_students(self, major_id: int, grade: int) -> list[Student]:
+    #     query = """
+    #     SELECT * FROM students
+    #     WHERE students.major_id = :major_id,
+    #     """
+    #     return await self.db.fetch_all(query, {"major_id": major_id, "grade": grade})
+
     async def create_studnet(self, student: StudentIn) -> int:
         query = self.models_manager.students.insert().values(**student.dict())
         return await self.db.execute(query)
@@ -90,4 +98,48 @@ class DataBaseManager(metaclass=Singleton):
     async def update_student(self, id: int, **fields) -> None:
         query = self.models_manager.students.update().where(self.models_manager.students.c.id == id).values(**fields)
         return await self.db.execute(query)
+
+    async def delete_student(self, id: int) -> None:
+        query = self.models_manager.students.delete().where(self.models_manager.students.c.id == id)
+        await self.db.execute(query)
+
+    async def create_subject(self, subject: SubjectIn) -> int:
+        query = self.models_manager.subjects.insert().values(**subject.dict())
+        return await self.db.execute(query)
+
+    async def get_subject(self, id: int) -> Subject | None:
+        query = """
+        SELECT *, (SELECT name FROM majors WHERE majors.id = subjects.major_id) as major_name
+        FROM subjects
+        WHERE subjects.id = :id 
+        """
+        return await self.db.fetch_one(query, {"id": id})
+
+    async def get_class_subject(self, major_id: id, grade: int, subject_name: str) -> Subject | None:
+        query = """
+        SELECT * FROM subjects
+        WHERE major_id = :major_id
+        AND grade = :grade
+        AND name = :subject_name
+        """
+        return await self.db.fetch_one(query, {"major_id": major_id, "grade": grade, "subject_name": subject_name})
+
+    async def query_class_subjects(self, major_id: int, grade: int) -> list[Subject]:
+        query = """
+        SELECT subjects.*, majors.name as major_name
+        FROM subjects JOIN majors
+        ON majors.id == subjects.major_id
+        WHERE major_id = :major_id AND grade = :grade
+        """
+        return await self.db.fetch_all(query, {"major_id": major_id, "grade": grade})
+
+    async def update_subject(self, id: int, **values) -> None:
+        query = self.models_manager.subjects.update().where(self.models_manager.subjects.c.id == id).values(**values)
+        return await self.db.execute(query)
+
+    async def delete_subject(self, id: int) -> None:
+        query = self.models_manager.subjects.delete().where(self.models_manager.subjects.c.id == id)
+        return await self.db.execute(query)
+
+    
 
