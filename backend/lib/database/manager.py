@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from models.admins_models import Admin, AdminEdit, AdminIn, AdminOut
     from models.majors_models import MajorEdit, MajorIn, MajorOut
     from models.students_models import Student, StudentIn
+    from models.absences_models import AbsenceIn, AbsenceOut, AbsenceEdit
 
 
 class DataBaseManager(metaclass=Singleton):
@@ -141,5 +142,11 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.subjects.delete().where(self.models_manager.subjects.c.id == id)
         return await self.db.execute(query)
 
-    
+    # async def get_absence_date(self, id: int, date: DateTime) -> None:
+    #     query = """
+    #     SELECT * FROM absences
+    #     WHERE student_id = :student_id
+    #     AND date = :date
+    #     """
+    #     return await self.db.fetch_one(query, {"student_id": id, "date": date})
 

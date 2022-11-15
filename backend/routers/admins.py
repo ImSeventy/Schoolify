@@ -56,7 +56,3 @@ async def reset_password(id: int, passwords_scheme: AdminResetPassword):
         raise WrongPassowrd()
 
     await DataBaseManager().update_admin(id, password=passwords_scheme.new_password)
-
-    
-
-    

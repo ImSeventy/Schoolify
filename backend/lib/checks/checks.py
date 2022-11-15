@@ -20,6 +20,9 @@ async def subject_exists(id: int) -> bool:
     subject = await DataBaseManager().get_subject(id)
     return True if subject else False
 
+# async def absense_exists(id: int, date: DateTime) -> bool:
+#     absence = await DataBaseManager().get_absence_date(id, date)
+#     return True if absence else False
 
 async def class_has_subject(major_id: id, grade: int, subject_name: str) -> bool:
     subject = await DataBaseManager().get_class_subject(major_id, grade, subject_name)
