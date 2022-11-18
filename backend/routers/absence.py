@@ -1,8 +1,7 @@
-from datetime import datetime
 from fastapi import APIRouter, status
 
 from models.absences_models import AbsenceIn, AbsenceOut
-from lib.checks.checks import student_exists, student_is_absent_today, absence_exists
+from lib.checks.checks import student_is_absent_today, absence_exists
 from lib.exceptions.absences import StudentNotFound, StudentIsAlreadyAbsentToday, AbsenceNotFound
 from lib.database.manager import DataBaseManager
 

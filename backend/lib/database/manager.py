@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, MetaData
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
+from models.grades_models import Grade, GradeIn
 
 if TYPE_CHECKING:
     from models.admins_models import Admin, AdminIn
@@ -163,3 +164,39 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.absences.delete().where(self.models_manager.absences.c.id == id)
         return await self.db.execute(query)
 
+    async def get_grade(
+        self,
+        student_id: int,
+        subject_id: int,
+        semester: int
+    ) -> Grade | None:
+        query = """
+        SELECT * FROM grades WHERE grades.student_id = :student_id AND grades.subject_id = :subject_id AND grades.semester = :semester
+        """
+        return await self.db.fetch_one(query, {"student_id": student_id, "subject_id": subject_id, "semester": semester})
+
+    async def get_grade_with_id(self, grade_id: int) -> Grade | None:
+        query = """
+        SELECT * FROM grades WHERE grades.id = :grade_id;
+        """
+        return await self.db.fetch_one(query, {"grade_id": grade_id})
+
+    async def create_grade(self, grade: GradeIn) -> int:
+        query = self.models_manager.grades.insert().values(**grade.dict())
+        return await self.db.execute(query)
+
+    async def update_grade(self, id: int, **values) -> None:
+        query = self.models_manager.grades.update().where(self.models_manager.grades.c.id == id).values(**values)
+        return await self.db.execute(query)
+
+    async def delete_grade_with_id(self, id: int) -> None:
+        query = self.models_manager.grades.delete().where(self.models_manager.grades.c.id == id)
+        return await self.db.execute(query)
+
+    async def delete_grade(self, student_id: int, subject_id: int, semester: int) -> None:
+        query = self.models_manager.grades.delete().where(
+            self.models_manager.grades.c.student_id == student_id,
+            self.models_manager.grades.c.subject_id == subject_id,
+            self.models_manager.grades.c.semester == semester
+        )
+        return await self.db.execute(query)
