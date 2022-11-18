@@ -23,3 +23,11 @@ class AbsenceNotFound(HTTPException):
             status.HTTP_404_NOT_FOUND,
             "Absence not found"
         )
+
+
+class StudentHasNoAbsence(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_404_NOT_FOUND,
+            "This student has no absence"
+        )
