@@ -163,3 +163,31 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.absences.delete().where(self.models_manager.absences.c.id == id)
         return await self.db.execute(query)
 
+    async def get_absence_id(self, student_id: int) -> int:
+        query = """
+        SELECT id FROM absences WHERE absences.student_id = :student_id AND absences.date = DATE();
+        """
+        return await self.db.fetch_one(query, {"student_id": student_id})
+
+    async def get_absence_id_by_date(self, student_id: int, date: str) -> int:
+        query = """
+        SELECT id FROM absences WHERE absences.student_id = :student_id AND absences.date = :date;
+        """
+        return await self.db.fetch_one(query, {"student_id": student_id, "date": date})
+
+    async def get_student_absences(self, student_id: int) -> list[Absence]:
+        query = self.models_manager.absences.select().where(self.models_manager.absences.c.student_id == student_id)
+        return await self.db.fetch_all(query)
+    
+    async def get_student_grade_absences(self, student_id: int, grade: int, semester: int = None) -> list[Absence]:
+        if semester == None:
+            query = """
+            SELECT * FROM absences WHERE absences.student_id = :student_id AND absences.grade = :grade;
+            """
+            return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade})
+        
+        else:
+            query = """
+            SELECT * FROM absences WHERE absences.student_id = :student_id AND absences.grade = :grade AND absences.semester = :semester;
+            """
+            return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester})
