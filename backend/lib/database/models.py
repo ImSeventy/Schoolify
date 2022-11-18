@@ -1,8 +1,30 @@
-from sqlalchemy import MetaData, Table, Column, Integer, Float,String, ForeignKey, DateTime
+from datetime import datetime
+from sqlalchemy import (
+    MetaData,
+    Table,
+    Column,
+    Integer,
+    Float,
+    String,
+    ForeignKey,
+    DateTime,
+    Date,
+)
+from sqlalchemy.sql.expression import text
 
 
 class DbModelsManager:
-    __slots__ = ("meta_data", "students", "subjects", "grades", "absences", "majors", "admins", "owners")
+    __slots__ = (
+        "meta_data",
+        "students",
+        "subjects",
+        "grades",
+        "absences",
+        "majors",
+        "admins",
+        "owners",
+    )
+
     def __init__(self, meta_data: MetaData) -> None:
         self.meta_data = meta_data
         self._create_all_tables()
@@ -48,17 +70,17 @@ class DbModelsManager:
             Column("subject_id", ForeignKey("subjects.id")),
             Column("grade", Float),
             Column("semester", Integer),
-
         )
 
     def _create_absences_table(self) -> None:
         self.absences = Table(
             "absences",
             self.meta_data,
+            Column("id", Integer, primary_key=True),
             Column("student_id", ForeignKey("students.id")),
-            Column("date", DateTime),
+            Column("date", Date),
             Column("grade", Integer),
-            Column("semester", Integer)
+            Column("semester", Integer),
         )
 
     def _create_majors_table(self) -> None:
@@ -77,7 +99,7 @@ class DbModelsManager:
             Column("name", String),
             Column("role", String),
             Column("email", String, unique=True),
-            Column("password", String)
+            Column("password", String),
         )
 
     def _create_owners_table(self) -> None:
@@ -87,5 +109,5 @@ class DbModelsManager:
             Column("id", Integer, primary_key=True),
             Column("name", String),
             Column("email", String, unique=True),
-            Column("password", String)
+            Column("password", String),
         )

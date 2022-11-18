@@ -12,3 +12,8 @@ class Roles(Enum):
                 return True
 
         return False
+
+
+class Semesters(Enum):
+    first_semester = 1
+    second_semester = 2
