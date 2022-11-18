@@ -9,13 +9,19 @@ class StudentNotFound(HTTPException):
         )
 
 
+class StudentIsNotAbsentToday(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_404_NOT_FOUND,
+            "Student is not absent today"
+        )
+
 class StudentIsAlreadyAbsentToday(HTTPException):
     def __init__(self):
         super().__init__(
             status.HTTP_409_CONFLICT,
             "Student is already absent today"
         )
-
 
 class AbsenceNotFound(HTTPException):
     def __init__(self):
@@ -25,9 +31,17 @@ class AbsenceNotFound(HTTPException):
         )
 
 
-class StudentHasNoAbsence(HTTPException):
+class InvalidDateFormat(HTTPException):
     def __init__(self):
         super().__init__(
+            status.HTTP_400_BAD_REQUEST,
+            "Invalid date format"
+        )
+
+
+class StudentIsNotAbsentAtDate(HTTPException):
+    def __init__(self, date: str):
+        super().__init__(
             status.HTTP_404_NOT_FOUND,
-            "This student has no absence"
+            F"Student is not absent at {date}"
         )
