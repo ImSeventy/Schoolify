@@ -135,6 +135,16 @@ class DataBaseManager(metaclass=Singleton):
         WHERE major_id = :major_id AND grade = :grade
         """
         return await self.db.fetch_all(query, {"major_id": major_id, "grade": grade})
+    
+    async def get_student_subject(self, student_id: int, subject_id: int) -> Subject | None:
+        query = """
+        SELECT * FROM students
+        JOIN subjects
+        ON students.major_id = subjects.major_id
+        WHERE students.id = :student_id
+        AND subjects.id = :subject_id
+        """
+        return await self.db.fetch_one(query, {"student_id": student_id, "subject_id": subject_id})
 
     async def update_subject(self, id: int, **values) -> None:
         query = self.models_manager.subjects.update().where(self.models_manager.subjects.c.id == id).values(**values)
@@ -177,7 +187,13 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_grade_with_id(self, grade_id: int) -> Grade | None:
         query = """
-        SELECT * FROM grades WHERE grades.id = :grade_id;
+        SELECT grades.*,
+        subjects.name as subject_name,
+        subjects.full_degree as full_degree
+        FROM grades
+        JOIN subjects
+        ON grades.subject_id = subjects.id
+        WHERE grades.id = :grade_id;
         """
         return await self.db.fetch_one(query, {"grade_id": grade_id})
 
@@ -200,3 +216,27 @@ class DataBaseManager(metaclass=Singleton):
             self.models_manager.grades.c.semester == semester
         )
         return await self.db.execute(query)
+
+    async def get_student_grades(
+        self,
+        student_id: int,
+        grade: int = None,
+        semester: int = None,
+        subject_id: int = None
+    ) -> list[Grade]:
+        query = f"""
+        SELECT grades.*,
+        subjects.name as subject_name,
+        subjects.full_degree as full_degree,
+        :grade,
+        :semester,
+        :subject_id
+        FROM grades
+        JOIN subjects
+        ON grades.subject_id = subjects.id
+        WHERE grades.student_id = :student_id
+        {'AND subjects.grade = :grade' if grade else ''}
+        {'AND grades.semester = :semester' if semester else ''}
+        {'AND grades.subject_id = :subject_id' if subject_id else ''}
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester, "subject_id": subject_id})

@@ -45,3 +45,7 @@ async def grade_already_exists(
         grade = await DataBaseManager().get_grade(student_id, subject_id, semester)
 
     return True if grade else False
+
+async def student_has_subject(student_id: int, subject_id: int) -> bool:
+    student_subject = await DataBaseManager().get_student_subject(student_id, subject_id)
+    return True if student_subject else False
