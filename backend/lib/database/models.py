@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy import (
     MetaData,
     Table,
@@ -7,10 +6,8 @@ from sqlalchemy import (
     Float,
     String,
     ForeignKey,
-    DateTime,
     Date,
 )
-from sqlalchemy.sql.expression import text
 
 
 class DbModelsManager:
@@ -66,6 +63,7 @@ class DbModelsManager:
         self.grades = Table(
             "grades",
             self.meta_data,
+            Column("id", Integer, primary_key=True),
             Column("student_id", ForeignKey("students.id")),
             Column("subject_id", ForeignKey("subjects.id")),
             Column("grade", Float),

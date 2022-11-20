@@ -1,4 +1,3 @@
-from datetime import datetime
 from fastapi import APIRouter, status
 from lib.date_manager.date_manager import DateManager
 

@@ -35,3 +35,21 @@ async def student_is_absent_at_date(student_id: int, date: str) -> bool:
 async def absence_exists(absence_id: int):
     absence = await DataBaseManager().get_absence_from_id(absence_id)
     return True if absence else False
+
+async def grade_already_exists(
+    *,
+    id: int = None,
+    student_id: int = None,
+    subject_id: int = None,
+    semester: int = None
+    ) -> bool:
+    if id is not None:
+        grade = await DataBaseManager().get_grade_with_id(id)
+    else:
+        grade = await DataBaseManager().get_grade(student_id, subject_id, semester)
+
+    return True if grade else False
+
+async def student_has_subject(student_id: int, subject_id: int) -> bool:
+    student_subject = await DataBaseManager().get_student_subject(student_id, subject_id)
+    return True if student_subject else False
