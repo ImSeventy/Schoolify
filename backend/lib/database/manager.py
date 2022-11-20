@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from databases import Database
 from sqlalchemy import create_engine, MetaData
+from sqlalchemy import text
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
@@ -154,11 +155,11 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.subjects.delete().where(self.models_manager.subjects.c.id == id)
         return await self.db.execute(query)
 
-    async def get_student_absence_today(self, student_id: int) -> Absence | None:
-        query = """
-        SELECT * FROM absences WHERE absences.student_id = :student_id AND absences.date = DATE();
+    async def get_student_absence(self, student_id: int, date: str = None) -> Absence | None:
+        query = f"""
+        SELECT *, :date FROM absences WHERE absences.student_id = :student_id AND absences.date = {'DATE()' if date is None else 'STRFTIME(:date)'};
         """
-        return await self.db.fetch_one(query, {"student_id": student_id})
+        return await self.db.fetch_one(query, {"student_id": student_id, "date": date})
 
     async def set_student_as_absent_today(self, absence: AbsenceIn) -> int:
         query = self.models_manager.absences.insert().values(**absence.dict())
@@ -174,6 +175,31 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.absences.delete().where(self.models_manager.absences.c.id == id)
         return await self.db.execute(query)
 
+    async def delete_student_today_absence(self, student_id: int) -> None:
+        query = """
+        DELETE FROM absences WHERE absences.student_id = :student_id AND absences.date = DATE();
+        """
+        return await self.db.execute(query, {"student_id": student_id})
+
+    async def delete_student_absence_at_date(self, student_id: int, date: str) -> None:
+        query = """
+        DELETE FROM absences WHERE absences.student_id = :student_id AND absences.date = STRFTIME(:date);
+        """
+        return await self.db.execute(query, {"student_id": student_id, "date": date})
+
+    async def get_student_absences(self, student_id: int) -> list[Absence]:
+        query = self.models_manager.absences.select().where(self.models_manager.absences.c.student_id == student_id)
+        return await self.db.fetch_all(query)
+    
+    async def get_student_grade_absences(self, student_id: int, grade: int, semester: int = None) -> list[Absence]:
+        query = f"""
+        SELECT *, :semester FROM absences
+        WHERE absences.student_id = :student_id
+        AND absences.grade = :grade
+        {' AND absences.semester = :semester' if semester is not None else ''};
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester})
+   
     async def get_grade(
         self,
         student_id: int,
