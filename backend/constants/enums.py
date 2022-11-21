@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 class Roles(Enum):
     teacher = "teacher"
@@ -17,3 +17,8 @@ class Roles(Enum):
 class Semesters(Enum):
     first_semester = 1
     second_semester = 2
+
+
+class TokenTypes(Enum):
+    ACCESS_TOKEN = auto()
+    REFRESH_TOKEN = auto()
