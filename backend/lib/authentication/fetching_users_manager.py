@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import Callable
+from typing import Callable, TYPE_CHECKING
 from lib.database.manager import DataBaseManager
 from lib.exceptions.auth import InvalidCredentials
-from models.admins_models import Admin
-from models.students_models import Student
-from models.owners_models import Owner
+
+if TYPE_CHECKING:
+    from models.admins_models import Admin
+    from models.students_models import Student
+    from models.owners_models import Owner
 
 
 def role_fetcher_decorator(role_name: str) -> Callable:

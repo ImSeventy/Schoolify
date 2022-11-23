@@ -1,1 +1,1 @@
-from authentication import Authentication
+from lib.authentication.authentication import Authentication

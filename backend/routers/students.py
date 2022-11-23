@@ -1,11 +1,13 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlite3 import IntegrityError
-from lib.authentication.authentication import Authentication
+from lib.authentication.authentication import Authentication, get_user, oauth2_scheme
 from lib.checks.checks import student_exists
 from lib.database.manager import DataBaseManager
+from lib.exceptions.auth import WrongEmailOrPassword
 from lib.exceptions.students import EmailAlreadyExists, MajorDoesnotExist, StudentNotFound, WrongPassword
 
-from models.students_models import StudentEdit, StudentIn, StudentOut, StudentResetPassword
+from models.students_models import Student, StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword
 
 
 students = APIRouter(
@@ -20,21 +22,23 @@ students = APIRouter(
 
 
 @students.get("/{id}", response_model=StudentOut, status_code=status.HTTP_200_OK)
-async def get_student(id: int):
+async def get_student(id: int, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token)
     student = await DataBaseManager().get_student(id)
     if student is None:
         raise StudentNotFound()
 
     return student
 
-
 @students.get("/major/{id}", response_model=list[StudentOut], status_code=status.HTTP_200_OK)
-async def get_major_students(id: int):
+async def get_major_students(id: int, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token)
     return await DataBaseManager().get_major_students(id)
 
-
 @students.post("/", response_model=StudentOut, status_code=status.HTTP_201_CREATED)
-async def create_student(student: StudentIn):
+async def create_student(student: StudentIn, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token)
+
     major = await DataBaseManager().get_major(student.major_id)
     if major is None:
         raise MajorDoesnotExist()
@@ -47,29 +51,57 @@ async def create_student(student: StudentIn):
 
     return {**student.dict(), "id": id, "major_name": major.name}
 
+@students.post("/login", status_code=status.HTTP_200_OK)
+async def login_student(credintials: OAuth2PasswordRequestForm = Depends()):
+    student = await DataBaseManager().get_student(credintials.username)
+    if student is None:
+        raise WrongEmailOrPassword()
 
-@students.put("/{id}", response_model=StudentOut)
-async def update_student(id: int, new_student: StudentEdit):
+    if not Authentication.verify_password(student.password, credintials.password):
+        raise WrongEmailOrPassword()
+
+    data = {
+        "id": student.id,
+        "role": "student"
+    }
+
+    return {
+        "access_token": Authentication().create_access_token(data),
+        "refresh_token": Authentication().create_refresh_token(data),
+        "token_type": "bearer"
+        }
+
+@students.put("/", status_code=status.HTTP_204_NO_CONTENT)
+async def edit_student(new_student: StudentPersonalUpdate, token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token)
+    await DataBaseManager().update_student(student.id, **new_student)
+
+@students.put("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_student(id: int, new_student: StudentEdit, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token)
+
     if not await student_exists(id):
         raise StudentNotFound()
+
     await DataBaseManager().update_student(id, **new_student.dict())
-    return {**new_student.dict(), "id": id}
 
-
-@students.patch("/reset_password/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def reset_password(id: int, passwords_scheme: StudentResetPassword):
-    student = await DataBaseManager().get_student(id)
-    if student is None:
-        raise StudentNotFound()
-
+@students.patch("/reset_password", status_code=status.HTTP_204_NO_CONTENT)
+async def reset_password(passwords_scheme: StudentResetPassword, token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token)
     if not Authentication().verify_password(passwords_scheme.old_password, student.password):
         raise WrongPassword()
 
-    await DataBaseManager().update_student(id, password=passwords_scheme.new_password)
+    await DataBaseManager().update_student(student.id, password=passwords_scheme.new_password)
 
+@students.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_student(token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token)
+    await DataBaseManager().delete_student(student.id)
 
 @students.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_student(id: int):
+async def delete_student_by_admin(id: int, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token)
+
     if not await student_exists(id):
         raise StudentNotFound()
 

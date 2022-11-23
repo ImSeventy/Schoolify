@@ -3,6 +3,7 @@ from lib.authentication.authentication import Authentication
 
 from lib.database.manager import DataBaseManager
 from lib.date_manager.date_manager import DateManager
+from models.settings_models import Settings
 from routers import majors, admins, students, subjects, absence, grades
 
 app = FastAPI()
@@ -12,15 +13,24 @@ app.include_router(students.students)
 app.include_router(subjects.subjects)
 app.include_router(absence.absence)
 app.include_router(grades.grades)
+
+settings = Settings()
+
 DataBaseManager("sqlite:///database.db")
 DateManager(
-    9,
-    1,
-    2,
-    7,
+    settings.first_semester_start_month,
+    settings.first_semester_end_month,
+    settings.second_semester_start_month,
+    settings.second_semester_end_month,
     r"\d{4}-\d{2}-\d{2}"
 )
-Authentication()
+Authentication(
+    settings.access_token_secret_key,
+    settings.refresh_token_secret_key,
+    settings.algorithm,
+    settings.access_token_expire_minutes,
+    settings.refresh_token_expire_days
+)
 
 @app.on_event("startup")
 async def startup_event():
