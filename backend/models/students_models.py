@@ -45,6 +45,12 @@ class StudentEdit(BaseModel):
     rf_id: int
     name: str
     email: EmailStr
+    entry_year: int
+    major_id: int
+
+
+class StudentPersonalUpdate(BaseModel):
+    email: EmailStr
 
 
 class StudentResetPassword(BaseModel):

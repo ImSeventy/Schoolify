@@ -1,7 +1,7 @@
 from pydantic import BaseModel, validator, EmailStr
 
 from constants.enums import Roles
-from lib.authentication.authentication import Authentication
+from lib.authentication import Authentication
 
 
 class AdminIn(BaseModel):
