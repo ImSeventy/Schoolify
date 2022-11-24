@@ -23,7 +23,7 @@ students = APIRouter(
 
 @students.get("/{id}", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin_or_student", token)
     student = await DataBaseManager().get_student(id)
     if student is None:
         raise StudentNotFound()
@@ -32,7 +32,7 @@ async def get_student(id: int, token: str = Depends(oauth2_scheme)):
 
 @students.get("/major/{id}", response_model=list[StudentOut], status_code=status.HTTP_200_OK)
 async def get_major_students(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin_or_student", token)
     return await DataBaseManager().get_major_students(id)
 
 @students.post("/", response_model=StudentOut, status_code=status.HTTP_201_CREATED)
@@ -70,6 +70,20 @@ async def login_student(credintials: OAuth2PasswordRequestForm = Depends()):
         "refresh_token": Authentication().create_refresh_token(data),
         "token_type": "bearer"
         }
+
+@students.post("/refresh", status_code=status.HTTP_200_OK)
+async def refresh_student(token: str = Depends(oauth2_scheme)):
+    access_token, refresh_token = Authentication().refresh_access_token(token)
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+        }
+
+@students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
+async def get_student_me(token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token)
+    return student
 
 @students.put("/", status_code=status.HTTP_204_NO_CONTENT)
 async def edit_student(new_student: StudentPersonalUpdate, token: str = Depends(oauth2_scheme)):

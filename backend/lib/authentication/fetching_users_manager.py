@@ -69,3 +69,16 @@ async def fetch_admin(token_data: dict) -> Admin | None:
         raise InvalidCredentials()
 
     return admin
+
+@role_fetcher_decorator("admin_or_student")
+async def fetch_admin_or_student(token_data: dict) -> Admin | Student | None:
+    id = token_data.get("id")
+    admin = await DataBaseManager().get_admin(id)
+    if admin is not None:
+        return admin
+
+    student = await DataBaseManager().get_student(id)
+    if student is None:
+        raise InvalidCredentials()
+
+    return student

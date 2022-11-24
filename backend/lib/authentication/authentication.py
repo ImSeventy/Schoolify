@@ -47,7 +47,7 @@ class Authentication(metaclass=Singleton):
         to_encode["exp"] = expire_time.timestamp()
         return jwt.encode(to_encode, self.refresh_token_secret_key, algorithm=self.algorithm)
 
-    def refresh_access_token(self, refresh_token: str) -> str:
+    def refresh_access_token(self, refresh_token: str) -> tuple[str, str]:
         payload = self.get_token_data(refresh_token, TokenTypes.REFRESH_TOKEN)
         access_token = self.create_access_token(payload)
         new_refresh_token = self.create_refresh_token(payload)
