@@ -22,7 +22,7 @@ async def get_student_grades(
     subject_id: int = None,
     token: str = Depends(oauth2_scheme)
     ):
-    _ = await get_user("admin_or_student", token)
+    _ = await get_user("admin", "student", token=token)
 
     if not await student_exists(id):
         raise StudentNotFound(id)
@@ -42,7 +42,7 @@ async def get_student_grades_this_year(
     subject_id: int = None,
     token: str = Depends(oauth2_scheme)
     ):
-    _ = await get_user("admin_or_student", token)
+    _ = await get_user("admin", "student", token=token)
 
     student = await DataBaseManager().get_student(id)
     if student is None:
@@ -62,7 +62,7 @@ async def get_student_grades_this_year(
 
 @grades.get("/{id}", response_model=GradeOut, status_code=status.HTTP_200_OK)
 async def get_grade(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin_or_student", token)
+    _ = await get_user("admin", "student", token=token)
 
     grade = await DataBaseManager().get_grade_with_id(id)
     if grade is None:
@@ -72,7 +72,7 @@ async def get_grade(id: int, token: str = Depends(oauth2_scheme)):
 
 @grades.post("/", response_model=GradeOut, status_code=status.HTTP_201_CREATED)
 async def create_grade(grade: GradeIn, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if await grade_already_exists(
         student_id=grade.student_id,
@@ -97,7 +97,7 @@ async def create_grade(grade: GradeIn, token: str = Depends(oauth2_scheme)):
 
 @grades.patch("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_grade(id: int, grade: GradeUpdate, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await grade_already_exists(id=id):
         raise GradeNotFound(id)
@@ -107,7 +107,7 @@ async def update_grade(id: int, grade: GradeUpdate, token: str = Depends(oauth2_
 
 @grades.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_grade(student_id: int, subject_id: int, semester: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await grade_already_exists(
         student_id=student_id,
@@ -121,7 +121,7 @@ async def delete_grade(student_id: int, subject_id: int, semester: int, token: s
 
 @grades.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_grade(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await grade_already_exists(id=id):
         raise GradeNotFound(id)
