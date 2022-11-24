@@ -16,7 +16,7 @@ absence = APIRouter(
 
 @absence.post("/", response_model=AbsenceOut, status_code=status.HTTP_201_CREATED)
 async def add_absence(absence: AbsenceIn, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     student = await DataBaseManager().get_student(absence.student_id)
     if student is None:
@@ -32,7 +32,7 @@ async def add_absence(absence: AbsenceIn, token: str = Depends(oauth2_scheme)):
 
 @absence.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_absence_with_id(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await absence_exists(id):
         raise AbsenceNotFound()
@@ -41,7 +41,7 @@ async def delete_absence_with_id(id: int, token: str = Depends(oauth2_scheme)):
 
 @absence.delete("/today/{student_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_student_absence_today(student_id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await student_exists(student_id):
         raise StudentNotFound()
@@ -53,7 +53,7 @@ async def delete_student_absence_today(student_id: int, token: str = Depends(oau
 
 @absence.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_student_absence_date(student_id: int, date: str, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not DateManager().is_proper_format(date):
         raise InvalidDateFormat()
@@ -68,7 +68,7 @@ async def delete_student_absence_date(student_id: int, date: str, token: str = D
 
 @absence.get("/student/{id}", response_model=list[AbsenceOut], status_code=status.HTTP_200_OK)
 async def get_student_absences(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("student_or_admin", token)
+    _ = await get_user("admin", "student", token=token)
 
     if not await student_exists(id):
         raise StudentNotFound()
@@ -82,7 +82,7 @@ async def get_student_grade_absences(
     semester: int = None,
     token: str = Depends(oauth2_scheme)
     ):
-    _ = await get_user("student_or_admin", token)
+    _ = await get_user("admin", "student", token=token)
 
     if not await student_exists(student_id):
         raise StudentNotFound()

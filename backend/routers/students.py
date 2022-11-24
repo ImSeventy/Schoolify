@@ -23,7 +23,7 @@ students = APIRouter(
 
 @students.get("/{id}", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin_or_student", token)
+    _ = await get_user("admin", "student", token=token)
     student = await DataBaseManager().get_student(id)
     if student is None:
         raise StudentNotFound()
@@ -32,12 +32,12 @@ async def get_student(id: int, token: str = Depends(oauth2_scheme)):
 
 @students.get("/major/{id}", response_model=list[StudentOut], status_code=status.HTTP_200_OK)
 async def get_major_students(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin_or_student", token)
+    _ = await get_user("admin", "student", token=token)
     return await DataBaseManager().get_major_students(id)
 
 @students.post("/", response_model=StudentOut, status_code=status.HTTP_201_CREATED)
 async def create_student(student: StudentIn, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     major = await DataBaseManager().get_major(student.major_id)
     if major is None:
@@ -57,7 +57,7 @@ async def login_student(credintials: OAuth2PasswordRequestForm = Depends()):
     if student is None:
         raise WrongEmailOrPassword()
 
-    if not Authentication.verify_password(student.password, credintials.password):
+    if not Authentication.verify_password(credintials.password, student.password):
         raise WrongEmailOrPassword()
 
     data = {
@@ -82,17 +82,17 @@ async def refresh_student(token: str = Depends(oauth2_scheme)):
 
 @students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student_me(token: str = Depends(oauth2_scheme)):
-    student = await get_user("student", token)
+    student = await get_user("student", token=token)
     return student
 
 @students.put("/", status_code=status.HTTP_204_NO_CONTENT)
 async def edit_student(new_student: StudentPersonalUpdate, token: str = Depends(oauth2_scheme)):
-    student = await get_user("student", token)
+    student = await get_user("student", token=token)
     await DataBaseManager().update_student(student.id, **new_student)
 
 @students.put("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_student(id: int, new_student: StudentEdit, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await student_exists(id):
         raise StudentNotFound()
@@ -101,7 +101,7 @@ async def update_student(id: int, new_student: StudentEdit, token: str = Depends
 
 @students.patch("/reset_password", status_code=status.HTTP_204_NO_CONTENT)
 async def reset_password(passwords_scheme: StudentResetPassword, token: str = Depends(oauth2_scheme)):
-    student = await get_user("student", token)
+    student = await get_user("student", token=token)
     if not Authentication().verify_password(passwords_scheme.old_password, student.password):
         raise WrongPassword()
 
@@ -109,12 +109,12 @@ async def reset_password(passwords_scheme: StudentResetPassword, token: str = De
 
 @students.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_student(token: str = Depends(oauth2_scheme)):
-    student = await get_user("student", token)
+    student = await get_user("student", token=token)
     await DataBaseManager().delete_student(student.id)
 
 @students.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_student_by_admin(id: int, token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token)
+    _ = await get_user("admin", token=token)
 
     if not await student_exists(id):
         raise StudentNotFound()

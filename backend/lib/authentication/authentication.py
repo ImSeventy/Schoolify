@@ -28,8 +28,8 @@ class Authentication(metaclass=Singleton):
         self.refresh_token_expire_days = refresh_token_expire_days
 
     @staticmethod
-    def verify_password(to_verify: str, password: str) -> bool:
-        return pwd_context.verify(to_verify, password)
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        return pwd_context.verify(plain_password, hashed_password)
 
     @staticmethod
     def hash_password(password: str) -> str:
@@ -66,8 +66,6 @@ class Authentication(metaclass=Singleton):
         return payload
 
 
-async def get_user(role: str, token: str = Depends(oauth2_scheme)):
+async def get_user(*roles: str, token: str = Depends(oauth2_scheme)):
     token_data = Authentication().get_token_data(token, TokenTypes.ACCESS_TOKEN)
-    return await FetchingUsersManager.fetch_user(role, token_data)
-
-    
+    return await FetchingUsersManager.fetch_user(roles, token_data)

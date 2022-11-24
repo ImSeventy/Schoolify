@@ -24,22 +24,30 @@ def role_fetcher_decorator(role_name: str) -> Callable:
 
 
 class FetchingUsersManager:
-    __roles_fetchers__: list[FetchingUsersManager] = []
+    __roles_fetchers__: dict[str, FetchingUsersManager] = {}
     __slots__ = ("role", "callback")
 
     def __init__(self, role: str, callback: Callable) -> None:
         self.role = role
         self.callback = callback
-        self.__roles_fetchers__.append(self)
+        self.__roles_fetchers__[role] = self
 
     @classmethod
-    async def fetch_user(cls, role: str, token_data: dict) -> Student | Owner | Admin | None:
-        for fetcher in cls.__roles_fetchers__:
-            if fetcher.role == role:
-                user = await fetcher.callback(token_data)
-                if user is None:
-                    raise InvalidCredentials()
-        
+    async def fetch_user(
+        cls, roles: list[str], token_data: dict
+    ) -> Student | Owner | Admin | None:
+        for role in roles:
+            fetcher = cls.__roles_fetchers__.get(role)
+            if fetcher is None:
+                continue
+
+            user = await fetcher.callback(token_data)
+            if user is None:
+                continue
+
+            return user
+
+
         raise InvalidCredentials()
 
 
@@ -52,6 +60,7 @@ async def fetch_student(token_data: dict) -> Student | None:
 
     return student
 
+
 @role_fetcher_decorator("owner")
 async def fetch_owner(token_data: dict) -> Owner | None:
     owner_id = token_data.get("id")
@@ -61,6 +70,7 @@ async def fetch_owner(token_data: dict) -> Owner | None:
 
     return owner
 
+
 @role_fetcher_decorator("admin")
 async def fetch_admin(token_data: dict) -> Admin | None:
     admin_id = token_data.get("id")
@@ -69,16 +79,3 @@ async def fetch_admin(token_data: dict) -> Admin | None:
         raise InvalidCredentials()
 
     return admin
-
-@role_fetcher_decorator("admin_or_student")
-async def fetch_admin_or_student(token_data: dict) -> Admin | Student | None:
-    id = token_data.get("id")
-    admin = await DataBaseManager().get_admin(id)
-    if admin is not None:
-        return admin
-
-    student = await DataBaseManager().get_student(id)
-    if student is None:
-        raise InvalidCredentials()
-
-    return student
