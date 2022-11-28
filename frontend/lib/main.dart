@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/router/router.dart';
 import 'dependency_container.dart' as dc;
+import 'router/routes.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Schoolify',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: "/",
+      initialRoute: Routes.root,
     );
   }
 }

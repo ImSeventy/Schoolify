@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/features/authentication/presentation/pages/login_page.dart';
 import '../themes/light_theme.dart';
+import 'routes.dart';
 
 class AppRouter {
   static ThemeMode themeMode = ThemeMode.light;
@@ -21,8 +23,10 @@ class AppRouter {
 
   static Widget? getScreenFromRouteName(String? name, dynamic args) {
     switch (name) {
-      case "/":
+      case Routes.root:
         return const LoginPage();
+      case Routes.home:
+        return Text(AuthInfo.currentStudent!.name);
       default:
         return null;
     }

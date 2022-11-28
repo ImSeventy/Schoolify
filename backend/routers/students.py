@@ -20,6 +20,10 @@ students = APIRouter(
 # async def get_class_students(major_id: int, grade: int):
 #     return await DataBaseManager().query_class_students(major_id, grade)
 
+@students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
+async def get_student_me(token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token=token)
+    return student
 
 @students.get("/{id}", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student(id: int, token: str = Depends(oauth2_scheme)):
@@ -79,11 +83,6 @@ async def refresh_student(token: str = Depends(oauth2_scheme)):
         "refresh_token": refresh_token,
         "token_type": "bearer"
         }
-
-@students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
-async def get_student_me(token: str = Depends(oauth2_scheme)):
-    student = await get_user("student", token=token)
-    return student
 
 @students.put("/", status_code=status.HTTP_204_NO_CONTENT)
 async def edit_student(new_student: StudentPersonalUpdate, token: str = Depends(oauth2_scheme)):

@@ -15,7 +15,7 @@ def role_fetcher_decorator(role_name: str) -> Callable:
             role = token_data.get("role")
             if role != role_name:
                 raise InvalidCredentials()
-            await func(token_data)
+            return await func(token_data)
 
         FetchingUsersManager(role_name, wrapper)
         return func

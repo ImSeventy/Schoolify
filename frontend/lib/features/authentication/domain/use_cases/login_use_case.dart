@@ -3,8 +3,12 @@ import 'package:equatable/equatable.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/errors/failures.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
+import 'package:frontend/dependency_container.dart';
+import 'package:frontend/features/authentication/data/data_providers/tokens_data_provider.dart';
+import 'package:frontend/features/authentication/data/models/tokens_model.dart';
 import 'package:frontend/features/authentication/domain/entities/tokens_entity.dart';
 import 'package:frontend/features/authentication/domain/repository/authentication_repository.dart';
+import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
 
 class LoginUseCase implements UseCase<TokensEntity, LoginParams> {
   final AuthenticationRepository authenticationRepository;
@@ -18,7 +22,8 @@ class LoginUseCase implements UseCase<TokensEntity, LoginParams> {
 
     response.fold(
       (failure) => null,
-      (tokensEntity) {
+      (tokensEntity) async {
+        getIt<TokensDataProvider>().storeTokensInCache(tokensEntity as TokensModel);
         AuthInfo.accessTokens = tokensEntity;
       },
     );

@@ -7,9 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class TokensDataProvider  {
   TokensModel? getCachedTokens();
 
-  storeTokensInCache(TokensModel tokensModel);
+  void storeTokensInCache(TokensModel tokensModel);
 
-  removeTokensStoredInCache();
+  void removeTokensStoredInCache();
 }
 
 
@@ -29,12 +29,12 @@ class TokensDataProviderImpl implements TokensDataProvider {
   }
 
   @override
-  removeTokensStoredInCache() async {
+  void removeTokensStoredInCache() async {
     await sharedPreferences.remove(tokensInCacheKey);
   }
 
   @override
-  storeTokensInCache(TokensModel tokensModel) async {
+  void storeTokensInCache(TokensModel tokensModel) async {
     await sharedPreferences.setString(tokensInCacheKey, tokensModel.toJson().toString());
   }
 

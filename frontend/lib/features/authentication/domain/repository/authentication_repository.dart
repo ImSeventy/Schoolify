@@ -6,4 +6,6 @@ import '../entities/tokens_entity.dart';
 
 abstract class AuthenticationRepository {
   Future<Either<Failure, TokensEntity>> login({required String email, required String password});
+
+  Future<Either<Failure, StudentEntity>> getCurrentStudent();
 }

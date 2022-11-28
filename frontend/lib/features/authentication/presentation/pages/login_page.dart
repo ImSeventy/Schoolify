@@ -5,6 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
+import 'package:frontend/features/authentication/presentation/widgets/icons_group_widget.dart';
+import 'package:frontend/router/routes.dart';
+import 'package:toast/toast.dart';
 
 import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
@@ -37,7 +40,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      LoginCubit loginCubit = context.read<LoginCubit>();
 
+      loginCubit.login(
+        email: _emailTextEditingController.text,
+        password: _passwordTextEditingController.text,
+      );
     }
   }
 
@@ -45,15 +53,33 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) {
+        ToastContext().init(context);
         return getIt<LoginCubit>();
       },
       child: BlocConsumer<LoginCubit, LoginState>(
         buildWhen: (oldState, newState) => oldState != newState,
         listenWhen: (oldState, newState) => oldState != newState,
-        listener: (oldState, newState) {},
+        listener: (oldState, newState) async {
+          if (newState is LoginFailedState) {
+            Toast.show(
+              newState.message,
+              duration: 3,
+              backgroundColor: Colors.red
+            );
+          }
+
+          if (newState is LoginSucceededState) {
+            Toast.show(
+              "Logged in successfully",
+              duration: 3,
+              backgroundColor: Colors.green
+            );
+
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          }
+        },
         builder: (context, state) {
           return SafeArea(
-
             child: Stack(
               children: [
                 Container(
@@ -61,14 +87,14 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF0F5E75),
-                            Color(0xFF12839C),
-                            Color(0xFF0F5E75),
-                          ],
-                        ))),
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF0F5E75),
+                        Color(0xFF12839C),
+                        Color(0xFF0F5E75),
+                      ],
+                    ))),
                 Row(
                   children: [
                     const Spacer(),
@@ -86,27 +112,18 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(
+                    const IconsGroupWidget(
                       flex: 10,
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: SvgPicture.asset(
-                          "assets/login_icons_1.svg",
-                          alignment: Alignment.topLeft,
-                        ),
-                      ),
+                      imagePath: "assets/login_icons_1.svg",
+                      alignment: Alignment.topLeft,
                     ),
-                    SizedBox(height: 230.h,),
-                    Expanded(
+                    SizedBox(
+                      height: 230.h,
+                    ),
+                    const IconsGroupWidget(
                       flex: 9,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: SvgPicture.asset(
-                          "assets/Group 2icons.svg",
-                          allowDrawingOutsideViewBox: false,
-                          alignment: Alignment.bottomRight,
-                        ),
-                      ),
+                      imagePath: "assets/login_icons_2.svg",
+                      alignment: Alignment.bottomRight,
                     ),
                   ],
                 ),
@@ -136,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                                       children: const [
                                         TextSpan(
                                             text: "here",
-                                            style:
-                                            TextStyle(color: const Color(0xFFFFFFFF)))
+                                            style: TextStyle(
+                                                color: Color(0xFFFFFFFF)))
                                       ]),
                                 ),
                                 SizedBox(
@@ -146,7 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                                 CredentialsField(
                                   hintText: "Enter your E-mail",
                                   isPassword: false,
-                                  textEditingController: _emailTextEditingController,
+                                  textEditingController:
+                                      _emailTextEditingController,
                                   validator: emailValidator,
                                 ),
                                 SizedBox(
@@ -155,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                                 CredentialsField(
                                   hintText: "Enter your password",
                                   isPassword: true,
-                                  textEditingController: _passwordTextEditingController,
+                                  textEditingController:
+                                      _passwordTextEditingController,
                                   validator: passwordValidator,
                                 ),
                                 SizedBox(
@@ -166,30 +185,27 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 70.h,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.r),
-                                      gradient: const LinearGradient(
-                                          colors: [
-                                            Color(0xFF00E9CD),
-                                            Color(0xFFF478FF),
-                                          ]
-                                      )
-                                  ),
+                                      gradient: const LinearGradient(colors: [
+                                        Color(0xFF00E9CD),
+                                        Color(0xFFF478FF),
+                                      ])),
                                   child: TextButton(
                                     style: TextButton.styleFrom(
-                                        backgroundColor: Colors.transparent
-                                    ),
-                                    onPressed: () => login(context),
-                                    child: Text(
+                                        backgroundColor: Colors.transparent),
+                                    onPressed: () => state is LoginLoadingState ? null : login(context),
+                                    child: state is LoginLoadingState ? const FittedBox(child: CircularProgressIndicator(color: Colors.black,)) : Text(
                                       "login",
                                       style: TextStyle(
                                           fontFamily: "Overpass",
                                           fontWeight: FontWeight.w400,
                                           fontSize: 35.sp,
-                                          color: Colors.black
-                                      ),
+                                          color: Colors.black),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 11.h,),
+                                SizedBox(
+                                  height: 11.h,
+                                ),
                               ],
                             ),
                           ),

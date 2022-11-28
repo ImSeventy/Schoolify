@@ -1,11 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/errors/exceptions.dart';
 import 'package:frontend/core/constants/end_points.dart';
+import 'package:frontend/features/authentication/data/models/student_model.dart';
 import 'package:frontend/features/authentication/data/models/tokens_model.dart';
+import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 
 
 abstract class AuthenticationDataProvider {
   Future<TokensModel> login({required email, required password});
+
+  Future<StudentEntity> getCurrentStudent();
 }
 
 class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
@@ -25,7 +30,7 @@ class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
   @override
   Future<TokensModel> login({required email, required password}) async {
     try {
-      final Response response = await _dio.post(
+      Response response = await _dio.post(
         "/login",
         data: FormData.fromMap(
           {
@@ -40,7 +45,29 @@ class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
       }
 
       return TokensModel.fromJson(response.data);
-    } on DioError {
+    } on DioError{
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<StudentEntity> getCurrentStudent() async {
+    try {
+      Response response = await _dio.get(
+        "/me",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${AuthInfo.accessTokens?.accessToken}"
+          }
+        )
+      );
+
+      if (response.statusCode == 401) {
+        throw InvalidAccessTokenException();
+      }
+
+      return StudentModel.fromJson(response.data);
+    } on DioError{
       throw ServerException();
     }
   }
