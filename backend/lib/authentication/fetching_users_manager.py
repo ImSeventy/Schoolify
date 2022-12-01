@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Callable, TYPE_CHECKING
+from constants.enums import Roles
 from lib.database.manager import DataBaseManager
 from lib.exceptions.auth import InvalidCredentials
 
@@ -76,6 +77,19 @@ async def fetch_admin(token_data: dict) -> Admin | None:
     admin_id = token_data.get("id")
     admin = await DataBaseManager().get_admin(admin_id)
     if admin is None:
+        raise InvalidCredentials()
+
+    return admin
+
+
+@role_fetcher_decorator("manager")
+async def fetch_manager(token_data: dict) -> Admin | None:
+    admin_id = token_data.get("id")
+    admin = await DataBaseManager().get_admin(admin_id)
+    if admin is None:
+        raise InvalidCredentials()
+
+    if admin.role != Roles.manager:
         raise InvalidCredentials()
 
     return admin
