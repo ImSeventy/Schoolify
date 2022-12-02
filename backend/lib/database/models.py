@@ -20,6 +20,8 @@ class DbModelsManager:
         "majors",
         "admins",
         "owners",
+        "posts",
+        "likes"
     )
 
     def __init__(self, meta_data: MetaData) -> None:
@@ -34,6 +36,8 @@ class DbModelsManager:
         self._create_absences_table()
         self._create_admins_table()
         self._create_owners_table()
+        self._create_posts_table()
+        self._create_likes_table()
 
     def _create_students_table(self) -> None:
         self.students = Table(
@@ -108,4 +112,23 @@ class DbModelsManager:
             Column("name", String),
             Column("email", String, unique=True),
             Column("password", String),
+        )
+
+    def _create_posts_table(self) -> None:
+        self.posts = Table(
+            "posts",
+            self.meta_data,
+            Column("id", Integer, primary_key=True),
+            Column("content", String),
+            Column("image_url", String),
+            Column("by", ForeignKey("admins.id"))
+        )
+
+    def _create_likes_table(self) -> None:
+        self.likes = Table(
+            "likes",
+            self.meta_data,
+            Column("id", Integer, primary_key=True),
+            Column("by", ForeignKey("students.id")),
+            Column("post_id", ForeignKey("posts.id"))
         )

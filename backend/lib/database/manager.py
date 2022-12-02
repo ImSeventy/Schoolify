@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from models.absences_models import AbsenceIn
     from models.absences_models import Absence
     from models.subjects_models import Subject, SubjectIn
+    from models.posts_models import PostIn, Post, PostEdit
+    from models.owners_models import Owner
 
 
 class DataBaseManager(metaclass=Singleton):
@@ -64,7 +66,7 @@ class DataBaseManager(metaclass=Singleton):
         if isinstance(id_or_email, int):
             query = self.models_manager.admins.select().where(self.models_manager.admins.c.id == id_or_email)
         else:
-            query = self.models_manager.admins.select().where(self.models_manager.admins.c.name == id_or_email)
+            query = self.models_manager.admins.select().where(self.models_manager.admins.c.email == id_or_email)
 
         return await self.db.fetch_one(query)
 
@@ -266,3 +268,27 @@ class DataBaseManager(metaclass=Singleton):
         {'AND grades.subject_id = :subject_id' if subject_id else ''}
         """
         return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester, "subject_id": subject_id})
+
+    async def add_new_post(self, post: PostIn) -> int:
+        query = self.models_manager.posts.insert().values(**post.dict())
+        return await self.db.execute(query)
+
+    async def get_owner(self, id_or_email: int | str) -> Owner | None:
+        query = f"""
+        SELECT *  FROM owners WHERE {'owners.email = :id_or_email' if isinstance(id_or_email, str) else 'owners.id = :id_or_email'}
+        """
+        return await self.db.fetch_one(query, {"id_or_email": id_or_email})
+
+    async def get_post_from_id(self, post_id: int):
+        query = """
+        SELECT * FROM posts WHERE posts.id = :post_id;
+        """
+        return await self.db.fetch_one(query, {"post_id": post_id})
+
+    async def delete_post_with_id(self, id: int) -> None:
+        query = self.models_manager.posts.delete().where(self.models_manager.posts.c.id == id)
+        await self.db.execute(query)
+
+    async def edit_post(self, id: int, new_post: PostEdit) -> None:
+        query = self.models_manager.posts.update().where(self.models_manager.posts.c.id == id).values(**new_post.dict())
+        await self.db.execute(query)
