@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
 import 'package:frontend/dependency_container.dart';
+import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 
@@ -45,6 +46,11 @@ class _HomePageState extends State<HomePage> {
           GradesCubit gradesCubit = getIt<GradesCubit>();
           gradesCubit.getStudentGrades();
           return gradesCubit;
+        }),
+        BlocProvider<AttendanceCubit>(create: (_) {
+          AttendanceCubit attendanceCubit = getIt<AttendanceCubit>();
+          attendanceCubit.getStudentAbsences();
+          return attendanceCubit;
         }),
       ],
       child: SafeArea(
@@ -99,19 +105,16 @@ class MainHomePage extends StatelessWidget {
       child: BlocConsumer<GradesCubit, GradesState>(
         buildWhen: (oldState, newState) => oldState != newState,
         listenWhen: (oldState, newState) => oldState != newState,
-        listener: (context, state) {
-          if (state is GetStudentGradeSucceededState) {
-            DataHandlerCubit dataHandlerCubit = context.read<DataHandlerCubit>();
-            dataHandlerCubit.setNewGrades(grades: context.read<GradesCubit>().grades);
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
+          AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
           GradesCubit gradesCubit = context.read<GradesCubit>();
 
           return RefreshIndicator(
             onRefresh: () async {
-              gradesCubit.getStudentGrades();
+              await gradesCubit.getStudentGrades();
+              await attendanceCubit.getStudentAbsences();
             },
             child: Stack(
               children: [
@@ -239,19 +242,19 @@ class MainHomePage extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: FancyProgressIndicator(
-                                  percentage: calculateGradesPercentage(dataHandlerCubit.filteredGrades),
-                                  backgroundColor: Color(0xFF306767),
+                                  percentage: calculateGradesPercentage(dataHandlerCubit.filterGrades(gradesCubit.grades)),
+                                  backgroundColor: const Color(0xFF306767),
                                   name: "Grades",
                                 ),
                               ),
                             ),
                             Transform.translate(
                               offset: Offset(0, 130.h),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.topLeft,
                                 child: FancyProgressIndicator(
-                                  percentage: 65,
-                                  backgroundColor: Color(0xFF306767),
+                                  percentage: dataHandlerCubit.calculateAttendancePercentage(attendanceCubit.absences),
+                                  backgroundColor: const Color(0xFF306767),
                                   name: "Attendance",
                                 ),
                               ),

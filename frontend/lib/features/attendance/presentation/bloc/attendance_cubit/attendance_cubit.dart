@@ -11,7 +11,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   AttendanceCubit({required this.getStudentAbsencesUseCase})
       : super(AttendanceInitialState());
 
-  void getStudentAbsences() async {
+  Future<void> getStudentAbsences() async {
     emit(GetStudentAbsencesLoadingState());
 
     final response = await getStudentAbsencesUseCase.call(NoParams());

@@ -13,7 +13,8 @@ class AbsenceModel extends AbsenceEntity {
     return AbsenceModel(
       id: json['id'],
       studentId: json['student_id'],
-      date: json['date'],
+      date: DateTime.fromMicrosecondsSinceEpoch(
+          (json["date"] * 1000000.0).round()),
       grade: json['grade'],
       semester: json['semester'],
     );
@@ -23,7 +24,7 @@ class AbsenceModel extends AbsenceEntity {
     return {
       "id": id,
       "student_id": studentId,
-      "date": date,
+      "date": date.microsecondsSinceEpoch / 1000,
       "grade": grade,
       "semester": semester
     };

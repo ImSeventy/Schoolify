@@ -1,4 +1,9 @@
 import 'package:frontend/core/network/network_info.dart';
+import 'package:frontend/features/attendance/data/data_provider/attendance_data_provider.dart';
+import 'package:frontend/features/attendance/data/repository/attendance_repository.dart';
+import 'package:frontend/features/attendance/domain/repository/attendance_repository.dart';
+import 'package:frontend/features/attendance/domain/use_cases/get_students_absences.dart';
+import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/authentication/data/data_providers/authentication_data_provider.dart';
 import 'package:frontend/features/authentication/data/data_providers/tokens_data_provider.dart';
 import 'package:frontend/features/authentication/data/repository/authentication_repository.dart';
@@ -22,6 +27,7 @@ final getIt = GetIt.instance;
 Future<void> setUp() async {
   _setupAuthenticationFeature();
   _setupGradesFeature();
+  _setupAttendanceFeature();
   await _setupCore();
 }
 
@@ -101,5 +107,28 @@ void _setupGradesFeature() {
 
   getIt.registerLazySingleton<GradesDataProvider>(
     () => GradesDataProviderImpl(),
+  );
+}
+
+void _setupAttendanceFeature() {
+  getIt.registerFactory<AttendanceCubit>(
+    () => AttendanceCubit(getStudentAbsencesUseCase: getIt()),
+  );
+
+  getIt.registerLazySingleton<GetStudentAbsencesUseCase>(
+    () => GetStudentAbsencesUseCase(
+      attendanceRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<AttendanceRepository>(
+    () => AttendanceRepositoryImpl(
+      networkInfo: getIt(),
+      attendanceDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<AttendanceDataProvider>(
+    () => AttendanceDataProviderImpl(),
   );
 }

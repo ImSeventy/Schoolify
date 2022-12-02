@@ -12,7 +12,7 @@ class GradesCubit extends Cubit<GradesState> {
   GradesCubit({required this.getStudentGradesUseCase})
       : super(GradesInitialState());
 
-  void getStudentGrades() async {
+  Future<void> getStudentGrades() async {
     emit(GetStudentGradesLoadingState());
     final response = await getStudentGradesUseCase(NoParams());
 
