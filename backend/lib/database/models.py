@@ -109,3 +109,22 @@ class DbModelsManager:
             Column("email", String, unique=True),
             Column("password", String),
         )
+
+    def _create_posts_table(self) -> None:
+        self.posts = Table(
+            "posts",
+            self.meta_data,
+            Column("id", Integer, primary_key=True),
+            Column("content", String),
+            Column("image_url", String),
+            Column("by", ForeignKey("admins.id"))
+        )
+
+    def _create_likes_table(self) -> None:
+        self.likes = Table(
+            "likes",
+            self.meta_data,
+            Column("id", Integer, primary_key=True),
+            Column("by", ForeignKey("students.id")),
+            Column("post_id", ForeignKey("posts.id"))
+        )
