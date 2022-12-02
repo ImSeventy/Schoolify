@@ -15,7 +15,7 @@ def role_fetcher_decorator(role_name: str) -> Callable:
         async def wrapper(token_data: dict):
             role = token_data.get("role")
             if role != role_name:
-                raise InvalidCredentials()
+                return None
             return await func(token_data)
 
         FetchingUsersManager(role_name, wrapper)
@@ -56,8 +56,6 @@ class FetchingUsersManager:
 async def fetch_student(token_data: dict) -> Student | None:
     student_id = token_data.get("id")
     student = await DataBaseManager().get_student(student_id)
-    if student is None:
-        raise InvalidCredentials()
 
     return student
 
@@ -66,8 +64,6 @@ async def fetch_student(token_data: dict) -> Student | None:
 async def fetch_owner(token_data: dict) -> Owner | None:
     owner_id = token_data.get("id")
     owner = await DataBaseManager().get_owner(owner_id)
-    if owner is None:
-        raise InvalidCredentials()
 
     return owner
 
@@ -76,20 +72,5 @@ async def fetch_owner(token_data: dict) -> Owner | None:
 async def fetch_admin(token_data: dict) -> Admin | None:
     admin_id = token_data.get("id")
     admin = await DataBaseManager().get_admin(admin_id)
-    if admin is None:
-        raise InvalidCredentials()
-
-    return admin
-
-
-@role_fetcher_decorator("manager")
-async def fetch_manager(token_data: dict) -> Admin | None:
-    admin_id = token_data.get("id")
-    admin = await DataBaseManager().get_admin(admin_id)
-    if admin is None:
-        raise InvalidCredentials()
-
-    if admin.role != Roles.manager:
-        raise InvalidCredentials()
 
     return admin

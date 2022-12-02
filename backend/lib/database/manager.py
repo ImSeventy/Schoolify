@@ -269,15 +269,15 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester, "subject_id": subject_id})
 
-    async def add_new_post(self, post: PostsIn) -> int:
+    async def add_new_post(self, post: PostIn) -> int:
         query = self.models_manager.posts.insert().values(**post.dict())
         return await self.db.execute(query)
 
-    async def get_owner(self, email: str) -> Owner | None:
-        query = """
-        SELECT *, owners.id + 1  FROM owners WHERE owners.email = :email
+    async def get_owner(self, id_or_email: int | str) -> Owner | None:
+        query = f"""
+        SELECT *  FROM owners WHERE {'owners.email = :id_or_email' if isinstance(id_or_email, str) else 'owners.id = :id_or_email'}
         """
-        return await self.db.fetch_one(query, {"email": email})
+        return await self.db.fetch_one(query, {"id_or_email": id_or_email})
 
     async def get_post_from_id(self, post_id: int):
         query = """

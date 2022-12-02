@@ -20,6 +20,8 @@ class DbModelsManager:
         "majors",
         "admins",
         "owners",
+        "posts",
+        "likes"
     )
 
     def __init__(self, meta_data: MetaData) -> None:
@@ -34,6 +36,8 @@ class DbModelsManager:
         self._create_absences_table()
         self._create_admins_table()
         self._create_owners_table()
+        self._create_posts_table()
+        self._create_likes_table()
 
     def _create_students_table(self) -> None:
         self.students = Table(

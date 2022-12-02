@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class Post(BaseModel):
-    post_id : int
+    id : int
     content : str
     image_url : Optional[str] = None
     by : int
@@ -11,11 +11,11 @@ class Post(BaseModel):
 class PostIn(BaseModel):
     content : str
     image_url : Optional[str] = None
-    by : int
+    by : int = None
 
 
 class PostOut(BaseModel):
-    post_id : int
+    id : int
     content : str
     image_url : Optional[str] = None
     by : int
