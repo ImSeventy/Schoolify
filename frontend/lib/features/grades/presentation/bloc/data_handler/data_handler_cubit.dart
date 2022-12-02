@@ -170,8 +170,21 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     absences = filterAbsences(absences);
     int totalDays = totalAttendanceDays;
     if (totalDays == 0) return 0;
-    print(totalDays);
     double percentage = 100 - ((absences.length / totalDays) * 100);
     return min(percentage, 100);
+  }
+
+  double calculateGradesPercentage(List<GradeEntity> grades) {
+    grades = filterGrades(grades);
+    if (grades.isEmpty) return 0;
+
+    double fullDegree = 0;
+    double degree = 0;
+    for (GradeEntity grade in grades) {
+      fullDegree += grade.fullDegree;
+      degree += grade.grade;
+    }
+
+    return ((degree / fullDegree) * 100);
   }
 }

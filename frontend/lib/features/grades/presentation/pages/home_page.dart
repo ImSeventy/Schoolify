@@ -9,7 +9,6 @@ import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 
-import '../../domain/entities/grade.py.dart';
 import '../bloc/grades/grades_cubit.dart';
 import '../widgets/data_options_list_widget.dart';
 import '../widgets/progress_indicator.dart';
@@ -82,17 +81,15 @@ class MainHomePage extends StatelessWidget {
     dataHandlerCubit.changeYearMode(yearMode);
   }
 
-  double calculateGradesPercentage(List<GradeEntity> grades) {
-    if (grades.isEmpty) return 0;
+  double calculateSuperiorityPercentage(BuildContext context) {
+    DataHandlerCubit dataHandlerCubit = context.read<DataHandlerCubit>();
+    GradesCubit gradesCubit = context.read<GradesCubit>();
+    AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
 
-    double fullDegree = 0;
-    double degree = 0;
-    for (GradeEntity grade in grades) {
-      fullDegree += grade.fullDegree;
-      degree += grade.grade;
-    }
+    double gradesPercentage = dataHandlerCubit.calculateGradesPercentage(gradesCubit.grades);
+    double attendancePercentage = dataHandlerCubit.calculateAttendancePercentage(attendanceCubit.absences);
 
-    return ((degree / fullDegree) * 100);
+    return (gradesPercentage * 75 / 100) + (attendancePercentage * 25 / 100);
   }
 
   @override
@@ -242,7 +239,7 @@ class MainHomePage extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: FancyProgressIndicator(
-                                  percentage: calculateGradesPercentage(dataHandlerCubit.filterGrades(gradesCubit.grades)),
+                                  percentage: dataHandlerCubit.calculateGradesPercentage(gradesCubit.grades),
                                   backgroundColor: const Color(0xFF306767),
                                   name: "Grades",
                                 ),
@@ -261,11 +258,11 @@ class MainHomePage extends StatelessWidget {
                             ),
                             Transform.translate(
                               offset: Offset(0, 290.h),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.topRight,
                                 child: FancyProgressIndicator(
-                                  percentage: 45,
-                                  backgroundColor: Color(0xFF306767),
+                                  percentage: calculateSuperiorityPercentage(context),
+                                  backgroundColor: const Color(0xFF306767),
                                   name: "Superiority",
                                 ),
                               ),
