@@ -88,3 +88,13 @@ async def get_student_grade_absences(
         raise StudentNotFound()
     
     return await DataBaseManager().get_student_grade_absences(student_id, grade, semester)
+
+@absence.get("/me", response_model=list[AbsenceOut], status_code=status.HTTP_200_OK)
+async def get_my_absences(
+    grade: int = None,
+    semester: int = None,
+    token: str = Depends(oauth2_scheme)
+    ):
+    student = await get_user("student", token=token)
+
+    return await DataBaseManager().get_student_absences(student.id, grade, semester)

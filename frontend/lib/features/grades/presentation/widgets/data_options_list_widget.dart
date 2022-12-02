@@ -59,6 +59,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
             borderRadius: BorderRadius.circular(8),
           ),
           offset: const Offset(0, -5),
+          dropdownMaxHeight: 250.h,
         ),
       ),
     );

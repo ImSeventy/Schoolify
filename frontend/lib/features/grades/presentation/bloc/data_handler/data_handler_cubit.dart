@@ -11,7 +11,12 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     "Last Year": (grade) =>
         grade.gradeYear == (AuthInfo.currentStudent!.gradeYear - 1),
     "1st Semester": (grade) => grade.semester == 1,
-    "2nd Semester": (grade) => grade.semester == 2
+    "2nd Semester": (grade) => grade.semester == 2,
+    "Grade 1": (grade) => grade.gradeYear == 1,
+    "Grade 2": (grade) => grade.gradeYear == 2,
+    "Grade 3": (grade) => grade.gradeYear == 3,
+    "Grade 4": (grade) => grade.gradeYear == 4,
+    "Grade 5": (grade) => grade.gradeYear == 5
   };
 
   String currentYearMode = "All Years";

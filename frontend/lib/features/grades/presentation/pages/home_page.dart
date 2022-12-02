@@ -6,7 +6,6 @@ import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
 import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
-import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_states.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 
 import '../../domain/entities/grade.py.dart';
@@ -207,10 +206,10 @@ class MainHomePage extends StatelessWidget {
                         onChanged: (yearMode) {
                           changeYearMode(context, yearMode);
                         },
-                        optionValues: const [
+                        optionValues: [
                           "All Years",
                           "This Year",
-                          "Last Year"
+                          "Last Year", ...List.generate(AuthInfo.currentStudent!.gradeYear, (index) => "Grade ${index + 1}")
                         ],
                         prefixMsg: "",
                         currentValue: dataHandlerCubit.currentYearMode

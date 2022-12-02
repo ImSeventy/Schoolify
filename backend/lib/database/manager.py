@@ -187,9 +187,14 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.execute(query, {"student_id": student_id, "date": date})
 
-    async def get_student_absences(self, student_id: int) -> list[Absence]:
-        query = self.models_manager.absences.select().where(self.models_manager.absences.c.student_id == student_id)
-        return await self.db.fetch_all(query)
+    async def get_student_absences(self, student_id: int, grade: int = None, semester: int = None) -> list[Absence]:
+        query = f"""
+        SELECT *, :grade, :semester FROM absences
+        WHERE absences.student_id = :student_id
+        {'AND absences.grade = :grade' if grade is not None else ''}
+        {'AND absences.semester = :semester' if semester is not None else ''}
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester})
     
     async def get_student_grade_absences(self, student_id: int, grade: int, semester: int = None) -> list[Absence]:
         query = f"""
