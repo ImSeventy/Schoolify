@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from models.absences_models import Absence
     from models.subjects_models import Subject, SubjectIn
     from models.posts_models import PostIn, Post, PostEdit, PostOut
-    from models.likes_models import LikeIn, Like, LikeOut
+    from models.likes_models import Like
     from models.owners_models import Owner
 
 
@@ -280,10 +280,9 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.fetch_one(query, {"id_or_email": id_or_email})
 
-    async def get_post_from_id(self, post_id: int):
+    async def get_post_from_id(self, post_id: int) -> Post | None:
         query = """
-        SELECT posts.*, COUNT(likes.post_id) as post_likes FROM posts JOIN likes
-        ON posts.id = likes.post_id WHERE posts.id = :post_id;
+        SELECT posts.*, (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes FROM posts WHERE posts.id = :post_id;
         """
         return await self.db.fetch_one(query, {"post_id": post_id})
 
@@ -302,11 +301,17 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.posts.update().where(self.models_manager.posts.c.id == id).values(**new_post.dict())
         await self.db.execute(query)
 
-    async def add_new_like(self, like: LikeIn) -> int:
-        query = self.models_manager.likes.insert().values(**like.dict())
+    async def add_new_like(self, **kwagrs) -> int:
+        query = self.models_manager.likes.insert().values(**kwagrs)
         return await self.db.execute(query)
 
-    async def get_like_from_id(self, like_id: int):
+    async def get_like(self, post_id: int, user_id: int) -> Like | None:
+        query = """
+        SELECT * FROM likes WHERE likes.post_id = :post_id AND likes.by = :user_id
+        """
+        return await self.db.fetch_one(query, {"post_id": post_id, "user_id": user_id})
+
+    async def get_like_from_id(self, like_id: int) -> Like:
         query = """
         SELECT * FROM likes WHERE likes.id = :like_id;
         """
@@ -318,6 +323,9 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.fetch_one(query, {"like_id": like_id})
 
-    async def delete_like_with_id(self, id: int) -> None:
-        query = self.models_manager.likes.delete().where(self.models_manager.likes.c.id == id)
+    async def delete_like(self, post_id: int, user_id: int) -> None:
+        query = self.models_manager.likes.delete().where(
+            self.models_manager.likes.c.post_id == post_id,
+            self.models_manager.likes.c.by == user_id
+        )
         await self.db.execute(query)
