@@ -38,13 +38,18 @@ class SubPageNavItem extends StatelessWidget {
             SizedBox(
               width: 12.w,
             ),
-            Text(
-              label,
-              style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "Poppins",
-                  color: const Color(0xFFBAC5C5)),
+            Expanded(
+              child: FittedBox(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Poppins",
+                      color: const Color(0xFFBAC5C5)),
+                ),
+              ),
             )
           ],
         ),

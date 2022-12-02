@@ -25,7 +25,7 @@ class AppRouter {
   static Widget? getScreenFromRouteName(String? name, dynamic args) {
     switch (name) {
       case Routes.root:
-        return const HomePage();
+        return const LoginPage();
       case Routes.home:
         return const HomePage();
       default:

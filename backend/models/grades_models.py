@@ -24,6 +24,7 @@ class GradeOut(BaseModel):
     subject_name: str
     full_degree: float
     grade: float
+    grade_year: int
     semester: int
 
 

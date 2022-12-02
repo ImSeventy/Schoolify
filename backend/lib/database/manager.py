@@ -207,7 +207,15 @@ class DataBaseManager(metaclass=Singleton):
         semester: int
     ) -> Grade | None:
         query = """
-        SELECT * FROM grades WHERE grades.student_id = :student_id AND grades.subject_id = :subject_id AND grades.semester = :semester
+        SELECT grades.*,
+        subjects.name as subject_name,
+        subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
+        FROM grades JOIN subjects
+        ON grades.subject_id = subjects.id
+        WHERE grades.student_id = :student_id
+        AND grades.subject_id = :subject_id
+        AND grades.semester = :semester
         """
         return await self.db.fetch_one(query, {"student_id": student_id, "subject_id": subject_id, "semester": semester})
 
@@ -215,7 +223,8 @@ class DataBaseManager(metaclass=Singleton):
         query = """
         SELECT grades.*,
         subjects.name as subject_name,
-        subjects.full_degree as full_degree
+        subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
         FROM grades
         JOIN subjects
         ON grades.subject_id = subjects.id
@@ -254,6 +263,7 @@ class DataBaseManager(metaclass=Singleton):
         SELECT grades.*,
         subjects.name as subject_name,
         subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
         :grade,
         :semester,
         :subject_id

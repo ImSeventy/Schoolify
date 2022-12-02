@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 from fastapi import APIRouter, status, Depends
 from lib.database.manager import DataBaseManager
@@ -13,6 +14,24 @@ grades = APIRouter(
     prefix="/grades",
     tags=["grades"],
 )
+
+@grades.get("/me", status_code=status.HTTP_200_OK, response_model=list[GradeOut])
+async def get_my_grades(
+    grade: int = None,
+    semester: int = None,
+    subject_id: int = None,
+    token: str = Depends(oauth2_scheme)
+    ):
+    student = await get_user("student", token=token)
+
+    grades =  await DataBaseManager().get_student_grades(
+        student_id=student.id,
+        grade=grade,
+        semester=semester,
+        subject_id=subject_id
+    )
+    print(grades)
+    return grades
 
 @grades.get("/student", response_model=list[GradeOut], status_code=status.HTTP_200_OK)
 async def get_student_grades(

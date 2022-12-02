@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
+import 'package:frontend/core/constants/semesters_timeline.dart';
 
 class StudentEntity extends Equatable {
   final String email;
@@ -18,6 +21,15 @@ class StudentEntity extends Equatable {
     required this.majorId,
     required this.majorName,
   });
+
+  int get gradeYear {
+    DateTime currentDate = DateTime.now().toUtc();
+    int currentGrade = currentDate.year - entryYear;
+    if (currentDate.month >= SemesterTimeLine.firstSemesterStart) {
+      currentGrade += 1;
+    }
+    return min(currentGrade, 5);
+}
 
   @override
   List<Object?> get props => [

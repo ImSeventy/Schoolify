@@ -17,6 +17,7 @@ class FancyProgressIndicator extends StatelessWidget {
 
   get color {
     int colorIndex = ((percentage * colors.length / 100) - 1).round();
+    if (colorIndex < 0) colorIndex = 0;
     return colors[colorIndex];
   }
 
@@ -75,7 +76,7 @@ class FancyProgressIndicator extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: "$percentage %",
+                    text: "${percentage.toStringAsFixed(1)} %",
                     style: TextStyle(
                       color: color
                     )
