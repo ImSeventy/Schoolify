@@ -190,9 +190,14 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.execute(query, {"student_id": student_id, "date": date})
 
-    async def get_student_absences(self, student_id: int) -> list[Absence]:
-        query = self.models_manager.absences.select().where(self.models_manager.absences.c.student_id == student_id)
-        return await self.db.fetch_all(query)
+    async def get_student_absences(self, student_id: int, grade: int = None, semester: int = None) -> list[Absence]:
+        query = f"""
+        SELECT *, :grade, :semester FROM absences
+        WHERE absences.student_id = :student_id
+        {'AND absences.grade = :grade' if grade is not None else ''}
+        {'AND absences.semester = :semester' if semester is not None else ''}
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester})
     
     async def get_student_grade_absences(self, student_id: int, grade: int, semester: int = None) -> list[Absence]:
         query = f"""
@@ -210,7 +215,15 @@ class DataBaseManager(metaclass=Singleton):
         semester: int
     ) -> Grade | None:
         query = """
-        SELECT * FROM grades WHERE grades.student_id = :student_id AND grades.subject_id = :subject_id AND grades.semester = :semester
+        SELECT grades.*,
+        subjects.name as subject_name,
+        subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
+        FROM grades JOIN subjects
+        ON grades.subject_id = subjects.id
+        WHERE grades.student_id = :student_id
+        AND grades.subject_id = :subject_id
+        AND grades.semester = :semester
         """
         return await self.db.fetch_one(query, {"student_id": student_id, "subject_id": subject_id, "semester": semester})
 
@@ -218,7 +231,8 @@ class DataBaseManager(metaclass=Singleton):
         query = """
         SELECT grades.*,
         subjects.name as subject_name,
-        subjects.full_degree as full_degree
+        subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
         FROM grades
         JOIN subjects
         ON grades.subject_id = subjects.id
@@ -257,6 +271,7 @@ class DataBaseManager(metaclass=Singleton):
         SELECT grades.*,
         subjects.name as subject_name,
         subjects.full_degree as full_degree,
+        subjects.grade as grade_year,
         :grade,
         :semester,
         :subject_id

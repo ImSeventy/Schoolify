@@ -17,12 +17,14 @@ class AbsenceIn(BaseModel):
 
 
 class Absence(BaseModel):
+    id: int
     student_id: int
     date: datetime
     grade: int
     semester: int
 
 class AbsenceOut(BaseModel):
+    id: int
     student_id: int
     date: float
     grade: int
