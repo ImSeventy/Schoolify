@@ -5,6 +5,7 @@ class Owner(BaseModel):
     name: str
     email: EmailStr
 
+
 class OwnerOut(BaseModel):
     id: int
     name: str
