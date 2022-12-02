@@ -19,6 +19,7 @@ class PostOut(BaseModel):
     content : str
     image_url : Optional[str] = None
     by : int
+    like_count : int
 
 
 class PostEdit(BaseModel):

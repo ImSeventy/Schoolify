@@ -40,6 +40,10 @@ async def post_exists(post_id: int) -> bool:
     post = await DataBaseManager().get_post_from_id(post_id=post_id)
     return True if post else False
 
+async def like_exists(like_id: int) -> bool:
+    like = await DataBaseManager().get_like_from_id(like_id= like_id)
+    return True if like else False
+
 async def grade_already_exists(
     *,
     id: int = None,

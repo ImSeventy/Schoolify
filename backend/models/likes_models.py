@@ -7,7 +7,7 @@ class Like(BaseModel):
 
 
 class LikeIn(BaseModel):
-    by : int
+    by : int = None
     post_id : int
 
 
