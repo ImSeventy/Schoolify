@@ -4,7 +4,7 @@ from lib.authentication.authentication import Authentication
 from lib.database.manager import DataBaseManager
 from lib.date_manager.date_manager import DateManager
 from models.settings_models import Settings
-from routers import majors, admins, students, subjects, absence, grades, posts, owners
+from routers import majors, admins, students, subjects, absence, grades, posts, owners, warnings
 
 app = FastAPI()
 app.include_router(majors.majors)
@@ -15,6 +15,7 @@ app.include_router(absence.absence)
 app.include_router(grades.grades)
 app.include_router(posts.posts)
 app.include_router(owners.owners)
+app.include_router(warnings.warnings)
 
 settings = Settings()
 

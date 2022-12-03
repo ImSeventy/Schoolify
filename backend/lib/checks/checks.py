@@ -62,7 +62,10 @@ async def student_has_subject(student_id: int, subject_id: int) -> bool:
     student_subject = await DataBaseManager().get_student_subject(student_id, subject_id)
     return True if student_subject else False
 
-
 async def user_liked_post(user_id: int, post_id: int) -> bool:
     like = await DataBaseManager().get_like(post_id, user_id)
     return True if like else False
+
+async def warning_exists(warning_id: int) -> bool:
+    warning = await DataBaseManager().get_warning_from_id(warning_id==warning_id)
+    return True if warning else False
