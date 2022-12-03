@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from models.absences_models import Absence
     from models.subjects_models import Subject, SubjectIn
     from models.posts_models import PostIn, Post, PostEdit, PostOut
+    from models.warnings_models import WarningIn, Warning, WarningEdit, WarningOut
     from models.likes_models import Like
     from models.owners_models import Owner
 
@@ -344,3 +345,29 @@ class DataBaseManager(metaclass=Singleton):
             self.models_manager.likes.c.by == user_id
         )
         await self.db.execute(query)
+
+    async def add_new_warning(self, warning: WarningIn) -> int:
+        query = self.models_manager.warnings.insert().values(**warning.dict())
+        return await self.db.execute(query)
+
+    async def get_warning_from_id(self, warning_id: int) -> Warning | None:
+        query = self.models_manager.warnings.select().where(self.models_manager.warnings.c.id == warning_id)
+        return await self.db.fetch_one(query)
+
+    async def delete_warning_with_id(self, id: int) -> None:
+        query = self.models_manager.warnings.delete().where(self.models_manager.warnings.c.id == id)
+        await self.db.execute(query)
+
+    async def edit_warning(self, id: int, new_warning: WarningEdit) -> None:
+        query = self.models_manager.warnings.update().where(self.models_manager.warnings.c.id == id).values(**new_warning.dict())
+        await self.db.execute(query)
+
+    async def get_all_warnings(self, student_id: int) -> list[WarningOut]:
+        query = """
+        SELECT * FROM warnings WHERE warnings.by = :student_id
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id})
+
+    async def get_warning_from_id(self, warning_id: int) -> WarningOut:
+        query = self.models_manager.warnings.select().where(self.models_manager.warnings.c.id == warning_id)
+        return await self.db.fetch_one(query)
