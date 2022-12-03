@@ -136,7 +136,7 @@ class DbModelsManager:
         )
 
     def _create_warnings_table(self) -> None:
-        self.warnings = TAble(
+        self.warnings = Table(
             "warnings",
             self.meta_data,
             Column("id", Integer, primary_key=True),

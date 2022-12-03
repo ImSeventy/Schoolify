@@ -11,16 +11,14 @@ from lib.checks.checks import student_exists, warning_exists
 warnings = APIRouter(prefix="/warnings", tags=["warnings"])
 
 @warnings.post("/", response_model=WarningOut, status_code=status.HTTP_201_CREATED)
-async def add_warning(student_id: int, warning: WarningIn, token: str = Depends(oauth2_scheme)):
+async def add_warning(warning: WarningIn, token: str = Depends(oauth2_scheme)):
     admin = await get_user("admin", token=token)
     if admin.role != Roles.manager.value:
         raise InvalidCredentials()
     
-    if not await student_exists(student_id):
+    if not await student_exists(warning.by):
         raise StudentNotFound()
-    
-    warning.by = student_id
-    
+        
     id = await DataBaseManager().add_new_warning(warning)
     return {**warning.dict(), "id": id}
 
@@ -36,7 +34,7 @@ async def delete_warning(id: int, token: str = Depends(oauth2_scheme)):
     await DataBaseManager().delete_warning_with_id(id)
 
 @warnings.put("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def edit_post(id: int, warning: WarningEdit, token: str = Depends(oauth2_scheme)):
+async def edit_warning(id: int, warning: WarningEdit, token: str = Depends(oauth2_scheme)):
     admin = await get_user("admin", token=token)
     if admin.role != Roles.manager.value:
         raise InvalidCredentials()
@@ -47,14 +45,14 @@ async def edit_post(id: int, warning: WarningEdit, token: str = Depends(oauth2_s
     await DataBaseManager().edit_warning(id, warning)
 
 @warnings.get("/me", response_model=list[WarningOut], status_code=status.HTTP_200_OK)
-async def get_all_warnings(token: str = Depends(oauth2_scheme)):
+async def get_my_warnings(token: str = Depends(oauth2_scheme)):
     user = await get_user("student", token=token)
     
     return await DataBaseManager().get_all_warnings(user.id)
 
-@warnings.get("/student/{id}", response_model=list[WarningOut], status_code=status.HTTP_200_OK)
-async def get_all_warnings(student_id: int, token: str = Depends(oauth2_scheme)):
-    admin = await get_user("admin", token=token)
+@warnings.get("/student", response_model=list[WarningOut], status_code=status.HTTP_200_OK)
+async def get_student_warnings(student_id: int, token: str = Depends(oauth2_scheme)):
+    _ = await get_user("admin", token=token)
     
     if not await student_exists(student_id):
         raise StudentNotFound()
