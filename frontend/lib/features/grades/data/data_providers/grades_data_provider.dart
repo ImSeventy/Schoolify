@@ -4,6 +4,8 @@ import 'package:frontend/core/constants/end_points.dart';
 import 'package:frontend/core/errors/exceptions.dart';
 import 'package:frontend/features/grades/data/models/grade.py.dart';
 
+import '../../../../core/network/interceptors.dart';
+
 abstract class GradesDataProvider {
   Future<List<GradeModel>> getStudentGrades();
 }
@@ -20,6 +22,10 @@ class GradesDataProviderImpl extends GradesDataProvider {
       validateStatus: (status) {
         return status != null && status < 500;
       },
+    ));
+
+    _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: onRequestInterceptor
     ));
   }
 

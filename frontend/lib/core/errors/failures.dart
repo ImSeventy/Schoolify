@@ -41,3 +41,20 @@ class InvalidAccessTokenFailure extends Failure with EquatableMixin {
   @override
   List<Object?> get props => [message];
 }
+
+class InvalidRefreshTokenFailure extends Failure with EquatableMixin {
+
+  InvalidRefreshTokenFailure() : super("Invalid refresh token");
+
+  @override
+  List<Object?> get props => [message];
+}
+
+
+class NoCachedAccessTokensFailure extends Failure with EquatableMixin {
+
+  NoCachedAccessTokensFailure() : super("There is not cached access tokens");
+
+  @override
+  List<Object?> get props => [message];
+}

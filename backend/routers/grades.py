@@ -30,7 +30,6 @@ async def get_my_grades(
         semester=semester,
         subject_id=subject_id
     )
-    print(grades)
     return grades
 
 @grades.get("/student", response_model=list[GradeOut], status_code=status.HTTP_200_OK)

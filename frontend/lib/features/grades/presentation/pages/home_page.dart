@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int pageIndex = 0;
+  int pageIndex = 1;
 
   void changePageIndex(int index) {
     setState(() {
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: const Color(0xFF131524),
-          bottomNavigationBar: CustomNavigationBar(onTap: changePageIndex),
+          bottomNavigationBar: CustomNavigationBar(onTap: changePageIndex, initialIndex: 1),
           body: IndexedStack(
             index: pageIndex,
             children: pages,
@@ -113,6 +113,8 @@ class MainHomePage extends StatelessWidget {
               await gradesCubit.getStudentGrades();
               await attendanceCubit.getStudentAbsences();
             },
+            color: const Color(0xFF131524),
+            backgroundColor: const Color(0xFF2d407b),
             child: Stack(
               children: [
                 Container(
@@ -153,28 +155,31 @@ class MainHomePage extends StatelessWidget {
                           SizedBox(
                             width: 9.w,
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: 29.h,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                    text: "Welcome!\n",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "Poppins",
-                                        fontSize: 16.sp,
-                                        color: Colors.white.withOpacity(0.8)),
-                                    children: const [
-                                      TextSpan(
-                                          text: "Ahmed",
-                                          style: TextStyle(color: Colors.white))
-                                    ]),
-                              )
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 29.h,
+                                ),
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                      text: "Welcome!\n",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Poppins",
+                                          fontSize: 16.sp,
+                                          color: Colors.white.withOpacity(0.8)),
+                                      children: [
+                                        TextSpan(
+                                            text: AuthInfo.currentStudent!.name,
+                                            style: const TextStyle(color: Colors.white))
+                                      ]),
+                                )
+                              ],
+                            ),
                           ),
-                          const Spacer(),
                           Column(
                             children: [
                               Text(
