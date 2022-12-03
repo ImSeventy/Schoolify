@@ -8,4 +8,8 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, TokensEntity>> login({required String email, required String password});
 
   Future<Either<Failure, StudentEntity>> getCurrentStudent();
+
+  Future<Either<Failure, TokensEntity>> refreshAccessToken();
+
+  Future<Either<Failure, TokensEntity>> loadCachedAccessTokens();
 }

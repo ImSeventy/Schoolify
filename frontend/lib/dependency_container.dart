@@ -9,7 +9,11 @@ import 'package:frontend/features/authentication/data/data_providers/tokens_data
 import 'package:frontend/features/authentication/data/repository/authentication_repository.dart';
 import 'package:frontend/features/authentication/domain/repository/authentication_repository.dart';
 import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
+import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
+import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
+import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/grades/domain/repository/grades_repository.dart';
 import 'package:frontend/features/grades/domain/use_cases/get_student_grades.dart';
@@ -52,6 +56,18 @@ void _setupAuthenticationFeature() {
 
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
+      authenticationRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<RefreshAccessTokenUseCase>(
+        () => RefreshAccessTokenUseCase(
+      authenticationRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<LoadCachedAccessTokensUseCase>(
+        () => LoadCachedAccessTokensUseCase(
       authenticationRepository: getIt(),
     ),
   );

@@ -13,19 +13,20 @@ class AppRouter {
     Widget? screen = getScreenFromRouteName(settings.name, args);
     if (screen == null) return null;
 
-    return MaterialPageRoute(
-        builder: (context) {
-          return CurrentThemeWrapper(
-            child: screen,
-          );
-        }
-    );
+    return MaterialPageRoute(builder: (context) {
+      return CurrentThemeWrapper(
+        child: screen,
+      );
+    });
   }
 
   static Widget? getScreenFromRouteName(String? name, dynamic args) {
     switch (name) {
       case Routes.root:
-        return const LoginPage();
+        if (AuthInfo.accessTokens == null || AuthInfo.currentStudent == null) {
+          return const LoginPage();
+        }
+        return const HomePage();
       case Routes.home:
         return const HomePage();
       default:

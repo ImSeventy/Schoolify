@@ -4,6 +4,7 @@ import 'package:frontend/features/attendance/data/models/absence_model.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/end_points.dart';
+import '../../../../core/network/interceptors.dart';
 
 abstract class AttendanceDataProvider {
   Future<List<AbsenceModel>> getStudentAbsences();
@@ -21,6 +22,10 @@ class AttendanceDataProviderImpl implements AttendanceDataProvider {
         validateStatus: (status) {
           return status != null && status < 500;
         }));
+
+    _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: onRequestInterceptor
+    ));
   }
 
   @override

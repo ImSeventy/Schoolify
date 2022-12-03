@@ -35,7 +35,7 @@ class TokensDataProviderImpl implements TokensDataProvider {
 
   @override
   void storeTokensInCache(TokensModel tokensModel) async {
-    await sharedPreferences.setString(tokensInCacheKey, tokensModel.toJson().toString());
+    await sharedPreferences.setString(tokensInCacheKey, jsonEncode(tokensModel.toJson()));
   }
 
 }

@@ -64,4 +64,34 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return Left(WrongEmailOrPasswordFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, TokensEntity>> refreshAccessToken() async {
+    if (!await networkInfo.isConnected()) {
+    return Left(NetworkFailure());
+    }
+
+
+    if (AuthInfo.accessTokens == null) {
+    return Left(InvalidAccessTokenFailure());
+    }
+
+    try {
+    TokensModel tokensModel =  await authenticationDataProvider.refreshAccessToken();
+    return Right(tokensModel);
+    } on ServerException {
+    return Left(ServerFailure());
+    } on InvalidRefreshTokenException {
+    return Left(InvalidRefreshTokenFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, TokensEntity>> loadCachedAccessTokens() async {
+    TokensEntity? tokensEntity = tokensDataProvider.getCachedTokens();
+
+    if (tokensEntity == null) return Left(NoCachedAccessTokensFailure());
+
+    return Right(tokensEntity);
+  }
 }

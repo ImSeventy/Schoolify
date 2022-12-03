@@ -6,11 +6,15 @@ import 'package:frontend/features/authentication/data/models/student_model.dart'
 import 'package:frontend/features/authentication/data/models/tokens_model.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 
+import '../../../../core/network/interceptors.dart';
+
 
 abstract class AuthenticationDataProvider {
   Future<TokensModel> login({required email, required password});
 
   Future<StudentEntity> getCurrentStudent();
+
+  Future<TokensModel> refreshAccessToken();
 }
 
 class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
@@ -25,6 +29,10 @@ class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
         validateStatus: (status) {
           return status != null && status < 500;
         }));
+
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: onRequestInterceptor
+    ));
   }
 
   @override
@@ -67,6 +75,28 @@ class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
       }
 
       return StudentModel.fromJson(response.data);
+    } on DioError{
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<TokensModel> refreshAccessToken() async {
+    try {
+      Response response = await _dio.post(
+          "/refresh",
+          options: Options(
+              headers: {
+                "Authorization": "Bearer ${AuthInfo.accessTokens?.refreshToken}"
+              }
+          )
+      );
+
+      if (response.statusCode == 401) {
+        throw InvalidRefreshTokenException();
+      }
+
+      return TokensModel.fromJson(response.data);
     } on DioError{
       throw ServerException();
     }
