@@ -30,3 +30,19 @@ class UserDidnotLikePost(HTTPException):
             status.HTTP_409_CONFLICT,
             "User did not like the post"
         )
+
+
+class InvalidImageFormat(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_400_BAD_REQUEST,
+            "Invalid image format"
+        )
+
+
+class ImageNotFound(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_404_NOT_FOUND,
+            "Image not found"
+        )

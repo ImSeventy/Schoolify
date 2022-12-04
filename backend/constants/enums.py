@@ -13,6 +13,9 @@ class Roles(Enum):
 
         return False
 
+class ImagesSubPaths(Enum):
+    posts = "posts"
+    users = "students"
 
 class Semesters(Enum):
     first_semester = 1
