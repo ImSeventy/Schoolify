@@ -7,6 +7,7 @@ from sqlalchemy import text
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
 from models.grades_models import Grade, GradeIn
+from models.posts_models import PostFormModel
 
 if TYPE_CHECKING:
     from models.admins_models import Admin, AdminIn
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
     from models.absences_models import AbsenceIn
     from models.absences_models import Absence
     from models.subjects_models import Subject, SubjectIn
-    from models.posts_models import PostIn, Post, PostEdit, PostOut
+    from models.posts_models import Post, PostEdit, PostOut
     from models.warnings_models import WarningIn, Warning, WarningEdit, WarningOut
     from models.likes_models import Like
     from models.owners_models import Owner
@@ -286,8 +287,8 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.fetch_all(query, {"student_id": student_id, "grade": grade, "semester": semester, "subject_id": subject_id})
 
-    async def add_new_post(self, post: PostIn) -> int:
-        query = self.models_manager.posts.insert().values(**post.dict())
+    async def add_new_post(self, post: PostFormModel) -> int:
+        query = self.models_manager.posts.insert().values(**post.as_dict())
         return await self.db.execute(query)
 
     async def get_owner(self, id_or_email: int | str) -> Owner | None:

@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     first_semester_end_month: int
     second_semester_start_month: int
     second_semester_end_month: int
+    images_path: str
+    ip_address: str
 
     class Config:
         env_file = ".env"

@@ -1,25 +1,41 @@
 from fastapi import APIRouter, status, Depends
-from constants.enums import Roles
+from fastapi.responses import FileResponse
+from constants.enums import ImagesSubPaths, Roles
 from lib.database.manager import DataBaseManager
 from lib.exceptions.auth import InvalidCredentials
-from models.posts_models import PostIn, PostOut, PostEdit
+from lib.images_manager.images_manager import ImagesManager
+from models.posts_models import PostFormModel, PostOut, PostEdit
 from models.likes_models import LikeOut
 from lib.authentication.authentication import oauth2_scheme, get_user
-from lib.exceptions.posts import PostNotFound, UserAlreadyLikedPost, UserDidnotLikePost
-from lib.checks.checks import post_exists, like_exists, user_liked_post
+from lib.exceptions.posts import ImageNotFound, InvalidImageFormat, PostNotFound, UserAlreadyLikedPost, UserDidnotLikePost
+from lib.checks.checks import post_exists, user_liked_post
 
 posts = APIRouter(prefix="/posts", tags=["posts"])
 
 
 @posts.post("/", response_model=PostOut, status_code=status.HTTP_201_CREATED)
-async def add_post(post: PostIn, token: str = Depends(oauth2_scheme)):
+async def add_post(post: PostFormModel = Depends(), token: str = Depends(oauth2_scheme)):
     admin = await get_user("admin", token=token)
     if admin.role != Roles.manager.value:
         raise InvalidCredentials()
 
     post.by = admin.id
+    if post.image is not None:
+        if not ImagesManager().is_valid_image(post.image):
+            raise InvalidImageFormat()
+
+        image_url = ImagesManager().save_image(post.image, ImagesSubPaths.posts.value)
+        post.image_url = image_url
+
     id = await DataBaseManager().add_new_post(post)
-    return {**post.dict(), "id": id}
+    return {**post.as_dict(), "id": id}
+
+@posts.get("/image/{image_name}")
+async def get_image(image_name: str):
+    if not ImagesManager().image_exists(image_name, ImagesSubPaths.posts.value):
+        raise ImageNotFound()
+
+    return FileResponse(ImagesManager().get_image_path(image_name, ImagesSubPaths.posts.value))
 
 @posts.get("/feed", response_model=list[PostOut], status_code=status.HTTP_200_OK)
 async def get_feed_posts(token: str = Depends(oauth2_scheme)):
