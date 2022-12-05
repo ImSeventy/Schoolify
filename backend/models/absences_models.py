@@ -1,4 +1,4 @@
-from datetime import datetime, date as dt
+from datetime import datetime, date, timezone
 from pydantic import BaseModel, validator
 
 from models.students_models import Student
@@ -31,7 +31,7 @@ class AbsenceOut(BaseModel):
     semester: int
 
     @validator("date", pre=True)
-    def date_validator(cls, date: dt) -> float:
+    def date_validator(cls, date: date | str) -> float:
         if isinstance(date, str):
             date = datetime.strptime(date, "%Y-%m-%d")
-        return datetime(date.year, date.month, date.day).timestamp()
+        return datetime(date.year, date.month, date.day, tzinfo=timezone.utc).timestamp()
