@@ -1,6 +1,8 @@
+from datetime import datetime
 from fastapi import APIRouter, status, Depends
 from constants.enums import Roles
 from lib.database.manager import DataBaseManager
+from lib.date_manager.date_manager import DateManager
 from lib.exceptions.auth import InvalidCredentials
 from lib.exceptions.warnings import StudentNotFound, WarningNotFound, ThisWarningNotYours
 from models.warnings_models import WarningIn, WarningOut, WarningEdit
@@ -16,8 +18,12 @@ async def add_warning(warning: WarningIn, token: str = Depends(oauth2_scheme)):
     if admin.role != Roles.manager.value:
         raise InvalidCredentials()
     
-    if not await student_exists(warning.student_id):
+    student = await DataBaseManager().get_student(warning.student_id)
+    if student is None:
         raise StudentNotFound()
+
+    warning.grade_year = DateManager().get_current_grade(student.entry_year)
+    warning.semester = DateManager().get_current_semester(datetime.utcnow())
         
     id = await DataBaseManager().add_new_warning(warning)
     return {**warning.dict(), "id": id}

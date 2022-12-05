@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
@@ -9,14 +10,15 @@ import 'package:frontend/features/authentication/domain/use_cases/load_cached_ac
 import 'package:frontend/router/router.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 import 'dependency_container.dart' as dc;
+import 'features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'router/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
-  await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
-  await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  // await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
+  // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
   // final port = SerialPort("COM15", openNow: false, BaudRate: 9600, ByteSize: 8, ReadTotalTimeoutConstant: 10);
   // port.open();
   // List<int> chars = [];
@@ -42,11 +44,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Schoolify',
-      onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: Routes.root,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DataHandlerCubit>(
+          create: (context) {
+            DataHandlerCubit dataHandlerCubit = dc.getIt<DataHandlerCubit>();
+            return dataHandlerCubit;
+          },
+        )
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Schoolify',
+        onGenerateRoute: AppRouter.onGenerateRoute,
+        initialRoute: Routes.root,
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/constants/semesters_timeline.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
+import 'package:frontend/features/warnings/domain/entities/warning_entity.dart';
 
 import '../../../domain/entities/grade.py.dart';
 import 'data_handler_states.dart';
@@ -35,6 +36,20 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     "Grade 3": (absence) => absence.grade == 3,
     "Grade 4": (absence) => absence.grade == 4,
     "Grade 5": (absence) => absence.grade == 5
+  };
+
+  final Map<String, bool Function(WarningEntity)> warningsPredicates = {
+    "This Year": (warning) =>
+    warning.gradeYear == AuthInfo.currentStudent!.gradeYear,
+    "Last Year": (warning) =>
+    warning.gradeYear == (AuthInfo.currentStudent!.gradeYear - 1),
+    "1st Semester": (warning) => warning.semester == 1,
+    "2nd Semester": (warning) => warning.semester == 2,
+    "Grade 1": (warning) => warning.gradeYear == 1,
+    "Grade 2": (warning) => warning.gradeYear == 2,
+    "Grade 3": (warning) => warning.gradeYear == 3,
+    "Grade 4": (warning) => warning.gradeYear == 4,
+    "Grade 5": (warning) => warning.gradeYear == 5
   };
 
   String currentYearMode = "All Years";
@@ -76,6 +91,19 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
       absences = absences.where(semesterPredicate).toList();
     }
     return absences;
+  }
+
+  List<WarningEntity> filterWarnings(List<WarningEntity> warnings) {
+    final yearsPredicate = warningsPredicates[currentYearMode];
+    if (yearsPredicate != null) {
+      warnings = warnings.where(yearsPredicate).toList();
+    }
+
+    final semesterPredicate = warningsPredicates[currentSemesterMode];
+    if (semesterPredicate != null) {
+      warnings = warnings.where(semesterPredicate).toList();
+    }
+    return warnings;
   }
 
   int getDaysFromTheBeginningOfTheSemester(int semester) {
