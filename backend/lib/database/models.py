@@ -141,5 +141,5 @@ class DbModelsManager:
             self.meta_data,
             Column("id", Integer, primary_key=True),
             Column("content", String),
-            Column("by", ForeignKey("students.id"))
+            Column("student_id", ForeignKey("students.id"))
         )

@@ -16,7 +16,7 @@ async def add_warning(warning: WarningIn, token: str = Depends(oauth2_scheme)):
     if admin.role != Roles.manager.value:
         raise InvalidCredentials()
     
-    if not await student_exists(warning.by):
+    if not await student_exists(warning.student_id):
         raise StudentNotFound()
         
     id = await DataBaseManager().add_new_warning(warning)
@@ -67,7 +67,7 @@ async def get_warning(id: int, token: str = Depends(oauth2_scheme)):
     if warning is None:
         raise WarningNotFound()
     
-    if getattr(user, "role", None) is None and warning.by != user.id:
+    if getattr(user, "role", None) is None and warning.student_id != user.id:
             raise ThisWarningNotYours()
     
     return warning

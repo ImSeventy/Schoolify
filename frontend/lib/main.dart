@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/router/router.dart';
+import 'package:serial_port_win32/serial_port_win32.dart';
 import 'dependency_container.dart' as dc;
 import 'router/routes.dart';
 
@@ -13,6 +17,23 @@ Future<void> main() async {
   await ScreenUtil.ensureScreenSize();
   await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
   await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  // final port = SerialPort("COM15", openNow: false, BaudRate: 9600, ByteSize: 8, ReadTotalTimeoutConstant: 10);
+  // port.open();
+  // List<int> chars = [];
+  // String? id;
+  // port.readOnListenFunction = (value) {
+  //   print(value.first);
+  //   if (value.first == 10) {
+  //     String newId = String.fromCharCodes(chars);
+  //     if (id != newId) {
+  //       id = String.fromCharCodes(chars);
+  //       print(id);
+  //     }
+  //     chars.clear();
+  //   } else {
+  //     chars.add(value.first);
+  //   }
+  // };
   runApp(const MyApp());
 }
 
