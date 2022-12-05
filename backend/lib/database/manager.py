@@ -366,7 +366,7 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_all_warnings(self, student_id: int) -> list[WarningOut]:
         query = """
-        SELECT * FROM warnings WHERE warnings.by = :student_id
+        SELECT * FROM warnings WHERE warnings.student_id = :student_id
         """
         return await self.db.fetch_all(query, {"student_id": student_id})
 

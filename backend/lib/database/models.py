@@ -144,7 +144,9 @@ class DbModelsManager:
             Column("id", Integer, primary_key=True),
             Column("content", String),
             Column("student_id", ForeignKey("students.id")),
-            Column("date", Date)
+            Column("date", Date),
+            Column("grade_year", Integer),
+            Column("semester", Integer),
         )
 
     def _create_certifications_table(self) -> None:
