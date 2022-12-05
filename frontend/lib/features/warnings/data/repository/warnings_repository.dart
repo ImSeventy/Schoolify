@@ -8,11 +8,11 @@ import 'package:frontend/features/warnings/data/models/warning_model.dart';
 import 'package:frontend/features/warnings/domain/entities/warning_entity.dart';
 import 'package:frontend/features/warnings/domain/reposistory/warnings_repository.dart';
 
-class WarningRepositoryImpl implements WarningsRepository {
+class WarningsRepositoryImpl implements WarningsRepository {
   final NetworkInfo networkInfo;
   final WarningsDataProvider warningsDataProvider;
 
-  WarningRepositoryImpl({required this.networkInfo, required this.warningsDataProvider});
+  WarningsRepositoryImpl({required this.networkInfo, required this.warningsDataProvider});
 
   @override
   Future<Either<Failure, List<WarningEntity>>> getStudentWarnings() async {

@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
+from models.certifications_models import Certifiaction, CertificationEditFormModel, CertificationFormModel
 from models.grades_models import Grade, GradeIn
 from models.posts_models import PostFormModel
 
@@ -372,3 +373,23 @@ class DataBaseManager(metaclass=Singleton):
     async def get_warning_from_id(self, warning_id: int) -> WarningOut:
         query = self.models_manager.warnings.select().where(self.models_manager.warnings.c.id == warning_id)
         return await self.db.fetch_one(query)
+
+    async def create_certification(self, cert: CertificationFormModel) -> int:
+        query = self.models_manager.certifications.insert().values(**cert.as_dict())
+        return await self.db.execute(query)
+
+    async def get_certification_from_id(self, cert_id: int) -> Certifiaction:
+        query = self.models_manager.certifications.select().where(self.models_manager.certifications.c.id == cert_id)
+        return await self.db.fetch_one(query)
+
+    async def get_student_certifications(self, student_id: int) -> list[Certifiaction]:
+        query = self.models_manager.certifications.select().where(self.models_manager.certifications.c.student_id == student_id)
+        return await self.db.fetch_all(query)
+
+    async def delete_certification_with_id(self, id: int) -> None:
+        query = self.models_manager.certifications.delete().where(self.models_manager.certifications.c.id == id)
+        await self.db.execute(query)
+
+    async def edit_certification(self, id: int, new_cert: CertificationEditFormModel) -> None:
+        query = self.models_manager.certifications.update().where(self.models_manager.certifications.c.id == id).values(**new_cert.as_dict())
+        await self.db.execute(query)
