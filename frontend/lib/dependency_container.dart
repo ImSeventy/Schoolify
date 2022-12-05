@@ -10,9 +10,7 @@ import 'package:frontend/features/authentication/data/repository/authentication_
 import 'package:frontend/features/authentication/domain/repository/authentication_repository.dart';
 import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
-import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/features/authentication/domain/use_cases/login_use_case.dart';
-import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
 import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/grades/domain/repository/grades_repository.dart';
@@ -22,9 +20,19 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'features/certifications/data/data_providers/certifiactions_data_provider.dart';
+import 'features/certifications/data/repository/certifications_repository.dart';
+import 'features/certifications/domain/repository/certifications_repository.dart';
+import 'features/certifications/domain/use_cases/get_student_certifications.dart';
+import 'features/certifications/presentation/bloc/certifications_cubit/certifications_cubit.dart';
 import 'features/grades/data/data_providers/grades_data_provider.dart';
 import 'features/grades/data/repository/grades_repository.py.dart';
 import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
+import 'features/warnings/data/data_providers/warnings_data_provider.dart';
+import 'features/warnings/data/repository/warnings_repository.dart';
+import 'features/warnings/domain/reposistory/warnings_repository.dart';
+import 'features/warnings/domain/use_cases/get_student_warnings.dart';
+import 'features/warnings/presentation/bloc/warnings_cubit/warnings_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -32,6 +40,8 @@ Future<void> setUp() async {
   _setupAuthenticationFeature();
   _setupGradesFeature();
   _setupAttendanceFeature();
+  _setupWarningsFeature();
+  _setupCertificationsFeature();
   await _setupCore();
 }
 
@@ -146,5 +156,51 @@ void _setupAttendanceFeature() {
 
   getIt.registerLazySingleton<AttendanceDataProvider>(
     () => AttendanceDataProviderImpl(),
+  );
+}
+
+void _setupWarningsFeature() {
+  getIt.registerFactory<WarningsCubit>(
+    () => WarningsCubit(getStudentWarningsUseCase: getIt()),
+  );
+
+  getIt.registerLazySingleton<GetStudentWarningsUseCase>(
+    () => GetStudentWarningsUseCase(
+      warningsRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<WarningsRepository>(
+    () => WarningsRepositoryImpl(
+      networkInfo: getIt(),
+      warningsDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<WarningsDataProvider>(
+    () => WarningsDataProviderImpl(),
+  );
+}
+
+void _setupCertificationsFeature() {
+  getIt.registerFactory<CertificationsCubit>(
+    () => CertificationsCubit(getStudentCertificationsUseCase: getIt()),
+  );
+
+  getIt.registerLazySingleton<GetStudentCertificationsUseCase>(
+    () => GetStudentCertificationsUseCase(
+      certificationsRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CertificationsRepository>(
+    () => CertificationsRepositoryImpl(
+      networkInfo: getIt(),
+      certificationsDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CertificationsDataProvider>(
+    () => CertificationsDataProviderImpl(),
   );
 }
