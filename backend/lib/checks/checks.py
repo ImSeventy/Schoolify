@@ -67,5 +67,5 @@ async def user_liked_post(user_id: int, post_id: int) -> bool:
     return True if like else False
 
 async def warning_exists(warning_id: int) -> bool:
-    warning = await DataBaseManager().get_warning_from_id(warning_id==warning_id)
+    warning = await DataBaseManager().get_warning_from_id(warning_id=warning_id)
     return True if warning else False

@@ -4,18 +4,18 @@ from pydantic import BaseModel
 class Warning(BaseModel):
     id : int
     content : str
-    by : int
+    student_id : int
 
 
 class WarningIn(BaseModel):
     content : str
-    by : int
+    student_id : int
 
 
 class WarningOut(BaseModel):
     id : int
     content : str
-    by : int
+    student_id : int
 
 
 class WarningEdit(BaseModel):
