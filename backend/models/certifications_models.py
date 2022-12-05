@@ -36,4 +36,30 @@ class CertificationFormModel:
         self.student_id = student_id
         self.content = content
         self.image = image
+        self.image_url = None
         self.date = datetime.utcnow()
+
+    def as_dict(self) -> dict:
+        return {
+            "student_id": self.student_id,
+            "content": self.content,
+            "image_url": self.image_url,
+            "date": self.date,
+        }
+
+
+class CertificationEditFormModel:
+    def __init__(
+        self,
+        content: str = Form(),
+        image: UploadFile = None,
+    ):
+        self.content = content
+        self.image = image
+        self.image_url = None
+
+    def as_dict(self) -> dict:
+        return {
+            "content": self.content,
+            "image_url": self.image_url,
+        }

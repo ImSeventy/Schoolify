@@ -14,6 +14,7 @@ from routers import (
     posts,
     owners,
     warnings,
+    certifications
 )
 
 app = FastAPI()
@@ -26,6 +27,7 @@ app.include_router(grades.grades)
 app.include_router(posts.posts)
 app.include_router(owners.owners)
 app.include_router(warnings.warnings)
+app.include_router(certifications.certifications)
 
 settings = Settings()
 
