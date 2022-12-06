@@ -17,6 +17,8 @@ class ImagesSubPaths(Enum):
     posts = "posts"
     users = "students"
     certifications = "certifications"
+    admins = "admins"
+    students = "students"
 
 class Semesters(Enum):
     first_semester = 1

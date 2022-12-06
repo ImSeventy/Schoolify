@@ -31,3 +31,19 @@ class WrongPassword(HTTPException):
             status.HTTP_400_BAD_REQUEST,
             "Wrong Password"
         )
+
+
+class ImageNotFound(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status.HTTP_404_NOT_FOUND,
+            "Image isn't found"
+        )
+
+
+class InvalidImageFormat(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_400_BAD_REQUEST,
+            "Invalid Image Format"
+        )

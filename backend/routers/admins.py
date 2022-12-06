@@ -1,10 +1,13 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import FileResponse
 from sqlite3 import IntegrityError
+from constants.enums import ImagesSubPaths
 from lib.authentication.authentication import Authentication, oauth2_scheme, get_user
 from lib.checks.checks import admin_exists
 from lib.database.manager import DataBaseManager
-from lib.exceptions.admins import AdminNotFound, EmailIsAlreadyUsed, WrongPassowrd
+from lib.exceptions.admins import AdminNotFound, EmailIsAlreadyUsed, ImageNotFound, InvalidImageForamt, WrongPassowrd
+from lib.images_manager.images_manager import ImagesManager
 
 from models.admins_models import AdminEdit, AdminIn, AdminOut, AdminResetPassword
 
@@ -52,9 +55,20 @@ async def refresh_admin(token: str = Depends(oauth2_scheme)):
         "token_type": "bearer"
         }
 
+
 @admins.get("/me", response_model=AdminOut, status_code=status.HTTP_200_OK)
 async def get_admin(token: str = Depends(oauth2_scheme)):
     return await get_user("admin", token=token)
+
+
+@admins.get("/image/{image_name}", status_code=status.HTTP_200_OK)
+async def get_admin_image(image_name: str):
+    if not ImagesManager().image_exists(image_name, ImagesSubPaths.admins.value):
+        raise ImageNotFound()
+
+    image_path =  ImagesManager().get_image_path(image_name, ImagesSubPaths.admins.value)
+    return FileResponse(image_path)
+
 
 @admins.get("/{id}", response_model=AdminOut, status_code=status.HTTP_200_OK)
 async def get_admin(id: int, token: str = Depends(oauth2_scheme)):
@@ -84,6 +98,17 @@ async def update_admin(
         raise AdminNotFound()
     await DataBaseManager().update_admin(id, **new_admin.dict())
     return {**new_admin.dict(), "id": id}
+
+
+@admins.patch("/set_image", status_code=status.HTTP_204_NO_CONTENT)
+async def set_image(image: UploadFile, token: str = Depends(oauth2_scheme)):
+    admin = await get_user("admin", token=token)
+
+    if not ImagesManager().is_valid_image(image):
+        raise InvalidImageForamt()
+
+    image_url = ImagesManager().save_image(image, ImagesSubPaths.admins.value)
+    await DataBaseManager().update_admin(admin.id, image_url=image_url)
 
 
 @admins.patch("/reset_password", status_code=status.HTTP_204_NO_CONTENT)

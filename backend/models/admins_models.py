@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, validator, EmailStr
 
 from constants.enums import Roles
@@ -31,7 +32,7 @@ class AdminOut(BaseModel):
     name: str
     role: str
     email: str
-
+    image_url: Optional[str] = None
     class Config:
         orm_mode = True
 
@@ -41,6 +42,7 @@ class Admin(BaseModel):
     role: str
     email: str
     password: str
+    image_url: Optional[str] = None
 
     class Config:
         orm_mode = True

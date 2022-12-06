@@ -16,7 +16,7 @@ certifications = APIRouter(
 
 @certifications.post("/", status_code=status.HTTP_201_CREATED, response_model=CertificationOut)
 async def create_certification(certification: CertificationFormModel = Depends(), token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", token=token)
+    admin = await get_user("admin", token=token)
     if certification.image is not None:
         if not ImagesManager().is_valid_image(certification.image):
             raise InvalidImageFormat()
@@ -24,9 +24,17 @@ async def create_certification(certification: CertificationFormModel = Depends()
         image_url = ImagesManager().save_image(certification.image, ImagesSubPaths.certifications.value)
         certification.image_url = image_url
 
+    certification.given_by = admin.id
+
     id = await DataBaseManager().create_certification(certification)
 
-    return {**certification.as_dict(), "id": id}
+    return {
+        **certification.as_dict(),
+        "id": id,
+        "given_by": admin.id,
+        "given_by_name": admin.name,
+        "given_by_image_url": admin.image_url
+    }
 
 
 @certifications.get("/me", status_code=status.HTTP_200_OK, response_model=list[CertificationOut])

@@ -54,6 +54,7 @@ class DbModelsManager:
             Column("password", String),
             Column("entry_year", Integer),
             Column("major_id", ForeignKey("majors.id")),
+            Column("image_url", String, nullable=True),
         )
 
     def _create_subjects_table(self) -> None:
@@ -106,6 +107,7 @@ class DbModelsManager:
             Column("role", String),
             Column("email", String, unique=True),
             Column("password", String),
+            Column("image_url", String, nullable=True),
         )
 
     def _create_owners_table(self) -> None:
@@ -157,5 +159,6 @@ class DbModelsManager:
             Column("content", String),
             Column("image_url", String),
             Column("student_id", ForeignKey("students.id")),
-            Column("date", Date)
+            Column("date", Date),
+            Column("given_by", ForeignKey("admins.id")),
         )

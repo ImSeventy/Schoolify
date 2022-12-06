@@ -1,13 +1,16 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import FileResponse
 from sqlite3 import IntegrityError
+from constants.enums import ImagesSubPaths
 from lib.authentication.authentication import Authentication, get_user, oauth2_scheme
 from lib.checks.checks import student_exists
 from lib.database.manager import DataBaseManager
 from lib.exceptions.auth import WrongEmailOrPassword
-from lib.exceptions.students import EmailAlreadyExists, MajorDoesnotExist, StudentNotFound, WrongPassword
+from lib.exceptions.students import EmailAlreadyExists, ImageNotFound, InvalidImageFormat, MajorDoesnotExist, StudentNotFound, WrongPassword
+from lib.images_manager.images_manager import ImagesManager
 
-from models.students_models import Student, StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword
+from models.students_models import StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword
 
 
 students = APIRouter(
@@ -19,6 +22,15 @@ students = APIRouter(
 # @students.get("/class", response_model=list[StudentOut], status_code=status.HTTP_200_OK)
 # async def get_class_students(major_id: int, grade: int):
 #     return await DataBaseManager().query_class_students(major_id, grade)
+
+@students.get("/image/{image_name}")
+async def get_student_image(image_name: str):
+    if not ImagesManager().image_exists(image_name, ImagesSubPaths.students.value):
+        raise ImageNotFound()
+
+    image_path = ImagesManager().get_image_path(image_name, ImagesSubPaths.students.value)
+    return FileResponse(image_path)
+
 
 @students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student_me(token: str = Depends(oauth2_scheme)):
@@ -97,6 +109,16 @@ async def update_student(id: int, new_student: StudentEdit, token: str = Depends
         raise StudentNotFound()
 
     await DataBaseManager().update_student(id, **new_student.dict())
+
+@students.patch("/set_image", status_code=status.HTTP_204_NO_CONTENT)
+async def set_student_image(image: UploadFile, token: str = Depends(oauth2_scheme)):
+    student = await get_user("student", token=token)
+    if not ImagesManager().is_valid_image(image):
+        raise InvalidImageFormat()
+
+    image_url = ImagesManager().save_image(image, ImagesSubPaths.students.value)
+
+    await DataBaseManager().update_student(student.id, image_url=image_url)
 
 @students.patch("/reset_password", status_code=status.HTTP_204_NO_CONTENT)
 async def reset_password(passwords_scheme: StudentResetPassword, token: str = Depends(oauth2_scheme)):

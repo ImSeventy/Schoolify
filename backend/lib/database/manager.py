@@ -6,7 +6,7 @@ from sqlalchemy import text
 
 from lib.database.models import DbModelsManager
 from lib.singleton_handler import Singleton
-from models.certifications_models import Certifiaction, CertificationEditFormModel, CertificationFormModel
+from models.certifications_models import CertificationEditFormModel, CertificationFormModel, CertificationOut
 from models.grades_models import Grade, GradeIn
 from models.posts_models import PostFormModel
 
@@ -378,13 +378,27 @@ class DataBaseManager(metaclass=Singleton):
         query = self.models_manager.certifications.insert().values(**cert.as_dict())
         return await self.db.execute(query)
 
-    async def get_certification_from_id(self, cert_id: int) -> Certifiaction:
-        query = self.models_manager.certifications.select().where(self.models_manager.certifications.c.id == cert_id)
-        return await self.db.fetch_one(query)
+    async def get_certification_from_id(self, cert_id: int) -> CertificationOut:
+        query = """
+        SELECT certifications*,
+        admins.name as given_by_name,
+        admins.image_url as given_by_image_url
+        FROM certifications
+        JOIN admins ON certifications.given_by = admins.id
+        WHERE certifications.id = :cert_id
+        """
+        return await self.db.fetch_one(query, {"cert_id": cert_id})
 
-    async def get_student_certifications(self, student_id: int) -> list[Certifiaction]:
-        query = self.models_manager.certifications.select().where(self.models_manager.certifications.c.student_id == student_id)
-        return await self.db.fetch_all(query)
+    async def get_student_certifications(self, student_id: int) -> list[CertificationOut]:
+        query = """
+        SELECT certifications*,
+        admins.name as given_by_name,
+        admins.image_url as given_by_image_url
+        FROM certifications
+        JOIN admins ON certifications.given_by = admins.id
+        WHERE certifications.student_id = :student_id
+        """
+        return await self.db.fetch_all(query, {"student_id": student_id})
 
     async def delete_certification_with_id(self, id: int) -> None:
         query = self.models_manager.certifications.delete().where(self.models_manager.certifications.c.id == id)

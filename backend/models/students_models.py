@@ -13,6 +13,7 @@ class Student(BaseModel):
     password: str
     entry_year: int
     major_id: int
+    image_url: Optional[str] = None
 
 
 class StudentIn(BaseModel):
@@ -39,6 +40,7 @@ class StudentOut(BaseModel):
     entry_year: int
     major_id: int
     major_name: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class StudentEdit(BaseModel):
