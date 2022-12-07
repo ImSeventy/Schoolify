@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, status, Depends
 from fastapi.responses import FileResponse
 from constants.enums import ImagesSubPaths
@@ -7,6 +8,7 @@ from models.certifications_models import CertificationEditFormModel, Certificati
 from lib.authentication.authentication import get_user, oauth2_scheme
 from lib.images_manager.images_manager import ImagesManager
 from lib.checks.checks import certification_exists, student_exists
+from lib.date_manager.date_manager import DateManager
 
 certifications = APIRouter(
     prefix="/certifications",
@@ -17,6 +19,11 @@ certifications = APIRouter(
 @certifications.post("/", status_code=status.HTTP_201_CREATED, response_model=CertificationOut)
 async def create_certification(certification: CertificationFormModel = Depends(), token: str = Depends(oauth2_scheme)):
     admin = await get_user("admin", token=token)
+
+    student = await DataBaseManager().get_student(certification.student_id)
+    if student is None:
+        raise StudentNotFound()
+
     if certification.image is not None:
         if not ImagesManager().is_valid_image(certification.image):
             raise InvalidImageFormat()
@@ -25,6 +32,8 @@ async def create_certification(certification: CertificationFormModel = Depends()
         certification.image_url = image_url
 
     certification.given_by = admin.id
+    certification.grade_year = DateManager().get_current_grade(student.entry_year)
+    certification.semester = DateManager().get_current_semester(datetime.utcnow()).value
 
     id = await DataBaseManager().create_certification(certification)
 

@@ -11,6 +11,8 @@ class Certifiaction(BaseModel):
     image_url: Optional[str] = None
     date: date
     given_by: int
+    grade_year: int
+    semester: int
 
 
 class CertificationOut(BaseModel):
@@ -21,7 +23,9 @@ class CertificationOut(BaseModel):
     date: float
     given_by: int
     given_by_name: str
-    given_by_image_url: str
+    given_by_image_url: Optional[str] = None
+    grade_year: int
+    semester: int
 
     @validator("date", pre=True)
     def date_to_timestamp(cls, date: date | str) -> float:
@@ -40,8 +44,10 @@ class CertificationFormModel:
         self.student_id = student_id
         self.content = content
         self.image = image
-        self.image_url = None
-        self.given_by = None
+        self.image_url: Optional[str] = None
+        self.given_by: Optional[int] = None
+        self.grade_year: Optional[int] = None
+        self.semester: Optional[int] = None
         self.date = datetime.utcnow()
 
     def as_dict(self) -> dict:
@@ -50,6 +56,9 @@ class CertificationFormModel:
             "content": self.content,
             "image_url": self.image_url,
             "date": self.date,
+            "given_by": self.given_by,
+            "grade_year": self.grade_year,
+            "semester": self.semester,
         }
 
 

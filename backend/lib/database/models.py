@@ -161,4 +161,6 @@ class DbModelsManager:
             Column("student_id", ForeignKey("students.id")),
             Column("date", Date),
             Column("given_by", ForeignKey("admins.id")),
+            Column("grade_year", Integer),
+            Column("semester", Integer),
         )

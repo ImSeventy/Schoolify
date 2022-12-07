@@ -380,7 +380,7 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_certification_from_id(self, cert_id: int) -> CertificationOut:
         query = """
-        SELECT certifications*,
+        SELECT certifications.*,
         admins.name as given_by_name,
         admins.image_url as given_by_image_url
         FROM certifications
@@ -391,7 +391,7 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_student_certifications(self, student_id: int) -> list[CertificationOut]:
         query = """
-        SELECT certifications*,
+        SELECT certifications.*,
         admins.name as given_by_name,
         admins.image_url as given_by_image_url
         FROM certifications

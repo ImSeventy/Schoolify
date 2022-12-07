@@ -23,7 +23,7 @@ async def add_warning(warning: WarningIn, token: str = Depends(oauth2_scheme)):
         raise StudentNotFound()
 
     warning.grade_year = DateManager().get_current_grade(student.entry_year)
-    warning.semester = DateManager().get_current_semester(datetime.utcnow())
+    warning.semester = DateManager().get_current_semester(datetime.utcnow()).value
         
     id = await DataBaseManager().add_new_warning(warning)
     return {**warning.dict(), "id": id}
