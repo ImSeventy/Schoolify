@@ -15,6 +15,7 @@ import '../widgets/data_options_list_widget.dart';
 import '../widgets/progress_indicator.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/sub_page_nav_item.dart';
+import 'grades_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,13 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    List<Widget> pages = [
+    const List<Widget> pages = [
       AttendancePage(),
       MainHomePage(),
-      Container(
-        color: Colors.red,
-      ),
+      GradesPage(),
     ];
 
     return SafeArea(
