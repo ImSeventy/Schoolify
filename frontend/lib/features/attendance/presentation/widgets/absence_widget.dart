@@ -20,7 +20,7 @@ class AbsenceWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: const Color(0xFF130B51),
-        borderRadius: BorderRadius.circular(7)
+        borderRadius: BorderRadius.circular(12)
       ),
       child: Center(
         child: Stack(
