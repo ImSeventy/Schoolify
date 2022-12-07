@@ -9,6 +9,7 @@ class StudentModel extends StudentEntity {
     required super.entryYear,
     required super.majorId,
     required super.majorName,
+    required super.imageUrl,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +21,7 @@ class StudentModel extends StudentEntity {
       entryYear: json["entry_year"],
       majorId: json["major_id"],
       majorName: json['major_name'],
+      imageUrl: json['image_url'],
     );
   }
 
@@ -31,7 +33,8 @@ class StudentModel extends StudentEntity {
       "name": name,
       "entry_year": entryYear,
       "major_id": majorId,
-      "major_name": majorName
+      "major_name": majorName,
+      "image_url": imageUrl,
     };
   }
 }

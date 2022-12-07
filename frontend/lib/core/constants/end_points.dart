@@ -1,5 +1,5 @@
 class EndPoints {
-  static const String ipAddress = "http://192.168.141.27:8000";
+  static const String ipAddress = "http://192.168.11.27:8000";
   static const String studentEndPoint = "$ipAddress/students";
   static const String gradesEndPoint = "$ipAddress/grades";
   static const String absenceEndPoint = "$ipAddress/absence";

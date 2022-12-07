@@ -25,7 +25,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 250.w),
-      width: 170.w,
+      width: 180.w,
       height: 32.h,
       decoration: BoxDecoration(
         gradient: const LinearGradient(

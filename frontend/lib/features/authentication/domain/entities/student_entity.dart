@@ -11,6 +11,7 @@ class StudentEntity extends Equatable {
   final int entryYear;
   final int majorId;
   final String majorName;
+  final String? imageUrl;
 
   const StudentEntity({
     required this.email,
@@ -20,6 +21,7 @@ class StudentEntity extends Equatable {
     required this.entryYear,
     required this.majorId,
     required this.majorName,
+    required this.imageUrl,
   });
 
   int get gradeYear {
