@@ -42,7 +42,7 @@ class CustomNavigationBar extends StatelessWidget {
         tabs: const [
           GButton(
             icon: FontAwesomeIcons.clipboardUser,
-            text: 'Absence',
+            text: 'Attendance',
           ),
           GButton(
             icon: FontAwesomeIcons.house,

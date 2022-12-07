@@ -10,15 +10,17 @@ import 'package:frontend/features/authentication/domain/use_cases/load_cached_ac
 import 'package:frontend/router/router.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 import 'dependency_container.dart' as dc;
+import 'features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
+import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'router/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
-  // await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
-  // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
+  await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
   // final port = SerialPort("COM15", openNow: false, BaudRate: 9600, ByteSize: 8, ReadTotalTimeoutConstant: 10);
   // port.open();
   // List<int> chars = [];
@@ -51,7 +53,17 @@ class MyApp extends StatelessWidget {
             DataHandlerCubit dataHandlerCubit = dc.getIt<DataHandlerCubit>();
             return dataHandlerCubit;
           },
-        )
+        ),
+        BlocProvider<GradesCubit>(create: (_) {
+          GradesCubit gradesCubit = dc.getIt<GradesCubit>();
+          gradesCubit.getStudentGrades();
+          return gradesCubit;
+        }),
+        BlocProvider<AttendanceCubit>(create: (_) {
+          AttendanceCubit attendanceCubit = dc.getIt<AttendanceCubit>();
+          attendanceCubit.getStudentAbsences();
+          return attendanceCubit;
+        }),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -55,6 +55,7 @@ class WarningsPage extends StatelessWidget {
                   child: Scaffold(
                     backgroundColor: Colors.transparent,
                     body: SingleChildScrollView(
+                      clipBehavior: Clip.none,
                       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       child: Column(
                         children: [

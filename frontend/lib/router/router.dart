@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/features/authentication/presentation/pages/login_page.dart';
+import '../features/certifications/presentation/pages/certifications_page.dart';
 import '../features/grades/presentation/pages/home_page.dart';
 import '../features/warnings/presentation/pages/warnings_page.dart';
 import '../themes/light_theme.dart';
@@ -32,6 +33,8 @@ class AppRouter {
         return const HomePage();
       case Routes.warnings:
         return const WarningsPage();
+      case Routes.certifications:
+        return const CertificationsPage();
       default:
         return null;
     }

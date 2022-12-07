@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/constants/semesters_timeline.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
+import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
 import 'package:frontend/features/warnings/domain/entities/warning_entity.dart';
 
 import '../../../domain/entities/grade.py.dart';
@@ -52,6 +53,21 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     "Grade 5": (warning) => warning.gradeYear == 5
   };
 
+  final Map<String, bool Function(CertificationEntity)> certificationsPredicates = {
+    "This Year": (certification) =>
+    certification.gradeYear == AuthInfo.currentStudent!.gradeYear,
+    "Last Year": (certification) =>
+    certification.gradeYear == (AuthInfo.currentStudent!.gradeYear - 1),
+    "1st Semester": (certification) => certification.semester == 1,
+    "2nd Semester": (certification) => certification.semester == 2,
+    "Grade 1": (certification) => certification.gradeYear == 1,
+    "Grade 2": (certification) => certification.gradeYear == 2,
+    "Grade 3": (certification) => certification.gradeYear == 3,
+    "Grade 4": (certification) => certification.gradeYear == 4,
+    "Grade 5": (certification) => certification.gradeYear == 5
+  };
+
+
   String currentYearMode = "All Years";
   String currentSemesterMode = "Whole Year";
 
@@ -96,7 +112,7 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
   List<WarningEntity> filterWarnings(List<WarningEntity> warnings) {
     final yearsPredicate = warningsPredicates[currentYearMode];
     if (yearsPredicate != null) {
-      warnings = warnings.where(yearsPredicate).toList();
+      warnings = warnings.where(yearsPredicate).toList()..sort((a, b) => b.date.compareTo(a.date));
     }
 
     final semesterPredicate = warningsPredicates[currentSemesterMode];
@@ -104,6 +120,19 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
       warnings = warnings.where(semesterPredicate).toList();
     }
     return warnings;
+  }
+
+  List<CertificationEntity> filterCertifications(List<CertificationEntity> certifications) {
+    final yearsPredicate = certificationsPredicates[currentYearMode];
+    if (yearsPredicate != null) {
+      certifications = certifications.where(yearsPredicate).toList()..sort((a, b) => b.date.compareTo(a.date));
+    }
+
+    final semesterPredicate = certificationsPredicates[currentSemesterMode];
+    if (semesterPredicate != null) {
+      certifications = certifications.where(semesterPredicate).toList();
+    }
+    return certifications;
   }
 
   int getDaysFromTheBeginningOfTheSemester(int semester) {
