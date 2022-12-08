@@ -39,7 +39,7 @@ class GradesGroupWidget extends StatelessWidget {
       constraints: BoxConstraints(
         minHeight: 137.h,
       ),
-      padding: EdgeInsets.only(left: 30.w, top: 8.h, bottom: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 30.w),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: const Color(0xFF130B51)),
@@ -109,30 +109,29 @@ class GradesGroupWidget extends StatelessWidget {
                 height: 8.h,
               ),
               Wrap(
+                spacing: 10.w,
+                runSpacing: 10.h,
                 children: [
                   ...grades.map(
-                        (grade) => Padding(
-                      padding: EdgeInsets.only(right: 16.w, bottom: 9.h),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text: "${grade.subjectName.toUpperCase()}\n",
-                            style: TextStyle(
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 21.sp),
-                            children: [
-                              TextSpan(
-                                  text: grade.grade.toString(),
-                                  style: TextStyle(
-                                      color: getColor(getPercentage(grade)),
-                                      fontWeight: FontWeight.w500)),
-                              TextSpan(
-                                  text: "/${grade.fullDegree}",
-                                  style: TextStyle(fontWeight: FontWeight.w500))
-                            ]),
-                      ),
-                    ),
+                        (grade) => RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text: "${grade.subjectName.toUpperCase()}\n",
+                              style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 21.sp),
+                              children: [
+                                TextSpan(
+                                    text: grade.grade.toString(),
+                                    style: TextStyle(
+                                        color: getColor(getPercentage(grade)),
+                                        fontWeight: FontWeight.w500)),
+                                TextSpan(
+                                    text: "/${grade.fullDegree}",
+                                    style: TextStyle(fontWeight: FontWeight.w500))
+                              ]),
+                        ),
                   )
                 ],
               ),

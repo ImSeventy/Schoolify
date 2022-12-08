@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
@@ -9,6 +10,7 @@ import 'package:frontend/features/authentication/domain/use_cases/get_current_st
 import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/router/router.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
+import 'package:toast/toast.dart';
 import 'dependency_container.dart' as dc;
 import 'features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Color(0xFCF131524)
+    ));
     return MultiBlocProvider(
       providers: [
         BlocProvider<DataHandlerCubit>(

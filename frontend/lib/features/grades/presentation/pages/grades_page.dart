@@ -5,8 +5,10 @@ import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
+import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
+import '../../../../core/utils/utils.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import '../../../grades/presentation/widgets/data_options_list_widget.dart';
@@ -37,7 +39,15 @@ class GradesPage extends StatelessWidget {
     return BlocConsumer<GradesCubit, GradesState>(
       listenWhen: (oldState, newState) => oldState != newState,
       buildWhen: (oldState, newState) => oldState != newState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetStudentGradesFailedState) {
+          showToastMessage(
+            state.msg,
+            Colors.red,
+            context
+          );
+        }
+      },
       builder: (context, state) {
         GradesCubit gradesCubit = context.read<GradesCubit>();
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
@@ -102,7 +112,7 @@ class GradesPage extends StatelessWidget {
                           percentage: dataHandlerCubit
                               .calculateGradesPercentage(gradesCubit.grades),
                           backgroundColor: const Color(0xFF306767),
-                          name: "Attendance",
+                          name: "Grades",
                         ),
                         SizedBox(height: 16.h),
                         Padding(

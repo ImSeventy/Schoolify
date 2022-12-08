@@ -10,6 +10,7 @@ import 'package:frontend/features/grades/presentation/bloc/data_handler/data_han
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 import 'package:frontend/router/routes.dart';
 
+import '../../../../core/utils/utils.dart';
 import '../bloc/grades/grades_cubit.dart';
 import '../widgets/data_options_list_widget.dart';
 import '../widgets/progress_indicator.dart';
@@ -100,7 +101,15 @@ class MainHomePage extends StatelessWidget {
     return BlocConsumer<GradesCubit, GradesState>(
       buildWhen: (oldState, newState) => oldState != newState,
       listenWhen: (oldState, newState) => oldState != newState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetStudentGradesFailedState) {
+          showToastMessage(
+            state.msg,
+            Colors.red,
+            context
+          );
+        }
+      },
       builder: (context, state) {
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
         AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();

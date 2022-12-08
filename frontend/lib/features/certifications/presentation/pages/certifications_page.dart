@@ -9,8 +9,10 @@ import 'package:frontend/features/certifications/presentation/bloc/certification
 import 'package:frontend/features/certifications/presentation/bloc/certifications_cubit/certifications_states.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/warnings/presentation/bloc/warnings_cubit/warnings_states.dart';
+import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
+import '../../../../core/utils/utils.dart';
 import '../../../grades/presentation/widgets/data_options_list_widget.dart';
 import '../widgets/certification_widget.dart';
 
@@ -28,7 +30,15 @@ class CertificationsPage extends StatelessWidget {
       child: BlocConsumer<CertificationsCubit, CertificationsState>(
         listenWhen: (oldState, newState) => oldState != newState,
         buildWhen: (oldState, newState) => oldState != newState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is GetStudentCertificationsFailedState) {
+            showToastMessage(
+              state.msg,
+              Colors.red,
+              context
+            );
+          }
+        },
         builder: (context, state) {
           CertificationsCubit certificationsCubit = context.read<CertificationsCubit>();
           DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();

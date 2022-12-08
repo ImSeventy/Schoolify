@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
@@ -21,7 +22,15 @@ class AttendancePage extends StatelessWidget {
     return BlocConsumer<AttendanceCubit, AttendanceState>(
       listenWhen: (oldState, newState) => oldState != newState,
       buildWhen: (oldState, newState) => oldState != newState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetStudentAbsencesFailedState) {
+          showToastMessage(
+            state.msg,
+            Colors.red,
+            context
+          );
+        }
+      },
       builder: (context, state) {
         AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
