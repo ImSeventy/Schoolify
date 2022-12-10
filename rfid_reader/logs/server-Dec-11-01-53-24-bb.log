@@ -1,0 +1,37 @@
+[01:52:45 AM] [proactor_events] [__init__] [DEBUG]: Using proactor: IocpProactor
+[01:52:45 AM] [proactor_events] [__init__] [DEBUG]: Using proactor: IocpProactor
+[01:52:45 AM] [server] [wrap] [INFO]: server listening on 127.0.0.1:8679
+[01:52:45 AM] [server] [wrap] [INFO]: server listening on [::1]:8679
+[01:52:45 AM] [server] [start] [INFO]: Serving to localhost:8679
+[01:52:48 AM] [protocol] [__init__] [DEBUG]: = connection is CONNECTING
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < GET / HTTP/1.1
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Host: localhost:8679
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Upgrade: websocket
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Connection: Upgrade
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Key: JrCnt58rVIg+yDeBHZ+JYQ==
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Version: 13
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
+[01:52:48 AM] [server] [read_http_request] [DEBUG]: < User-Agent: Python/3.10 websockets/10.1
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > HTTP/1.1 101 Switching Protocols
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Upgrade: websocket
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Connection: Upgrade
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Sec-WebSocket-Accept: TALHGvE/4RocIr8uvWLYXHr6Kqg=
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Sec-WebSocket-Extensions: permessage-deflate; server_max_window_bits=12; client_max_window_bits=12
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Date: Sat, 10 Dec 2022 23:52:48 GMT
+[01:52:48 AM] [server] [write_http_response] [DEBUG]: > Server: Python/3.10 websockets/10.1
+[01:52:48 AM] [server] [handshake] [INFO]: connection open
+[01:52:48 AM] [protocol] [connection_open] [DEBUG]: = connection is OPEN
+[01:52:48 AM] [server] [handle_connections] [INFO]: --- New Connection ---
+[01:52:48 AM] [server] [handle_connections] [INFO]: Remote: ('::1', 58780, 0, 0)
+[01:52:48 AM] [server] [handle_connections] [INFO]: Local: ('::1', 8679, 0, 0)
+[01:52:52 AM] [protocol] [read_frame] [DEBUG]: < CLOSE 1000 (OK) [2 bytes]
+[01:52:52 AM] [protocol] [write_close_frame] [DEBUG]: = connection is CLOSING
+[01:52:52 AM] [protocol] [write_frame_sync] [DEBUG]: > CLOSE 1000 (OK) [2 bytes]
+[01:52:52 AM] [protocol] [close_connection] [DEBUG]: x half-closing TCP connection
+[01:52:52 AM] [protocol] [connection_lost] [DEBUG]: = connection is CLOSED
+[01:52:52 AM] [handler] [unsubscribe] [DEBUG]: --- Connection Closed ---
+[01:52:52 AM] [handler] [unsubscribe] [INFO]: Remote: ('::1', 58780, 0, 0)
+[01:52:52 AM] [handler] [unsubscribe] [INFO]: Local: ('::1', 8679, 0, 0)
+[01:52:52 AM] [server] [handler] [INFO]: connection closed
+[01:53:23 AM] [server] [_close] [INFO]: server closing
+[01:53:23 AM] [server] [_close] [INFO]: server closed

@@ -9,6 +9,7 @@ import 'package:frontend/features/authentication/presentation/widgets/icons_grou
 import 'package:frontend/router/routes.dart';
 import 'package:toast/toast.dart';
 
+import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
 
@@ -53,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) {
-        ToastContext().init(context);
         return getIt<LoginCubit>();
       },
       child: BlocConsumer<LoginCubit, LoginState>(
@@ -61,20 +61,19 @@ class _LoginPageState extends State<LoginPage> {
         listenWhen: (oldState, newState) => oldState != newState,
         listener: (oldState, newState) async {
           if (newState is LoginFailedState) {
-            Toast.show(
+            showToastMessage(
               newState.message,
-              duration: 3,
-              backgroundColor: Colors.red
+              Colors.red,
+              context
             );
           }
 
           if (newState is LoginSucceededState) {
-            Toast.show(
+            showToastMessage(
               "Logged in successfully",
-              duration: 3,
-              backgroundColor: Colors.green
+              Colors.green,
+              context
             );
-
             Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
           }
         },
@@ -193,14 +192,18 @@ class _LoginPageState extends State<LoginPage> {
                                     style: TextButton.styleFrom(
                                         backgroundColor: Colors.transparent),
                                     onPressed: () => state is LoginLoadingState ? null : login(context),
-                                    child: state is LoginLoadingState ? const FittedBox(child: CircularProgressIndicator(color: Colors.black,)) : Text(
+                                    child: state is LoginLoadingState
+                                        ? const FittedBox(child: CircularProgressIndicator(color: Colors.black,))
+                                        : FittedBox(
+                                          child: Text(
                                       "login",
                                       style: TextStyle(
-                                          fontFamily: "Overpass",
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 35.sp,
-                                          color: Colors.black),
+                                            fontFamily: "Overpass",
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 35.sp,
+                                            color: Colors.black),
                                     ),
+                                        ),
                                   ),
                                 ),
                                 SizedBox(

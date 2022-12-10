@@ -87,7 +87,7 @@ class CertificationWidget extends StatelessWidget {
               Container(
                 width: 331.w,
                 height: 453.h,
-                color: const Color(0xFF2E006C),
+                color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
                   alignment: Alignment.center,

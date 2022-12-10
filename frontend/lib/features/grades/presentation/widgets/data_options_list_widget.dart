@@ -25,7 +25,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 250.w),
-      width: 180.w,
+      width: 220.w,
       height: 32.h,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -40,7 +40,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
               .map(
                 (value) => DropdownMenuItem(
                   value: value,
-                  child: Text(value),
+                  child: FittedBox(child: Text(value)),
                 ),
               )
               .toList(),
@@ -50,7 +50,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
           style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,
-              fontSize: 15.sp,
+              fontSize: 16.sp,
               fontFamily: "Poppins"),
           dropdownDecoration: BoxDecoration(
             gradient: const LinearGradient(

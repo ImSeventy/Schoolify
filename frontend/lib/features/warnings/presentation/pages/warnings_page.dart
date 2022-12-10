@@ -8,8 +8,10 @@ import 'package:frontend/features/grades/presentation/bloc/data_handler/data_han
 import 'package:frontend/features/warnings/domain/entities/warning_entity.dart';
 import 'package:frontend/features/warnings/presentation/bloc/warnings_cubit/warnings_cubit.dart';
 import 'package:frontend/features/warnings/presentation/bloc/warnings_cubit/warnings_states.dart';
+import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
+import '../../../../core/utils/utils.dart';
 import '../../../grades/presentation/widgets/data_options_list_widget.dart';
 import '../widgets/warning_widget.dart';
 
@@ -27,7 +29,15 @@ class WarningsPage extends StatelessWidget {
       child: BlocConsumer<WarningsCubit, WarningsState>(
         listenWhen: (oldState, newState) => oldState != newState,
         buildWhen: (oldState, newState) => oldState != newState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is GetStudentWarningsFailedState) {
+            showToastMessage(
+              state.msg,
+              Colors.red,
+              context
+            );
+          }
+        },
         builder: (context, state) {
           WarningsCubit warningsCubit = context.read<WarningsCubit>();
           DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
