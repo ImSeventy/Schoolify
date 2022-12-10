@@ -1,0 +1,83 @@
+[01:49:37 AM] [proactor_events] [__init__] [DEBUG]: Using proactor: IocpProactor
+[01:49:37 AM] [proactor_events] [__init__] [DEBUG]: Using proactor: IocpProactor
+[01:49:37 AM] [server] [wrap] [INFO]: server listening on [::1]:8679
+[01:49:37 AM] [server] [wrap] [INFO]: server listening on 127.0.0.1:8679
+[01:49:37 AM] [server] [start] [INFO]: Serving to localhost:8679
+[01:49:48 AM] [protocol] [__init__] [DEBUG]: = connection is CONNECTING
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < GET / HTTP/1.1
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Host: localhost:8679
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Upgrade: websocket
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Connection: Upgrade
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Key: oVAsqBVtDGiDxEtgMXC8wA==
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Version: 13
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
+[01:49:48 AM] [server] [read_http_request] [DEBUG]: < User-Agent: Python/3.10 websockets/10.1
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > HTTP/1.1 101 Switching Protocols
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Upgrade: websocket
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Connection: Upgrade
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Sec-WebSocket-Accept: EH9KOvT4EA0Ixx2ZtMO293n4pOI=
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Sec-WebSocket-Extensions: permessage-deflate; server_max_window_bits=12; client_max_window_bits=12
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Date: Sat, 10 Dec 2022 23:49:48 GMT
+[01:49:48 AM] [server] [write_http_response] [DEBUG]: > Server: Python/3.10 websockets/10.1
+[01:49:48 AM] [server] [handshake] [INFO]: connection open
+[01:49:48 AM] [protocol] [connection_open] [DEBUG]: = connection is OPEN
+[01:49:48 AM] [server] [handle_connections] [INFO]: --- New Connection ---
+[01:49:48 AM] [server] [handle_connections] [INFO]: Remote: ('::1', 58769, 0, 0)
+[01:49:48 AM] [server] [handle_connections] [INFO]: Local: ('::1', 8679, 0, 0)
+[01:49:54 AM] [protocol] [write_frame_sync] [DEBUG]: > TEXT '5976571' [7 bytes]
+[01:49:58 AM] [protocol] [write_frame_sync] [DEBUG]: > TEXT '5976571' [7 bytes]
+[01:50:00 AM] [protocol] [write_frame_sync] [DEBUG]: > TEXT '1852287989' [10 bytes]
+[01:50:01 AM] [protocol] [write_frame_sync] [DEBUG]: > TEXT '1852287989' [10 bytes]
+[01:50:08 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:50:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PING 78 7f 23 b7 [binary, 4 bytes]
+[01:50:08 AM] [protocol] [read_frame] [DEBUG]: < PING 11 62 e2 c8 [binary, 4 bytes]
+[01:50:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 11 62 e2 c8 [binary, 4 bytes]
+[01:50:08 AM] [protocol] [read_frame] [DEBUG]: < PONG 78 7f 23 b7 [binary, 4 bytes]
+[01:50:08 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:50:28 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:50:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PING 7f 9e b4 bd [binary, 4 bytes]
+[01:50:28 AM] [protocol] [read_frame] [DEBUG]: < PING 36 24 f4 f4 [binary, 4 bytes]
+[01:50:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 36 24 f4 f4 [binary, 4 bytes]
+[01:50:28 AM] [protocol] [read_frame] [DEBUG]: < PONG 7f 9e b4 bd [binary, 4 bytes]
+[01:50:28 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:50:48 AM] [protocol] [read_frame] [DEBUG]: < PING 24 37 ea 56 [binary, 4 bytes]
+[01:50:48 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 24 37 ea 56 [binary, 4 bytes]
+[01:50:48 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:50:48 AM] [protocol] [write_frame_sync] [DEBUG]: > PING e9 c6 49 43 [binary, 4 bytes]
+[01:50:48 AM] [protocol] [read_frame] [DEBUG]: < PONG e9 c6 49 43 [binary, 4 bytes]
+[01:50:48 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:51:08 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:51:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PING f0 2c ce e3 [binary, 4 bytes]
+[01:51:08 AM] [protocol] [read_frame] [DEBUG]: < PING df e5 72 6a [binary, 4 bytes]
+[01:51:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG df e5 72 6a [binary, 4 bytes]
+[01:51:08 AM] [protocol] [read_frame] [DEBUG]: < PONG f0 2c ce e3 [binary, 4 bytes]
+[01:51:08 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:51:28 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:51:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PING 2d af 16 6c [binary, 4 bytes]
+[01:51:28 AM] [protocol] [read_frame] [DEBUG]: < PING 8d c7 b4 a2 [binary, 4 bytes]
+[01:51:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 8d c7 b4 a2 [binary, 4 bytes]
+[01:51:28 AM] [protocol] [read_frame] [DEBUG]: < PONG 2d af 16 6c [binary, 4 bytes]
+[01:51:28 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:51:48 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:51:48 AM] [protocol] [write_frame_sync] [DEBUG]: > PING 8e 0c c1 5a [binary, 4 bytes]
+[01:51:48 AM] [protocol] [read_frame] [DEBUG]: < PING d2 45 8d 1d [binary, 4 bytes]
+[01:51:48 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG d2 45 8d 1d [binary, 4 bytes]
+[01:51:48 AM] [protocol] [read_frame] [DEBUG]: < PONG 8e 0c c1 5a [binary, 4 bytes]
+[01:51:48 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:52:08 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:52:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PING ae 08 3f 45 [binary, 4 bytes]
+[01:52:08 AM] [protocol] [read_frame] [DEBUG]: < PING 8e 80 4a 6e [binary, 4 bytes]
+[01:52:08 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 8e 80 4a 6e [binary, 4 bytes]
+[01:52:08 AM] [protocol] [read_frame] [DEBUG]: < PONG ae 08 3f 45 [binary, 4 bytes]
+[01:52:08 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:52:28 AM] [protocol] [keepalive_ping] [DEBUG]: % sending keepalive ping
+[01:52:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PING 8a 47 0b d5 [binary, 4 bytes]
+[01:52:28 AM] [protocol] [read_frame] [DEBUG]: < PING 52 b5 10 45 [binary, 4 bytes]
+[01:52:28 AM] [protocol] [write_frame_sync] [DEBUG]: > PONG 52 b5 10 45 [binary, 4 bytes]
+[01:52:28 AM] [protocol] [read_frame] [DEBUG]: < PONG 8a 47 0b d5 [binary, 4 bytes]
+[01:52:28 AM] [protocol] [keepalive_ping] [DEBUG]: % received keepalive pong
+[01:52:44 AM] [server] [handler] [INFO]: connection closed
+[01:52:44 AM] [protocol] [close_connection] [DEBUG]: x half-closing TCP connection
+[01:52:44 AM] [server] [_close] [INFO]: server closing
+[01:52:44 AM] [server] [_close] [INFO]: server closed
+[01:52:44 AM] [protocol] [connection_lost] [DEBUG]: = connection is CLOSED

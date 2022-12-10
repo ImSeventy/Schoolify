@@ -6,7 +6,7 @@ import time
 class SerialReader:
     def __init__(self, port: str, baudrate: int, timeout: Optional[int] = None):
         pass
-        # self.port = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
+        self.port = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
 
     def read_serial_data(self) -> int:
         data = self.port.readline()
@@ -16,6 +16,5 @@ class SerialReader:
 
     def values_generator(self):
         while True:
-            # value = self.read_serial_data()
-            time.sleep(1)
-            yield "test"
+            value = self.read_serial_data()
+            yield value

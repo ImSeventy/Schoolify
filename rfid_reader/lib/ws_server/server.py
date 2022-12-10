@@ -1,5 +1,7 @@
+import logging
 import websockets
 import json
+import socket
 import asyncio
 import threading
 
@@ -17,6 +19,10 @@ class Server:
         self.handler = ServerHandler(serial_port)
 
     async def handle_connections(self, websocket: websockets.WebSocketServerProtocol, _):
+        logging.info("--- New Connection ---")
+        logging.info(f"Remote: {websocket.remote_address}")
+        logging.info(f"Local: {websocket.local_address}")
+        websocket.transport._sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
         self.handler.subscribe(websocket)
         while True:
             try:
@@ -26,6 +32,7 @@ class Server:
                 break
 
     async def start(self):
-        threading.Thread(target=self.handler.start).start()
+        threading.Thread(target=self.handler.start, daemon=True).start()
         async with websockets.serve(self.handle_connections, self.url, self.port):
+            logging.info(f"Serving to {self.url}:{self.port}")
             await asyncio.Future()
