@@ -55,8 +55,8 @@ console_stdout.addFilter(DEBUG_FILTER)
 log_file.addFilter(DEBUG_FILTER)
 
 port = SerialReader(
-    "COM15",
-    9600,
+    config["serial_port"],
+    config["baud_rate"],
 )
 
 server = Server(
