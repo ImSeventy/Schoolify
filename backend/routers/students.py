@@ -10,7 +10,7 @@ from lib.exceptions.auth import WrongEmailOrPassword
 from lib.exceptions.students import EmailAlreadyExists, ImageNotFound, InvalidImageFormat, MajorDoesnotExist, StudentNotFound, WrongPassword
 from lib.images_manager.images_manager import ImagesManager
 
-from models.students_models import StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword
+from models.students_models import StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword, StudentRfidOut
 
 
 students = APIRouter(
@@ -31,6 +31,13 @@ async def get_student_image(image_name: str):
     image_path = ImagesManager().get_image_path(image_name, ImagesSubPaths.students.value)
     return FileResponse(image_path)
 
+@students.get("/rfid/{rf_id}", response_model=StudentRfidOut, status_code=status.HTTP_200_OK)
+async def get_student_by_rfid(rf_id: int):
+    student = await DataBaseManager().get_student_by_rfid(rf_id)
+    if student is None:
+        raise StudentNotFound()
+
+    return student
 
 @students.get("/me", response_model=StudentOut, status_code=status.HTTP_200_OK)
 async def get_student_me(token: str = Depends(oauth2_scheme)):

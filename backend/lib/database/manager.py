@@ -90,6 +90,11 @@ class DataBaseManager(metaclass=Singleton):
 
         return await self.db.fetch_one(query, values={"id_or_email": id_or_email})
 
+    async def get_student_by_rfid(self, rfid: int) -> Student | None:
+        query = "SELECT * FROM students where students.rf_id = :rfid"
+
+        return await self.db.fetch_one(query, values={"rfid": rfid})
+
     async def get_major_students(self, id: int) -> list[Student]:
         query = self.models_manager.students.select().where(self.models_manager.students.c.major_id == id)
         return await self.db.fetch_all(query)

@@ -43,6 +43,13 @@ class StudentOut(BaseModel):
     image_url: Optional[str] = None
 
 
+class StudentRfidOut(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+    image_url: Optional[str] = None
+
+
 class StudentEdit(BaseModel):
     rf_id: int
     name: str
