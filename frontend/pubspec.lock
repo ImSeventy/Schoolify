@@ -415,13 +415,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.7"
-  serial_port_win32:
-    dependency: "direct main"
-    description:
-      name: serial_port_win32
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -574,6 +567,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  web_socket_channel:
+    dependency: "direct main"
+    description:
+      name: web_socket_channel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   win32:
     dependency: transitive
     description:

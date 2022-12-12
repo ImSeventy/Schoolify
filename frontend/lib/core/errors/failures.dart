@@ -58,3 +58,12 @@ class NoCachedAccessTokensFailure extends Failure with EquatableMixin {
   @override
   List<Object?> get props => [message];
 }
+
+
+class StudentNotFoundFailure extends Failure with EquatableMixin {
+
+  StudentNotFoundFailure() : super("There is not student with the provided rfid");
+
+  @override
+  List<Object?> get props => [message];
+}

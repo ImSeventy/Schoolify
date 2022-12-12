@@ -7,6 +7,7 @@ import 'package:frontend/features/authentication/data/models/tokens_model.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 
 import '../../../../core/network/interceptors.dart';
+import '../models/sutdent_rfid_model.dart';
 
 
 abstract class AuthenticationDataProvider {
@@ -15,6 +16,8 @@ abstract class AuthenticationDataProvider {
   Future<StudentEntity> getCurrentStudent();
 
   Future<TokensModel> refreshAccessToken();
+  
+  Future<StudentRfidModel> getStudentFromRfid({required rfid});
 }
 
 class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
@@ -98,6 +101,21 @@ class AuthenticationDataProviderImpl implements AuthenticationDataProvider {
 
       return TokensModel.fromJson(response.data);
     } on DioError{
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<StudentRfidModel> getStudentFromRfid({required rfid}) async {
+    try {
+      Response response = await _dio.get("/rfid/$rfid");
+
+      if (response.statusCode == 404) {
+        throw StudentNotFoundException();
+      }
+
+      return StudentRfidModel.fromJson(response.data);
+    }on DioError {
       throw ServerException();
     }
   }
