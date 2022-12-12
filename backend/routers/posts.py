@@ -28,7 +28,7 @@ async def add_post(post: PostFormModel = Depends(), token: str = Depends(oauth2_
         post.image_url = image_url
 
     id = await DataBaseManager().add_new_post(post)
-    return {**post.as_dict(), "id": id}
+    return {**post.as_dict(), "id": id, "by_name": admin.name, "by_image_url": admin.image_url}
 
 @posts.get("/image/{image_name}")
 async def get_image(image_name: str):

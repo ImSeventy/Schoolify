@@ -305,14 +305,24 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_post_from_id(self, post_id: int) -> Post | None:
         query = """
-        SELECT posts.*, (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes FROM posts WHERE posts.id = :post_id;
+        SELECT posts.*,
+        (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes,
+        admins.name as by_name,
+        admins.image_url as by_image_url
+        FROM posts JOIN admins
+        ON posts.by = admins.id
+        WHERE posts.id = :post_id;
         """
         return await self.db.fetch_one(query, {"post_id": post_id})
 
     async def get_all_posts(self) -> list[PostOut]:
         query = """
-        SELECT posts.*, COUNT(likes.post_id) as post_likes FROM posts LEFT JOIN likes
-        ON posts.id = likes.post_id group by posts.id
+        SELECT posts.*,
+        COUNT(likes.post_id) as post_likes
+        FROM posts LEFT JOIN likes LEFT JOIN admins
+        ON posts.id = likes.post_id
+        ANd posts.by = admins.id
+        group by posts.id;
         """
         return await self.db.fetch_all(query)
 
