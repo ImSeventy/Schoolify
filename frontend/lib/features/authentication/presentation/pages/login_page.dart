@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,25 +7,47 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
+import 'package:frontend/features/authentication/presentation/pages/rfid_login_page.dart';
 import 'package:frontend/features/authentication/presentation/widgets/icons_group_widget.dart';
 import 'package:frontend/router/routes.dart';
-import 'package:toast/toast.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
+import '../widgets/submit_button.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+Stream<String>? rfIdStream;
+String? currentRfid;
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
+Stream<String> getRfIdStream() {
+  if (rfIdStream != null) {
+    return rfIdStream!;
+  }
+  StreamController<String> streamController = StreamController<String>();
+
+  void setupWebSocketConnection() {
+    WebSocketChannel channel = IOWebSocketChannel.connect(Uri.parse("ws://localhost:8679"));
+    channel.stream.listen((message) {
+      streamController.sink.add(message);
+    }, onDone: () async {
+      await Future.delayed(const Duration(seconds: 5));
+      setupWebSocketConnection();
+    }, onError: (e) {});
+  }
+
+  setupWebSocketConnection();
+
+  rfIdStream = streamController.stream.asBroadcastStream();
+  return rfIdStream!;
 }
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _emailTextEditingController;
   late TextEditingController _passwordTextEditingController;
+  StreamSubscription? rfidStreamSub;
 
   @override
   void initState() {
@@ -36,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailTextEditingController.dispose();
     _passwordTextEditingController.dispose();
+    rfidStreamSub?.cancel();
     super.dispose();
   }
 
@@ -59,25 +84,39 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<LoginCubit, LoginState>(
         buildWhen: (oldState, newState) => oldState != newState,
         listenWhen: (oldState, newState) => oldState != newState,
-        listener: (oldState, newState) async {
+        listener: (context, newState) async {
           if (newState is LoginFailedState) {
             showToastMessage(
               newState.message,
               Colors.red,
               context
             );
-          }
-
-          if (newState is LoginSucceededState) {
+          } else if (newState is GetStudentByRfidFailedState) {
+            currentRfid = null;
+            showToastMessage(
+                newState.message,
+                Colors.red,
+                context
+            );
+          }else if (newState is LoginSucceededState) {
             showToastMessage(
               "Logged in successfully",
               Colors.green,
               context
             );
             Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          } else if (newState is GetStudentByRfidSucceededState) {
+            await Navigator.of(context).pushNamed(Routes.rfidLogin, arguments: RfidLoginPageArgs(student: newState.student));
+            currentRfid = null;
           }
         },
         builder: (context, state) {
+          LoginCubit loginCubit = context.read<LoginCubit>();
+          rfidStreamSub = getRfIdStream().listen((rfid) async {
+            if (currentRfid != null) return;
+            currentRfid = rfid;
+            loginCubit.getStudentByRfid(rfid: int.parse(rfid));
+          });
           return SafeArea(
             child: Stack(
               children: [
@@ -179,32 +218,13 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(
                                   height: 18.h,
                                 ),
-                                Container(
-                                  width: 310.w,
-                                  height: 70.h,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      gradient: const LinearGradient(colors: [
-                                        Color(0xFF00E9CD),
-                                        Color(0xFFF478FF),
-                                      ])),
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: Colors.transparent),
-                                    onPressed: () => state is LoginLoadingState ? null : login(context),
-                                    child: state is LoginLoadingState
-                                        ? const FittedBox(child: CircularProgressIndicator(color: Colors.black,))
-                                        : FittedBox(
-                                          child: Text(
-                                      "login",
-                                      style: TextStyle(
-                                            fontFamily: "Overpass",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 35.sp,
-                                            color: Colors.black),
-                                    ),
-                                        ),
-                                  ),
+                                LoginSubmitButton(
+                                  onPressed: () => login(context),
+                                  enabled: state is! LoginLoadingState,
+                                  colors: const [
+                                    Color(0xFF00E9CD),
+                                    Color(0xFFF478FF),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 11.h,
@@ -224,4 +244,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
 }

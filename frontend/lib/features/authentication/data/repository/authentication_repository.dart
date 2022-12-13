@@ -7,6 +7,7 @@ import 'package:frontend/features/authentication/data/data_providers/authenticat
 import 'package:frontend/features/authentication/data/data_providers/tokens_data_provider.dart';
 import 'package:frontend/features/authentication/data/models/tokens_model.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
+import 'package:frontend/features/authentication/domain/entities/sutdent_rfid_entity.dart';
 import 'package:frontend/features/authentication/domain/repository/authentication_repository.dart';
 
 import '../../domain/entities/tokens_entity.dart';
@@ -93,5 +94,21 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     if (tokensEntity == null) return Left(NoCachedAccessTokensFailure());
 
     return Right(tokensEntity);
+  }
+
+  @override
+  Future<Either<Failure, StudentRfidEntity>> getStudentByRfid({required rfid}) async {
+    if (!await networkInfo.isConnected()) {
+    return Left(NetworkFailure());
+    }
+
+    try {
+    StudentRfidEntity studentRfidEntity =  await authenticationDataProvider.getStudentFromRfid(rfid: rfid);
+    return Right(studentRfidEntity);
+    } on ServerException {
+    return Left(ServerFailure());
+    } on StudentNotFoundException {
+    return Left(StudentNotFoundFailure());
+    }
   }
 }

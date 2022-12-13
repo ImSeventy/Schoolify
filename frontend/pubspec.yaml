@@ -31,9 +31,9 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   dropdown_button2: ^1.9.1
   jwt_decode: ^0.3.1
-  serial_port_win32: ^0.5.2
   readmore: ^2.2.0
   cached_network_image: ^3.2.3
+  web_socket_channel: ^2.2.0
 
 dev_dependencies:
   flutter_test:

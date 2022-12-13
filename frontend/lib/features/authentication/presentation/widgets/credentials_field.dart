@@ -6,13 +6,15 @@ class CredentialsField extends StatelessWidget {
   final String hintText;
   final TextEditingController textEditingController;
   final String? Function(String? value)? validator;
+  final bool enabled;
 
   const CredentialsField({
     Key? key,
     required this.isPassword,
     required this.hintText,
     required this.textEditingController,
-    this.validator
+    this.validator,
+    this.enabled = true
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class CredentialsField extends StatelessWidget {
       width: 310.w,
       child: TextFormField(
         validator: validator,
+        enabled: enabled,
         obscureText: isPassword,
         keyboardType: isPassword ? TextInputType.visiblePassword : TextInputType.emailAddress,
         controller: textEditingController,

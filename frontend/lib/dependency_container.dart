@@ -9,6 +9,7 @@ import 'package:frontend/features/authentication/data/data_providers/tokens_data
 import 'package:frontend/features/authentication/data/repository/authentication_repository.dart';
 import 'package:frontend/features/authentication/domain/repository/authentication_repository.dart';
 import 'package:frontend/features/authentication/domain/use_cases/get_current_student_use_case.dart';
+import 'package:frontend/features/authentication/domain/use_cases/get_student_by_rfid.dart';
 import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/features/authentication/domain/use_cases/login_use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
@@ -16,6 +17,11 @@ import 'package:frontend/features/authentication/presentation/bloc/login_cubit/l
 import 'package:frontend/features/grades/domain/repository/grades_repository.dart';
 import 'package:frontend/features/grades/domain/use_cases/get_student_grades.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
+import 'package:frontend/features/posts/data/data_providers/posts_data_provider.dart';
+import 'package:frontend/features/posts/data/repository/posts_repository.dart';
+import 'package:frontend/features/posts/domain/repository/posts_repository.dart';
+import 'package:frontend/features/posts/domain/use_cases/get_all_posts.dart';
+import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,6 +48,7 @@ Future<void> setUp() async {
   _setupAttendanceFeature();
   _setupWarningsFeature();
   _setupCertificationsFeature();
+  _setupPostsFeature();
   await _setupCore();
 }
 
@@ -61,8 +68,17 @@ Future<void> _setupCore() async {
 
 void _setupAuthenticationFeature() {
   getIt.registerFactory<LoginCubit>(
-    () => LoginCubit(loginUseCase: getIt(), getCurrentStudentUseCase: getIt()),
+    () => LoginCubit(
+      loginUseCase: getIt(),
+      getCurrentStudentUseCase: getIt(),
+      getStudentByRfidUseCase: getIt(),
+    ),
   );
+
+  getIt.registerLazySingleton<GetStudentByRfidUseCase>(
+      () => GetStudentByRfidUseCase(
+            authenticationRepository: getIt(),
+          ));
 
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
@@ -71,13 +87,13 @@ void _setupAuthenticationFeature() {
   );
 
   getIt.registerLazySingleton<RefreshAccessTokenUseCase>(
-        () => RefreshAccessTokenUseCase(
+    () => RefreshAccessTokenUseCase(
       authenticationRepository: getIt(),
     ),
   );
 
   getIt.registerLazySingleton<LoadCachedAccessTokensUseCase>(
-        () => LoadCachedAccessTokensUseCase(
+    () => LoadCachedAccessTokensUseCase(
       authenticationRepository: getIt(),
     ),
   );
@@ -202,5 +218,30 @@ void _setupCertificationsFeature() {
 
   getIt.registerLazySingleton<CertificationsDataProvider>(
     () => CertificationsDataProviderImpl(),
+  );
+}
+
+void _setupPostsFeature() {
+  getIt.registerFactory<PostsCubit>(
+    () => PostsCubit(
+      getAllPostsUseCase: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetAllPostsUseCase>(
+    () => GetAllPostsUseCase(
+      postsRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<PostsRepository>(
+    () => PostsRepositoryImpl(
+      networkInfo: getIt(),
+      postsDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<PostsDataProvider>(
+    () => PostsDataProviderImpl(),
   );
 }

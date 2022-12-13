@@ -90,6 +90,11 @@ class DataBaseManager(metaclass=Singleton):
 
         return await self.db.fetch_one(query, values={"id_or_email": id_or_email})
 
+    async def get_student_by_rfid(self, rfid: int) -> Student | None:
+        query = "SELECT * FROM students where students.rf_id = :rfid"
+
+        return await self.db.fetch_one(query, values={"rfid": rfid})
+
     async def get_major_students(self, id: int) -> list[Student]:
         query = self.models_manager.students.select().where(self.models_manager.students.c.major_id == id)
         return await self.db.fetch_all(query)
@@ -300,14 +305,24 @@ class DataBaseManager(metaclass=Singleton):
 
     async def get_post_from_id(self, post_id: int) -> Post | None:
         query = """
-        SELECT posts.*, (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes FROM posts WHERE posts.id = :post_id;
+        SELECT posts.*,
+        (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes,
+        admins.name as by_name,
+        admins.image_url as by_image_url
+        FROM posts JOIN admins
+        ON posts.by = admins.id
+        WHERE posts.id = :post_id;
         """
         return await self.db.fetch_one(query, {"post_id": post_id})
 
     async def get_all_posts(self) -> list[PostOut]:
         query = """
-        SELECT posts.*, COUNT(likes.post_id) as post_likes FROM posts LEFT JOIN likes
-        ON posts.id = likes.post_id group by posts.id
+        SELECT posts.*,
+        COUNT(likes.post_id) as post_likes
+        FROM posts LEFT JOIN likes LEFT JOIN admins
+        ON posts.id = likes.post_id
+        ANd posts.by = admins.id
+        group by posts.id;
         """
         return await self.db.fetch_all(query)
 
