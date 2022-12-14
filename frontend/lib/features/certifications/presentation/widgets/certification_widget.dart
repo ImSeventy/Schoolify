@@ -24,12 +24,18 @@ class CertificationWidget extends StatelessWidget {
               SizedBox(
                 height: 64.h,
                 width: 62.w,
-                child: CircleAvatar(
-                  backgroundColor: const Color(0xFFCCC1F0),
-                  foregroundImage: NetworkImage(
-                    certificationEntity.givenByImageUrl
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFCCC1F0),
+                      shape: BoxShape.circle
                   ),
-                  radius: 40,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: CachedNetworkImage(
+                    imageUrl: certificationEntity.givenByImageUrl,
+                    height: 64.h,
+                    width: 62.w,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               SizedBox(width: 7.w,),
@@ -94,12 +100,11 @@ class CertificationWidget extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print("test");
                       },
                       child: LayoutBuilder(
                         builder: (_ , constrains) {
-                          return Image.network(
-                            certificationEntity.imageUrl!,
+                          return CachedNetworkImage(
+                            imageUrl: certificationEntity.imageUrl!,
                             width: constrains.maxWidth,
                             height: constrains.maxHeight,
                             fit: BoxFit.fill,

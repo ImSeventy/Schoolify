@@ -41,8 +41,9 @@ async def get_image(image_name: str):
 async def get_feed_posts(token: str = Depends(oauth2_scheme)):
     _ = await get_user("admin", "student", token=token)
     
-    return await DataBaseManager().get_all_posts()
-
+    posts = await DataBaseManager().get_all_posts()
+    print(posts)
+    return posts
 @posts.get("/{id}", response_model=PostOut, status_code=status.HTTP_200_OK)
 async def get_post(id: int, token: str = Depends(oauth2_scheme)):
     _ = await get_user("admin", "student", token=token)

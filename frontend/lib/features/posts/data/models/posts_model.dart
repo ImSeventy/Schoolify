@@ -9,6 +9,7 @@ class PostsModel extends PostsEntity {
     required super.byName,
     required super.byImageUrl,
     required super.imageUrl,
+    required super.date
   });
 
   factory PostsModel.fromJson(Map<String, dynamic> json) {
@@ -19,7 +20,9 @@ class PostsModel extends PostsEntity {
       likeCount: json["like_count"],
       byName: json["by_name"],
       byImageUrl: json["by_image_url"],
-      imageUrl: json["image_url"]
+      imageUrl: json["image_url"],
+      date: DateTime.fromMicrosecondsSinceEpoch(
+          (json["date"] * 1000000.0).round()),
     );
   }
 
@@ -31,7 +34,8 @@ class PostsModel extends PostsEntity {
       "by": by,
       "like_count": likeCount,
       "by_name": byName,
-      "by_image_url": byImageUrl
+      "by_image_url": byImageUrl,
+      "date": date
     };
   }
 }

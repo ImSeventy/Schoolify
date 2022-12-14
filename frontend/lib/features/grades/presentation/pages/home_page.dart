@@ -8,6 +8,7 @@ import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/
 import 'package:frontend/features/attendance/presentation/pages/attendance_page.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
+import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
 import 'package:frontend/router/routes.dart';
 
 import '../../../../core/utils/utils.dart';
@@ -26,7 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int pageIndex = 1;
+  int pageIndex = 0;
 
   void changePageIndex(int index) {
     setState(() {
@@ -37,9 +38,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     const List<Widget> pages = [
-      AttendancePage(),
       MainHomePage(),
+      AttendancePage(),
       GradesPage(),
+      PostsPage()
     ];
 
     return SafeArea(

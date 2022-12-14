@@ -7,6 +7,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Date,
+    DateTime
 )
 
 
@@ -127,7 +128,8 @@ class DbModelsManager:
             Column("id", Integer, primary_key=True),
             Column("content", String),
             Column("image_url", String),
-            Column("by", ForeignKey("admins.id"))
+            Column("by", ForeignKey("admins.id")),
+            Column("date", DateTime)
         )
 
     def _create_likes_table(self) -> None:

@@ -19,7 +19,10 @@ class PostsCubit extends Cubit<PostsState> {
 
     response.fold(
       (failure) => emit(GetAllPostsFailedState(message: failure.message)),
-      (r) => emit(GetAllPostsSucceededState()),
+      (posts) {
+        this.posts = posts;
+        emit(GetAllPostsSucceededState());
+      },
     );
   }
 }

@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/router/router.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dependency_container.dart' as dc;
 import 'features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
@@ -22,24 +20,6 @@ Future<void> main() async {
   // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
 
   runApp(const MyApp());
-}
-
-Stream<String> getRfIdStream() {
-  StreamController<String> streamController = StreamController<String>();
-
-  void setupWebSocketConnection() {
-    WebSocketChannel channel = IOWebSocketChannel.connect(Uri.parse("ws://localhost:8679"));
-    channel.stream.listen((message) {
-      streamController.sink.add(message);
-    }, onDone: () async {
-      await Future.delayed(const Duration(seconds: 5));
-      setupWebSocketConnection();
-    }, onError: (e) {});
-  }
-
-  setupWebSocketConnection();
-
-  return streamController.stream;
 }
 
 class MyApp extends StatelessWidget {

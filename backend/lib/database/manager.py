@@ -318,10 +318,12 @@ class DataBaseManager(metaclass=Singleton):
     async def get_all_posts(self) -> list[PostOut]:
         query = """
         SELECT posts.*,
-        COUNT(likes.post_id) as post_likes
-        FROM posts LEFT JOIN likes LEFT JOIN admins
+        COUNT(likes.post_id) as post_likes,
+        admins.name as by_name,
+        admins.image_url as by_image_url
+        FROM posts LEFT JOIN admins LEFT JOIN likes
         ON posts.id = likes.post_id
-        ANd posts.by = admins.id
+        AND posts.by = admins.id
         group by posts.id;
         """
         return await self.db.fetch_all(query)

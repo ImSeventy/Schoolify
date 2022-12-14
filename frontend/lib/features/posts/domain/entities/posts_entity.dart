@@ -6,6 +6,7 @@ class PostsEntity {
   final int likeCount;
   final String byName;
   final String? byImageUrl;
+  final DateTime date;
 
   PostsEntity({
     required this.id,
@@ -15,5 +16,6 @@ class PostsEntity {
     required this.byName,
     required this.byImageUrl,
     required this.imageUrl,
+    required this.date
   });
 }
