@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/router/router.dart';
+import 'core/use_cases/use_case.dart';
 import 'dependency_container.dart' as dc;
 import 'features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
+import 'features/authentication/domain/use_cases/get_current_student_use_case.dart';
+import 'features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
@@ -16,8 +20,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
-  // await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
-  // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
+  await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+
+  if (Platform.isWindows) {
+    Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);
+  }
 
   runApp(const MyApp());
 }
@@ -27,8 +35,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFCF131524)
+        statusBarColor: Color(0xFF131524)
     ));
     return MultiBlocProvider(
       providers: [

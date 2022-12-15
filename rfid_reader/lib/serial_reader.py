@@ -5,7 +5,6 @@ import time
 
 class SerialReader:
     def __init__(self, port: str, baudrate: int, timeout: Optional[int] = None):
-        pass
         self.port = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
 
     def read_serial_data(self) -> int:
