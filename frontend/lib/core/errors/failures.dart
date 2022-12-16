@@ -67,3 +67,30 @@ class StudentNotFoundFailure extends Failure with EquatableMixin {
   @override
   List<Object?> get props => [message];
 }
+
+
+class StudentAlreadyLikedThePostFailure extends Failure with EquatableMixin {
+
+  StudentAlreadyLikedThePostFailure() : super("You've already liked this post");
+
+  @override
+  List<Object?> get props => [message];
+}
+
+
+class PostNotFoundFailure extends Failure with EquatableMixin {
+
+  PostNotFoundFailure() : super("The post doesn't exist");
+
+  @override
+  List<Object?> get props => [message];
+}
+
+
+class PostIsNotLikedByStudentFailure extends Failure with EquatableMixin {
+
+  PostIsNotLikedByStudentFailure() : super("The post is not liked by the student");
+
+  @override
+  List<Object?> get props => [message];
+}

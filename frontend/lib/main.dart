@@ -39,6 +39,8 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Color(0xFF131524)
     ));
+
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<DataHandlerCubit>(

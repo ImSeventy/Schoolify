@@ -16,7 +16,7 @@ class CustomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 75.h,
       padding: EdgeInsets.symmetric(horizontal: 23.h),
       decoration: const BoxDecoration(
         gradient: LinearGradient(

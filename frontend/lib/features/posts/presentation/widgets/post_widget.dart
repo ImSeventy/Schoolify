@@ -68,7 +68,7 @@ class Post extends StatelessWidget {
                     post.content,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 13.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins"
                     ),

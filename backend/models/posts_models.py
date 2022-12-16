@@ -20,6 +20,7 @@ class PostOut(BaseModel):
     by_image_url: Optional[str] = None
     like_count: int = 0
     date: float
+    liked: bool = False
 
     @validator("date", pre=True)
     def date_validator(cls, date: datetime | str) -> float:

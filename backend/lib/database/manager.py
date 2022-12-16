@@ -315,10 +315,12 @@ class DataBaseManager(metaclass=Singleton):
         """
         return await self.db.fetch_one(query, {"post_id": post_id})
 
-    async def get_all_posts(self) -> list[PostOut]:
+    async def get_all_posts(self, user_id: int = None) -> list[PostOut]:
         query = """
         SELECT posts.*,
+        :user_id,
         COUNT(likes.post_id) as post_likes,
+        (CASE WHEN likes.by = :user_id THEN true ELSE false END) as liked,
         admins.name as by_name,
         admins.image_url as by_image_url
         FROM posts LEFT JOIN admins LEFT JOIN likes
@@ -326,7 +328,7 @@ class DataBaseManager(metaclass=Singleton):
         AND posts.by = admins.id
         group by posts.id;
         """
-        return await self.db.fetch_all(query)
+        return await self.db.fetch_all(query, {"user_id": user_id})
 
     async def delete_post_with_id(self, id: int) -> None:
         query = self.models_manager.posts.delete().where(self.models_manager.posts.c.id == id)
