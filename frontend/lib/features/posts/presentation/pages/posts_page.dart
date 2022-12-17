@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
 
+import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
 import '../widgets/post_widget.dart';
 
@@ -20,9 +21,16 @@ class PostsPage extends StatelessWidget {
         return postsCubit;
       },
       child: BlocConsumer<PostsCubit, PostsState>(
-        buildWhen: (oldState, newState) => oldState != newState,
-        listenWhen: (oldState, newState) => oldState != newState,
-        listener: (context, state) {},
+        buildWhen: (oldState, newState) =>
+            oldState != newState &&
+            (newState is! LikeState && newState is! UnLikeState),
+        listenWhen: (oldState, newState) => oldState != newState &&
+            (newState is! LikeState || newState is! UnLikeState),
+        listener: (context, state) {
+          if (state is GetAllPostsFailedState) {
+            showToastMessage(state.message, Colors.red, context);
+          }
+        },
         builder: (context, state) {
           PostsCubit postsCubit = context.read<PostsCubit>();
           return Scaffold(
@@ -33,14 +41,21 @@ class PostsPage extends StatelessWidget {
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 17.w),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 100.h,),
-                      ...postsCubit.posts.map((post) => Post(post: post,),).toList()
-                    ],
-                  ),
+                child: ListView(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  children: [
+                    SizedBox(
+                      height: 100.h,
+                    ),
+                    ...postsCubit.posts
+                        .map(
+                          (post) => Post(
+                            post: post,
+                          ),
+                        )
+                        .toList()
+                  ],
                 ),
               ),
             ),
@@ -50,4 +65,3 @@ class PostsPage extends StatelessWidget {
     );
   }
 }
-

@@ -30,45 +30,64 @@ class GetAllPostsFailedState extends PostsState with EquatableMixin{
   List<Object?> get props => [message];
 }
 
+class LikeState extends PostsState {
+  final int postId;
 
-class LikePostLoadingState extends PostsState with EquatableMixin{
+  LikeState({required this.postId});
+}
+
+class LikePostLoadingState extends LikeState with EquatableMixin{
+  LikePostLoadingState({required super.postId});
   @override
   List<Object?> get props => [];
 }
 
 
-class LikePostSucceededState extends PostsState with EquatableMixin{
+class LikePostSucceededState extends LikeState with EquatableMixin{
+  LikePostSucceededState({required super.postId});
   @override
   List<Object?> get props => [];
 }
 
 
-class LikePostFailedState extends PostsState with EquatableMixin{
+class LikePostFailedState extends LikeState with EquatableMixin{
   final String message;
 
-  LikePostFailedState({required this.message});
+  LikePostFailedState({required this.message, required super.postId});
 
   @override
   List<Object?> get props => [message];
 }
 
+class UnLikeState extends PostsState {
+  final int postId;
 
-class UnLikePostLoadingState extends PostsState with EquatableMixin{
+  UnLikeState({required this.postId});
+}
+
+
+class UnLikePostLoadingState extends UnLikeState with EquatableMixin{
+
+  UnLikePostLoadingState({required super.postId});
+
   @override
   List<Object?> get props => [];
 }
 
 
-class UnLikePostSucceededState extends PostsState with EquatableMixin{
+class UnLikePostSucceededState extends UnLikeState with EquatableMixin{
+
+  UnLikePostSucceededState({required super.postId});
+
   @override
   List<Object?> get props => [];
 }
 
 
-class UnLikePostFailedState extends PostsState with EquatableMixin{
+class UnLikePostFailedState extends UnLikeState with EquatableMixin{
   final String message;
 
-  UnLikePostFailedState({required this.message});
+  UnLikePostFailedState({required this.message, required super.postId});
 
   @override
   List<Object?> get props => [message];
