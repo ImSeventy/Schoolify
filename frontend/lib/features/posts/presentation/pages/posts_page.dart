@@ -50,7 +50,7 @@ class PostsPage extends StatelessWidget {
                     ),
                     ...postsCubit.posts
                         .map(
-                          (post) => Post(
+                          (post) => PostWidget(
                             post: post,
                           ),
                         )

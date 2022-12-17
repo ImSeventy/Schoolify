@@ -12,6 +12,7 @@ import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
 import 'package:frontend/router/routes.dart';
 
 import '../../../../core/utils/utils.dart';
+import '../../../../core/widgets/avatar_image.dart';
 import '../bloc/grades/grades_cubit.dart';
 import '../widgets/data_options_list_widget.dart';
 import '../widgets/progress_indicator.dart';
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFF131524),
-        bottomNavigationBar: CustomNavigationBar(onTap: changePageIndex, initialIndex: 1),
+        bottomNavigationBar: CustomNavigationBar(onTap: changePageIndex, initialIndex: 0),
         body: Stack(
           children: [
             Container(
@@ -142,11 +143,11 @@ class MainHomePage extends StatelessWidget {
                         SizedBox(
                           height: 20.h,
                         ),
-                        CircleAvatar(
-                          radius: 40.r,
-                          backgroundColor: const Color(0xFFCCC1F0),
-                          child: const Icon(Icons.person),
-                        )
+                        AvatarImage(
+                          imageUrl: AuthInfo.currentStudent!.imageUrl,
+                          width: 70.w,
+                          height: 70.h,
+                        ),
                       ],
                     ),
                     SizedBox(

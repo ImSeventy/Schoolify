@@ -8,13 +8,14 @@ import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubi
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../core/widgets/avatar_image.dart';
 import '../../domain/entities/posts_entity.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class Post extends StatelessWidget {
+class PostWidget extends StatelessWidget {
   final PostsEntity post;
   bool isLiked = false;
-  Post({Key? key, required this.post}) : super(key: key) {
+  PostWidget({Key? key, required this.post}) : super(key: key) {
     isLiked = post.liked;
   }
 
@@ -101,27 +102,10 @@ class Post extends StatelessWidget {
               child: Column(children: [
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: SizedBox(
-                    width: 62.w,
-                    height: 64.h,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xFFCCC1F0)),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: post.byImageUrl == null || post.byImageUrl == ""
-                          ? Image.asset(
-                        "assets/default_profile.png",
-                        width: 62.w,
-                        height: 64.h,
-                        fit: BoxFit.contain,
-                      )
-                          : CachedNetworkImage(
-                        imageUrl: post.byImageUrl!,
-                        width: 62.w,
-                        height: 64.h,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                  leading: AvatarImage(
+                    imageUrl: post.byImageUrl,
+                    width: 70.w,
+                    height: 70.h,
                   ),
                   title: Text(
                     post.byName,
@@ -129,7 +113,7 @@ class Post extends StatelessWidget {
                         color: Colors.white,
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.w500,
-                        fontSize: 24.sp),
+                        fontSize: 22.sp),
                   ),
                   subtitle: Text(
                     timeago.format(post.date),
@@ -137,7 +121,7 @@ class Post extends StatelessWidget {
                         color: const Color(0xFFB9B9B9),
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.w500,
-                        fontSize: 16.sp),
+                        fontSize: 14.sp),
                   ),
                 ),
                 SizedBox(
