@@ -106,6 +106,8 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     if (semesterPredicate != null) {
       absences = absences.where(semesterPredicate).toList();
     }
+
+    absences.sort((a, b) => b.date.compareTo(a.date));
     return absences;
   }
 
@@ -119,6 +121,8 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     if (semesterPredicate != null) {
       warnings = warnings.where(semesterPredicate).toList();
     }
+
+    warnings.sort((a, b) => b.date.compareTo(a.date));
     return warnings;
   }
 
@@ -132,6 +136,8 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
     if (semesterPredicate != null) {
       certifications = certifications.where(semesterPredicate).toList();
     }
+
+    certifications.sort((a, b) => b.date.compareTo(a.date));
     return certifications;
   }
 

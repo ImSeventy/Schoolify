@@ -29,6 +29,8 @@ class PostsRepositoryImpl implements PostsRepository {
 
     try {
       List<PostsModel> posts = await postsDataProvider.getAllPosts();
+      posts.sort((a, b) => b.date.compareTo(a.date));
+      posts = posts.reversed.toList();
 
       return Right(posts);
     } on ServerException {
