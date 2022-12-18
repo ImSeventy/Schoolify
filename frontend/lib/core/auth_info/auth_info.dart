@@ -4,4 +4,9 @@ import 'package:frontend/features/authentication/domain/entities/tokens_entity.d
 class AuthInfo {
   static StudentEntity? currentStudent;
   static TokensEntity? accessTokens;
+
+  static void clear() {
+    currentStudent = null;
+    accessTokens = null;
+  }
 }

@@ -4,8 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
 
+import '../../../../core/constants/error_messages.dart';
+import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
+import '../../../../router/routes.dart';
+import '../../../authentication/domain/use_cases/logout_use_case.dart';
 import '../widgets/post_widget.dart';
 
 class PostsPage extends StatelessWidget {
@@ -29,6 +33,11 @@ class PostsPage extends StatelessWidget {
         listener: (context, state) {
           if (state is GetAllPostsFailedState) {
             showToastMessage(state.message, Colors.red, context);
+
+            if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
+              getIt<LogOutUseCase>().call(NoParams());
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            }
           }
         },
         builder: (context, state) {

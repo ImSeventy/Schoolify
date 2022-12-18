@@ -4,4 +4,5 @@ class Routes {
   static const warnings = "warnings";
   static const certifications = "certifications";
   static const rfidLogin = "rfidLogin";
+  static const login = "login";
 }

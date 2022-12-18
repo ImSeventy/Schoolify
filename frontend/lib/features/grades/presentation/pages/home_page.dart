@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
+import 'package:frontend/core/constants/error_messages.dart';
+import 'package:frontend/core/use_cases/use_case.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
+import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/attendance/presentation/pages/attendance_page.dart';
+import 'package:frontend/features/authentication/domain/use_cases/logout_use_case.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
@@ -105,19 +109,25 @@ class MainHomePage extends StatelessWidget {
       buildWhen: (oldState, newState) => oldState != newState,
       listenWhen: (oldState, newState) => oldState != newState,
       listener: (context, state) {
-        if (state is GetStudentGradesFailedState) {
+        if (state is GradesFailedState) {
           showToastMessage(
-            state.msg,
+            state.message,
             Colors.red,
             context
           );
+
+          if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
+            getIt<LogOutUseCase>().call(NoParams());
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+          }
         }
+
+
       },
       builder: (context, state) {
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
         AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
         GradesCubit gradesCubit = context.read<GradesCubit>();
-        Size pageSize = MediaQuery.of(context).size;
 
         return RefreshIndicator(
           onRefresh: () async {

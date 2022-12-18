@@ -17,11 +17,19 @@ class GetStudentGradeSucceededState extends GradesState  with EquatableMixin{
   List<Object?> get props => [];
 }
 
-class GetStudentGradesFailedState extends GradesState with EquatableMixin{
-  final String msg;
+class GradesFailedState extends GradesState with EquatableMixin {
+  final String message;
 
-  GetStudentGradesFailedState(this.msg);
+  GradesFailedState(this.message);
 
   @override
-  List<Object?> get props => [msg];
+  List<Object?> get props => [message];
+}
+
+class GetStudentGradesFailedState extends GradesFailedState{
+
+  GetStudentGradesFailedState(super.message);
+
+  @override
+  List<Object?> get props => [message];
 }

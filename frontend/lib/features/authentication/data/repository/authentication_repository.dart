@@ -111,4 +111,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return Left(StudentNotFoundFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, void>> logOut() async {
+    tokensDataProvider.removeTokensStoredInCache();
+    AuthInfo.clear();
+    return Right(null);
+  }
 }

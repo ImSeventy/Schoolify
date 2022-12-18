@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../constants/error_messages.dart';
+
 class Failure {
   final String message;
 
@@ -9,7 +11,7 @@ class Failure {
 
 class ServerFailure extends Failure with EquatableMixin {
 
-  ServerFailure() : super("Error on the server side try again later !!");
+  ServerFailure() : super(ErrorMessages.serverFailure);
 
   @override
   List<Object?> get props => [message];
@@ -18,7 +20,7 @@ class ServerFailure extends Failure with EquatableMixin {
 
 class WrongEmailOrPasswordFailure extends Failure with EquatableMixin {
 
-  WrongEmailOrPasswordFailure() : super("Wrong E-mail or Password");
+  WrongEmailOrPasswordFailure() : super(ErrorMessages.wrongEmailOrPasswordFailure);
 
   @override
   List<Object?> get props => [message];
@@ -27,7 +29,7 @@ class WrongEmailOrPasswordFailure extends Failure with EquatableMixin {
 
 class NetworkFailure extends Failure with EquatableMixin {
 
-  NetworkFailure() : super("There is no internet connection");
+  NetworkFailure() : super(ErrorMessages.networkFailure);
 
   @override
   List<Object?> get props => [message];
@@ -36,7 +38,7 @@ class NetworkFailure extends Failure with EquatableMixin {
 
 class InvalidAccessTokenFailure extends Failure with EquatableMixin {
 
-  InvalidAccessTokenFailure() : super("Invalid access token");
+  InvalidAccessTokenFailure() : super(ErrorMessages.invalidAccessTokenFailure);
 
   @override
   List<Object?> get props => [message];
@@ -44,7 +46,7 @@ class InvalidAccessTokenFailure extends Failure with EquatableMixin {
 
 class InvalidRefreshTokenFailure extends Failure with EquatableMixin {
 
-  InvalidRefreshTokenFailure() : super("Invalid refresh token");
+  InvalidRefreshTokenFailure() : super(ErrorMessages.invalidRefreshTokenFailure);
 
   @override
   List<Object?> get props => [message];
@@ -53,7 +55,7 @@ class InvalidRefreshTokenFailure extends Failure with EquatableMixin {
 
 class NoCachedAccessTokensFailure extends Failure with EquatableMixin {
 
-  NoCachedAccessTokensFailure() : super("There is not cached access tokens");
+  NoCachedAccessTokensFailure() : super(ErrorMessages.noCachedAccessTokensFailure);
 
   @override
   List<Object?> get props => [message];
@@ -62,7 +64,7 @@ class NoCachedAccessTokensFailure extends Failure with EquatableMixin {
 
 class StudentNotFoundFailure extends Failure with EquatableMixin {
 
-  StudentNotFoundFailure() : super("There is not student with the provided rfid");
+  StudentNotFoundFailure() : super(ErrorMessages.studentNotFoundFailure);
 
   @override
   List<Object?> get props => [message];
@@ -71,7 +73,7 @@ class StudentNotFoundFailure extends Failure with EquatableMixin {
 
 class StudentAlreadyLikedThePostFailure extends Failure with EquatableMixin {
 
-  StudentAlreadyLikedThePostFailure() : super("You've already liked this post");
+  StudentAlreadyLikedThePostFailure() : super(ErrorMessages.studentAlreadyLikedThePostFailure);
 
   @override
   List<Object?> get props => [message];
@@ -80,7 +82,7 @@ class StudentAlreadyLikedThePostFailure extends Failure with EquatableMixin {
 
 class PostNotFoundFailure extends Failure with EquatableMixin {
 
-  PostNotFoundFailure() : super("The post doesn't exist");
+  PostNotFoundFailure() : super(ErrorMessages.postNotFoundFailure);
 
   @override
   List<Object?> get props => [message];
@@ -89,7 +91,7 @@ class PostNotFoundFailure extends Failure with EquatableMixin {
 
 class PostIsNotLikedByStudentFailure extends Failure with EquatableMixin {
 
-  PostIsNotLikedByStudentFailure() : super("The post is not liked by the student");
+  PostIsNotLikedByStudentFailure() : super(ErrorMessages.postIsNotLikedByStudentFailure);
 
   @override
   List<Object?> get props => [message];
