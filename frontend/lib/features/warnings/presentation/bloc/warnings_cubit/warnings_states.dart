@@ -17,10 +17,17 @@ class GetStudentWarningsLoadingState extends WarningsState with EquatableMixin{
   List<Object?> get props => [];
 }
 
-class GetStudentWarningsFailedState extends WarningsState with EquatableMixin{
-  final String msg;
+class WarningsFailedState extends WarningsState with EquatableMixin{
+  String message;
 
-  GetStudentWarningsFailedState({required this.msg});
+  WarningsFailedState({required this.message});
+
   @override
-  List<Object?> get props => [msg];
+  List<Object?> get props => [];
+}
+
+class GetStudentWarningsFailedState extends WarningsFailedState{
+
+  GetStudentWarningsFailedState({required super.message});
+
 }

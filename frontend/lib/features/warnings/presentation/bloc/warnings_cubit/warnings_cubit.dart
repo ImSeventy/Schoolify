@@ -16,7 +16,7 @@ class WarningsCubit extends Cubit<WarningsState> {
     final response = await getStudentWarningsUseCase.call(NoParams());
 
     response.fold(
-      (failure) => emit(GetStudentWarningsFailedState(msg: failure.message)),
+      (failure) => emit(GetStudentWarningsFailedState(message: failure.message)),
       (studentWarnings) {
         warnings = studentWarnings;
         emit(GetStudentWarningsSucceededState());

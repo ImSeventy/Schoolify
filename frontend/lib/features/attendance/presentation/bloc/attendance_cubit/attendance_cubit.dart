@@ -18,7 +18,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
     response.fold(
       (failure) {
-        emit(GetStudentAbsencesFailedState(msg: failure.message));
+        emit(GetStudentAbsencesFailedState(message: failure.message));
       },
       (absencesEntities) {
         absences = absencesEntities;

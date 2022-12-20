@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:desktop_window/desktop_window.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,14 @@ Future<void> main() async {
     Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);
   }
 
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    const minSize = Size(550, 500);
+    const maxSize = Size(700, 2400);
+    await DesktopWindow.setWindowSize(Size(maxSize.width, 1000));
+    await DesktopWindow.setMinWindowSize(minSize);
+    await DesktopWindow.setMaxWindowSize(maxSize);
+  }
+
   runApp(const MyApp());
 }
 
@@ -39,6 +48,8 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Color(0xFF131524)
     ));
+
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<DataHandlerCubit>(

@@ -8,7 +8,12 @@ import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
+import '../../../../core/constants/error_messages.dart';
+import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/widgets/loading_indicator.dart';
+import '../../../../dependency_container.dart';
+import '../../../../router/routes.dart';
+import '../../../authentication/domain/use_cases/logout_use_case.dart';
 import '../../../grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import '../../../grades/presentation/widgets/data_options_list_widget.dart';
 import '../../../grades/presentation/widgets/progress_indicator.dart';
@@ -25,10 +30,15 @@ class AttendancePage extends StatelessWidget {
       listener: (context, state) {
         if (state is GetStudentAbsencesFailedState) {
           showToastMessage(
-            state.msg,
+            state.message,
             Colors.red,
             context
           );
+
+          if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
+            getIt<LogOutUseCase>().call(NoParams());
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+          }
         }
       },
       builder: (context, state) {

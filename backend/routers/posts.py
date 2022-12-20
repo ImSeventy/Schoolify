@@ -39,11 +39,10 @@ async def get_image(image_name: str):
 
 @posts.get("/feed", response_model=list[PostOut], status_code=status.HTTP_200_OK)
 async def get_feed_posts(token: str = Depends(oauth2_scheme)):
-    _ = await get_user("admin", "student", token=token)
+    user = await get_user("admin", "student", token=token)
     
-    posts = await DataBaseManager().get_all_posts()
-    print(posts)
-    return posts
+    return await DataBaseManager().get_all_posts(user_id=user.id)
+
 @posts.get("/{id}", response_model=PostOut, status_code=status.HTTP_200_OK)
 async def get_post(id: int, token: str = Depends(oauth2_scheme)):
     _ = await get_user("admin", "student", token=token)
@@ -56,7 +55,7 @@ async def get_post(id: int, token: str = Depends(oauth2_scheme)):
 
 @posts.delete("/like", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_like(post_id: int, token: str = Depends(oauth2_scheme)):
-    user = await get_user("admin", "student", token=token)
+    user = await get_user("student", token=token)
     
     post = await DataBaseManager().get_post_from_id(post_id)
     if post is None:
@@ -92,7 +91,7 @@ async def edit_post(id: int, post: PostEdit, token: str = Depends(oauth2_scheme)
 
 @posts.post("/like", response_model=LikeOut, status_code=status.HTTP_201_CREATED)
 async def like_post(post_id : int, token: str = Depends(oauth2_scheme)):
-    user = await get_user("admin", "student", token=token)
+    user = await get_user("student", token=token)
     
     post = await DataBaseManager().get_post_from_id(post_id)
     if post is None:

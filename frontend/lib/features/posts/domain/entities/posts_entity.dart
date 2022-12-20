@@ -1,4 +1,6 @@
-class PostsEntity {
+import 'package:equatable/equatable.dart';
+
+class PostsEntity extends Equatable {
   final int id;
   final String content;
   final int by;
@@ -7,8 +9,9 @@ class PostsEntity {
   final String byName;
   final String? byImageUrl;
   final DateTime date;
+  final bool liked;
 
-  PostsEntity({
+  const PostsEntity({
     required this.id,
     required this.content,
     required this.by,
@@ -16,6 +19,21 @@ class PostsEntity {
     required this.byName,
     required this.byImageUrl,
     required this.imageUrl,
-    required this.date
+    required this.date,
+    required this.liked
   });
+
+  @override
+  List<Object?> get props => [
+    id,
+    content,
+    by,
+    imageUrl,
+    likeCount,
+    byName,
+    byImageUrl,
+    date,
+    liked
+  ];
+
 }

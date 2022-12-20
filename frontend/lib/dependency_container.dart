@@ -21,6 +21,7 @@ import 'package:frontend/features/posts/data/data_providers/posts_data_provider.
 import 'package:frontend/features/posts/data/repository/posts_repository.dart';
 import 'package:frontend/features/posts/domain/repository/posts_repository.dart';
 import 'package:frontend/features/posts/domain/use_cases/get_all_posts.dart';
+import 'package:frontend/features/posts/domain/use_cases/like_post.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -34,6 +35,7 @@ import 'features/certifications/presentation/bloc/certifications_cubit/certifica
 import 'features/grades/data/data_providers/grades_data_provider.dart';
 import 'features/grades/data/repository/grades_repository.py.dart';
 import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
+import 'features/posts/domain/use_cases/unlike_post.dart';
 import 'features/warnings/data/data_providers/warnings_data_provider.dart';
 import 'features/warnings/data/repository/warnings_repository.dart';
 import 'features/warnings/domain/reposistory/warnings_repository.dart';
@@ -225,11 +227,25 @@ void _setupPostsFeature() {
   getIt.registerFactory<PostsCubit>(
     () => PostsCubit(
       getAllPostsUseCase: getIt(),
+      likePostUseCase: getIt(),
+      unLikePostUseCase: getIt(),
     ),
   );
 
   getIt.registerLazySingleton<GetAllPostsUseCase>(
     () => GetAllPostsUseCase(
+      postsRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<LikePostUseCase>(
+        () => LikePostUseCase(
+      postsRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UnLikePostUseCase>(
+        () => UnLikePostUseCase(
       postsRepository: getIt(),
     ),
   );

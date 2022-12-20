@@ -40,6 +40,8 @@ class AppRouter {
       case Routes.rfidLogin:
         StudentRfidEntity student = (args as RfidLoginPageArgs).student;
         return RfidLoginPage(student: student);
+      case Routes.login:
+        return const LoginPage();
       default:
         return null;
     }

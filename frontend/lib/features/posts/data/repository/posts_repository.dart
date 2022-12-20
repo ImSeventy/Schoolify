@@ -29,6 +29,8 @@ class PostsRepositoryImpl implements PostsRepository {
 
     try {
       List<PostsModel> posts = await postsDataProvider.getAllPosts();
+      posts.sort((a, b) => b.date.compareTo(a.date));
+      posts = posts.reversed.toList();
 
       return Right(posts);
     } on ServerException {
@@ -37,6 +39,60 @@ class PostsRepositoryImpl implements PostsRepository {
       return Left(InvalidAccessTokenFailure());
     } on InvalidRefreshTokenException {
       return Left(InvalidRefreshTokenFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> likePost({required int postId}) async {
+    if (!await networkInfo.isConnected()) {
+    return Left(NetworkFailure());
+    }
+
+    if (AuthInfo.accessTokens == null) {
+    return Left(InvalidAccessTokenFailure());
+    }
+
+    try {
+    await postsDataProvider.likePost(postId: postId);
+
+    return const Right(null);
+    } on ServerException {
+    return Left(ServerFailure());
+    } on InvalidAccessTokenException {
+    return Left(InvalidAccessTokenFailure());
+    } on InvalidRefreshTokenException {
+    return Left(InvalidRefreshTokenFailure());
+    } on PostNotFoundException {
+      return Left(StudentAlreadyLikedThePostFailure());
+    } on StudentAlreadyLikedThePostException {
+      return Left(PostNotFoundFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> unlikePost({required int postId}) async {
+    if (!await networkInfo.isConnected()) {
+    return Left(NetworkFailure());
+    }
+
+    if (AuthInfo.accessTokens == null) {
+    return Left(InvalidAccessTokenFailure());
+    }
+
+    try {
+    await postsDataProvider.unlikePost(postId: postId);
+
+    return const Right(null);
+    } on ServerException {
+    return Left(ServerFailure());
+    } on InvalidAccessTokenException {
+    return Left(InvalidAccessTokenFailure());
+    } on InvalidRefreshTokenException {
+    return Left(InvalidRefreshTokenFailure());
+    } on PostNotFoundException {
+      return Left(PostIsNotLikedByStudentFailure());
+    } on PostIsNotLikedByStudentException {
+      return Left(PostNotFoundFailure());
     }
   }
 }

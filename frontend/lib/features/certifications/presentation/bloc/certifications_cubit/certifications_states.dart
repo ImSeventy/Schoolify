@@ -8,6 +8,15 @@ class CertificationsInitialState extends CertificationsState with EquatableMixin
   List<Object?> get props => [];
 }
 
+class CertificationsFailedState extends CertificationsState with EquatableMixin {
+  String message;
+
+  CertificationsFailedState({required this.message});
+
+  @override
+  List<Object?> get props => [];
+}
+
 
 class GetStudentCertificationsLoadingState extends CertificationsState with EquatableMixin {
   @override
@@ -15,13 +24,10 @@ class GetStudentCertificationsLoadingState extends CertificationsState with Equa
 }
 
 
-class GetStudentCertificationsFailedState extends CertificationsState with EquatableMixin {
-  final String msg;
+class GetStudentCertificationsFailedState extends CertificationsFailedState {
 
-  GetStudentCertificationsFailedState({required this.msg});
+  GetStudentCertificationsFailedState({required super.message});
 
-  @override
-  List<Object?> get props => [msg];
 }
 
 

@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.1"
+  desktop_window:
+    dependency: "direct main"
+    description:
+      name: desktop_window
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   dio:
     dependency: "direct main"
     description:
@@ -184,13 +191,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_window_close:
-    dependency: "direct main"
-    description:
-      name: flutter_window_close
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
   font_awesome_flutter:
     dependency: "direct main"
     description:

@@ -7,6 +7,15 @@ class AttendanceInitialState extends AttendanceState with EquatableMixin {
   List<Object?> get props => [];
 }
 
+class AttendanceFailedState extends AttendanceState with EquatableMixin {
+  String message;
+
+  AttendanceFailedState({required this.message});
+
+  @override
+  List<Object?> get props => [];
+}
+
 class GetStudentAbsencesLoadingState extends AttendanceState with EquatableMixin {
   @override
   List<Object?> get props => [];
@@ -17,11 +26,8 @@ class GetStudentAbsencesSucceededState extends AttendanceState with EquatableMix
   List<Object?> get props => [];
 }
 
-class GetStudentAbsencesFailedState extends AttendanceState with EquatableMixin {
-  final String msg;
+class GetStudentAbsencesFailedState extends AttendanceFailedState {
 
-  GetStudentAbsencesFailedState({required this.msg});
+  GetStudentAbsencesFailedState({required super.message});
 
-  @override
-  List<Object?> get props => [msg];
 }

@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../core/widgets/avatar_image.dart';
+
 class CertificationWidget extends StatelessWidget {
   final CertificationEntity certificationEntity;
   const CertificationWidget({
@@ -21,22 +23,10 @@ class CertificationWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              SizedBox(
-                height: 64.h,
+              AvatarImage(
+                imageUrl: certificationEntity.givenByImageUrl,
                 width: 62.w,
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: Color(0xFFCCC1F0),
-                      shape: BoxShape.circle
-                  ),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: CachedNetworkImage(
-                    imageUrl: certificationEntity.givenByImageUrl,
-                    height: 64.h,
-                    width: 62.w,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                height: 64.h,
               ),
               SizedBox(width: 7.w,),
               RichText(
@@ -96,7 +86,7 @@ class CertificationWidget extends StatelessWidget {
                 color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
-                  alignment: Alignment.center,
+                  alignment: AlignmentDirectional.bottomEnd,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -108,12 +98,24 @@ class CertificationWidget extends StatelessWidget {
                             width: constrains.maxWidth,
                             height: constrains.maxHeight,
                             fit: BoxFit.fill,
+                            placeholder: (_, __) => Image.asset(
+                              "assets/image_placeholder.jpg",
+                              width: constrains.maxWidth,
+                              height: constrains.maxHeight,
+                              fit: BoxFit.fill,
+                            ),
+                            errorWidget: (_, __, ___) => Image.asset(
+                              "assets/image_placeholder.jpg",
+                              width: constrains.maxWidth,
+                              height: constrains.maxHeight,
+                              fit: BoxFit.fill,
+                            ),
                           );
                         },
                       ),
                     ),
                     Transform.translate(
-                      offset: Offset(18.w, 30.h),
+                      offset: Offset(20.w, 30.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: SvgPicture.asset(

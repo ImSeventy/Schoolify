@@ -16,7 +16,7 @@ class CertificationsCubit extends Cubit<CertificationsState> {
     emit(GetStudentCertificationsLoadingState());
     final response = await getStudentCertificationsUseCase.call(NoParams());
     response.fold(
-      (failure) => emit(GetStudentCertificationsFailedState(msg: failure.message)),
+      (failure) => emit(GetStudentCertificationsFailedState(message: failure.message)),
       (certifications) {
         this.certifications = certifications;
         emit(GetStudentCertificationsSucceededState());

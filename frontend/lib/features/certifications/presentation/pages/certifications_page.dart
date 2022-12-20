@@ -12,7 +12,11 @@ import 'package:frontend/features/warnings/presentation/bloc/warnings_cubit/warn
 import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
+import '../../../../core/constants/error_messages.dart';
+import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/utils/utils.dart';
+import '../../../../router/routes.dart';
+import '../../../authentication/domain/use_cases/logout_use_case.dart';
 import '../../../grades/presentation/widgets/data_options_list_widget.dart';
 import '../widgets/certification_widget.dart';
 
@@ -31,12 +35,17 @@ class CertificationsPage extends StatelessWidget {
         listenWhen: (oldState, newState) => oldState != newState,
         buildWhen: (oldState, newState) => oldState != newState,
         listener: (context, state) {
-          if (state is GetStudentCertificationsFailedState) {
+          if (state is CertificationsFailedState) {
             showToastMessage(
-              state.msg,
+              state.message,
               Colors.red,
               context
             );
+
+            if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
+              getIt<LogOutUseCase>().call(NoParams());
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            }
           }
         },
         builder: (context, state) {

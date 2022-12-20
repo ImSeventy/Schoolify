@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <flutter_window_close/flutter_window_close_plugin.h>
+#include <desktop_window/desktop_window_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  FlutterWindowClosePluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("FlutterWindowClosePlugin"));
+  DesktopWindowPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("DesktopWindowPlugin"));
 }

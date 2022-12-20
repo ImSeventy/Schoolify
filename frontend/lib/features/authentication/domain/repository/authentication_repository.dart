@@ -15,4 +15,6 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, TokensEntity>> loadCachedAccessTokens();
 
   Future<Either<Failure, StudentRfidEntity>> getStudentByRfid({required rfid});
+
+  Future<Either<Failure, void>> logOut();
 }
