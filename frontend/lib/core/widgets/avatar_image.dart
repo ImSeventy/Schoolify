@@ -1,13 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 import 'package:frontend/core/widgets/cached_image_with_place_holder.dart';
 
 class AvatarImage extends StatelessWidget {
   final String? imageUrl;
   final double width;
   final double height;
-  const AvatarImage({Key? key, required this.imageUrl, required this.width, required this.height}) : super(key: key);
+  final File? image;
+  const AvatarImage(
+      {Key? key,
+      required this.imageUrl,
+      required this.width,
+      required this.height,
+      this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,23 +23,37 @@ class AvatarImage extends StatelessWidget {
       width: width,
       height: height,
       child: Container(
-        decoration: const BoxDecoration(
-            shape: BoxShape.circle, color: Color(0xFFCCC1F0)),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: imageUrl == null || imageUrl == ""
-            ? Image.asset(
-          "assets/default_profile.png",
-          width: width,
-          height: height,
-          fit: BoxFit.contain,
-        )
-            : CachedImageWithPlaceHolder(
-          imageUrl: imageUrl!,
-          width: width,
-          height: height,
-          fit: BoxFit.contain,
-          placeHolderAssetPath: 'assets/profile_placeholder.png',
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: const Color(0xFFCCC1F0),
+          image: image == null
+              ? null
+              : DecorationImage(
+                  image: FileImage(
+                    image!,
+                  ),
+                  fit: BoxFit.cover,
+                ),
         ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: image == null
+            ? Conditional.single(
+          context: context,
+          conditionBuilder: (BuildContext context) => imageUrl == null || imageUrl == "",
+          widgetBuilder: (BuildContext context) => Image.asset(
+            "assets/default_profile.png",
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+          ),
+          fallbackBuilder: (BuildContext context) => CachedImageWithPlaceHolder(
+            imageUrl: imageUrl!,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            placeHolderAssetPath: 'assets/profile_placeholder.png',
+          ),
+        ) : null,
       ),
     );
   }

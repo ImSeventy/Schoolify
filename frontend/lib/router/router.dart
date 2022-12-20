@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
+import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 import 'package:frontend/features/authentication/domain/entities/sutdent_rfid_entity.dart';
 import 'package:frontend/features/authentication/presentation/pages/login_page.dart';
 import 'package:frontend/features/authentication/presentation/pages/rfid_login_page.dart';
+import 'package:frontend/features/profile/presentation/pages/profile_page.dart';
 import '../features/certifications/presentation/pages/certifications_page.dart';
 import '../features/grades/presentation/pages/home_page.dart';
 import '../features/warnings/presentation/pages/warnings_page.dart';
@@ -42,6 +44,9 @@ class AppRouter {
         return RfidLoginPage(student: student);
       case Routes.login:
         return const LoginPage();
+      case Routes.profile:
+        StudentEntity student = (args as ProfilePageArgs).student;
+        return ProfilePage(student: student,);
       default:
         return null;
     }

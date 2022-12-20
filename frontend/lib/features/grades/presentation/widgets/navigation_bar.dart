@@ -31,7 +31,7 @@ class CustomNavigationBar extends StatelessWidget {
         tabBorderRadius: 10,
         curve: Curves.linear, // tab animation curves
         duration: const Duration(milliseconds: 200), // tab animation duration
-        gap: 5, // the tab button gap between icon and text
+        gap: 10, // the tab button gap between icon and text
         color: const Color(0xFF40E1D1), // unselected icon color
         activeColor: const Color(0xFF40E1D1), // selected icon and text color
         iconSize: 24, // tab button icon size

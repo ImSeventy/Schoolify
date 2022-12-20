@@ -36,6 +36,8 @@ dependencies:
   web_socket_channel: ^2.2.0
   timeago: ^3.3.0
   desktop_window: ^0.4.0
+  image_picker: ^0.8.6
+  flutter_conditional_rendering: ^2.0.0
 
 dev_dependencies:
   flutter_test:
