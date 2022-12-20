@@ -13,6 +13,7 @@ import 'package:frontend/features/authentication/domain/use_cases/logout_use_cas
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
 import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
+import 'package:frontend/features/profile/presentation/pages/profile_page.dart';
 import 'package:frontend/router/routes.dart';
 
 import '../../../../core/utils/utils.dart';
@@ -52,7 +53,8 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFF131524),
-        bottomNavigationBar: CustomNavigationBar(onTap: changePageIndex, initialIndex: 0),
+        bottomNavigationBar:
+            CustomNavigationBar(onTap: changePageIndex, initialIndex: 0),
         body: Stack(
           children: [
             Container(
@@ -97,8 +99,10 @@ class MainHomePage extends StatelessWidget {
     GradesCubit gradesCubit = context.read<GradesCubit>();
     AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
 
-    double gradesPercentage = dataHandlerCubit.calculateGradesPercentage(gradesCubit.grades);
-    double attendancePercentage = dataHandlerCubit.calculateAttendancePercentage(attendanceCubit.absences);
+    double gradesPercentage =
+        dataHandlerCubit.calculateGradesPercentage(gradesCubit.grades);
+    double attendancePercentage = dataHandlerCubit
+        .calculateAttendancePercentage(attendanceCubit.absences);
 
     return (gradesPercentage * 75 / 100) + (attendancePercentage * 25 / 100);
   }
@@ -110,19 +114,15 @@ class MainHomePage extends StatelessWidget {
       listenWhen: (oldState, newState) => oldState != newState,
       listener: (context, state) {
         if (state is GradesFailedState) {
-          showToastMessage(
-            state.message,
-            Colors.red,
-            context
-          );
+          showToastMessage(state.message, Colors.red, context);
 
-          if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
+          if (state.message == ErrorMessages.invalidAccessTokenFailure ||
+              state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(Routes.login, (route) => false);
           }
         }
-
-
       },
       builder: (context, state) {
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
@@ -139,183 +139,202 @@ class MainHomePage extends StatelessWidget {
           child: state is GetStudentGradesLoadingState
               ? const LoadingIndicator()
               : SingleChildScrollView(
-            clipBehavior: Clip.none,
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 170.w,
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        AvatarImage(
-                          imageUrl: AuthInfo.currentStudent!.imageUrl,
-                          width: 70.w,
-                          height: 70.h,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 9.w,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  clipBehavior: Clip.none,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
                           SizedBox(
-                            height: 29.h,
+                            width: 170.w,
                           ),
-                          RichText(
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                                text: "Welcome!\n",
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                    Routes.profile,
+                                    arguments: ProfilePageArgs(
+                                      student: AuthInfo.currentStudent!,
+                                    ),
+                                  );
+                                },
+                                child: AvatarImage(
+                                  imageUrl: AuthInfo.currentStudent!.imageUrl,
+                                  width: 70.w,
+                                  height: 70.h,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 9.w,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 29.h,
+                                ),
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                      text: "Welcome!\n",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Poppins",
+                                          fontSize: 16.sp,
+                                          color: Colors.white.withOpacity(0.8)),
+                                      children: [
+                                        TextSpan(
+                                            text: AuthInfo.currentStudent!.name,
+                                            style: const TextStyle(
+                                                color: Colors.white))
+                                      ]),
+                                )
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "ST Page",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 16.sp,
-                                    color: Colors.white.withOpacity(0.8)),
-                                children: [
-                                  TextSpan(
-                                      text: AuthInfo.currentStudent!.name,
-                                      style: const TextStyle(color: Colors.white))
-                                ]),
+                                    color: const Color(0xFFCCC1F0),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.settings,
+                                  size: 28.sp,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            width: 10.w,
                           )
                         ],
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "ST Page",
-                          style: TextStyle(
-                              color: const Color(0xFFCCC1F0),
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.settings,
-                            size: 28.sp,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                DataOptionsListWidget(
-                  onChanged: (yearMode) {
-                    changeYearMode(context, yearMode);
-                  },
-                  optionValues: [
-                    "All Years",
-                    "This Year",
-                    "Last Year", ...List.generate(AuthInfo.currentStudent!.gradeYear, (index) => "Grade ${index + 1}")
-                  ],
-                  prefixMsg: "",
-                  currentValue: dataHandlerCubit.currentYearMode
-                ),
-                SizedBox(height: 10.h),
-                DataOptionsListWidget(
-                  onChanged: (semesterMode) {
-                    changeSemesterMode(context, semesterMode);
-                  },
-                  optionValues: const [
-                    "Whole Year",
-                    "1st Semester",
-                    "2nd Semester"
-                  ],
-                  prefixMsg: "",
-                  currentValue: dataHandlerCubit.currentSemesterMode,
-                ),
-                SizedBox(
-                  height: 35.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: Stack(
-                    children: [
-                      Transform.translate(
-                        offset: Offset(-5.w, 0),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: FancyProgressIndicator(
-                            percentage: dataHandlerCubit.calculateGradesPercentage(gradesCubit.grades),
-                            backgroundColor: const Color(0xFF306767),
-                            name: "Grades",
-                          ),
-                        ),
+                      SizedBox(
+                        height: 16.h,
                       ),
-                      Transform.translate(
-                        offset: Offset(0, 130.h),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: FancyProgressIndicator(
-                            percentage: dataHandlerCubit.calculateAttendancePercentage(attendanceCubit.absences),
-                            backgroundColor: const Color(0xFF306767),
-                            name: "Attendance",
-                          ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset(0, 290.h),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: FancyProgressIndicator(
-                            percentage: calculateSuperiorityPercentage(context),
-                            backgroundColor: const Color(0xFF306767),
-                            name: "Superiority",
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 420.h,
-                          ),
-                          SubPageNavItem(
-                            label: "Warnings",
-                            iconColor: Colors.red,
-                            iconPath: "assets/pin.svg",
-                            onTap: () {
-                              Navigator.of(context).pushNamed(Routes.warnings);
-                            },
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          SubPageNavItem(
-                            label: "Certifications",
-                            iconColor: Colors.green,
-                            iconPath: "assets/pin.svg",
-                            onTap: () {
-                              Navigator.of(context).pushNamed(Routes.certifications);
-                            },
-                          ),
+                      DataOptionsListWidget(
+                          onChanged: (yearMode) {
+                            changeYearMode(context, yearMode);
+                          },
+                          optionValues: [
+                            "All Years",
+                            "This Year",
+                            "Last Year",
+                            ...List.generate(AuthInfo.currentStudent!.gradeYear,
+                                (index) => "Grade ${index + 1}")
+                          ],
+                          prefixMsg: "",
+                          currentValue: dataHandlerCubit.currentYearMode),
+                      SizedBox(height: 10.h),
+                      DataOptionsListWidget(
+                        onChanged: (semesterMode) {
+                          changeSemesterMode(context, semesterMode);
+                        },
+                        optionValues: const [
+                          "Whole Year",
+                          "1st Semester",
+                          "2nd Semester"
                         ],
+                        prefixMsg: "",
+                        currentValue: dataHandlerCubit.currentSemesterMode,
+                      ),
+                      SizedBox(
+                        height: 35.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.w),
+                        child: Stack(
+                          children: [
+                            Transform.translate(
+                              offset: Offset(-5.w, 0),
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: FancyProgressIndicator(
+                                  percentage: dataHandlerCubit
+                                      .calculateGradesPercentage(
+                                          gradesCubit.grades),
+                                  backgroundColor: const Color(0xFF306767),
+                                  name: "Grades",
+                                ),
+                              ),
+                            ),
+                            Transform.translate(
+                              offset: Offset(0, 130.h),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: FancyProgressIndicator(
+                                  percentage: dataHandlerCubit
+                                      .calculateAttendancePercentage(
+                                          attendanceCubit.absences),
+                                  backgroundColor: const Color(0xFF306767),
+                                  name: "Attendance",
+                                ),
+                              ),
+                            ),
+                            Transform.translate(
+                              offset: Offset(0, 290.h),
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: FancyProgressIndicator(
+                                  percentage:
+                                      calculateSuperiorityPercentage(context),
+                                  backgroundColor: const Color(0xFF306767),
+                                  name: "Superiority",
+                                ),
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 420.h,
+                                ),
+                                SubPageNavItem(
+                                  label: "Warnings",
+                                  iconColor: Colors.red,
+                                  iconPath: "assets/pin.svg",
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed(Routes.warnings);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                SubPageNavItem(
+                                  label: "Certifications",
+                                  iconColor: Colors.green,
+                                  iconPath: "assets/pin.svg",
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed(Routes.certifications);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-
-              ],
-            ),
-          ),
         );
       },
     );
