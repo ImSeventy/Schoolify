@@ -31,16 +31,31 @@ class StudentEntity extends Equatable {
       currentGrade += 1;
     }
     return min(currentGrade, 5);
-}
+  }
 
   @override
-  List<Object?> get props => [
-    email,
-    id,
-    rfId,
-    name,
-    entryYear,
-    majorId,
-    majorName
-  ];
+  List<Object?> get props =>
+      [email, id, rfId, name, entryYear, majorId, majorName];
+
+  StudentEntity copyWith({
+    String? email,
+    int? id,
+    int? rfId,
+    String? name,
+    int? entryYear,
+    int? majorId,
+    String? majorName,
+    String? imageUrl,
+  }) {
+    return StudentEntity(
+      email: email ?? this.email,
+      id: id ?? this.id,
+      rfId: rfId ?? this.rfId,
+      name: name ?? this.name,
+      entryYear: entryYear ?? this.entryYear,
+      majorId: majorId ?? this.majorId,
+      majorName: majorName ?? this.majorName,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }
