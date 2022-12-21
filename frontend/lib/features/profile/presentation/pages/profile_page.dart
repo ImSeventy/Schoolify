@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/use_cases/use_case.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/core/widgets/avatar_image.dart';
+import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
@@ -14,6 +16,7 @@ import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profil
 import 'package:frontend/features/profile/presentation/widgets/custom_painted_background.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../authentication/domain/use_cases/logout_use_case.dart';
 import '../widgets/profile_data_field.dart';
 import '../widgets/save_button.dart';
 
@@ -196,7 +199,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     child: Column(
                       children: [
                         Row(
@@ -221,6 +225,28 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(
                               width: 50.w,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await getIt<LogOutUseCase>().call(NoParams());
+                                Navigator.of(context).pushNamedAndRemoveUntil("login", (_) => false,);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                margin: EdgeInsetsDirectional.only(end: 25.w),
+                                decoration: const BoxDecoration(
+                                  color: Colors.transparent,
+                                ),
+                                child: Text(
+                                  "Log Out",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Poppins",
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                              ),
                             )
                           ],
                         ),
@@ -287,7 +313,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ProfileDataField(
                           fieldName: 'Grade Year',
                           isPassword: false,
-                          textEditingController: _gradeYearTextEditingController,
+                          textEditingController:
+                              _gradeYearTextEditingController,
                           enabled: false,
                         ),
                         SizedBox(
@@ -296,7 +323,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ProfileDataField(
                           fieldName: 'Department',
                           isPassword: false,
-                          textEditingController: _departmentTextEditingController,
+                          textEditingController:
+                              _departmentTextEditingController,
                           enabled: false,
                         ),
                         SizedBox(
@@ -304,50 +332,53 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         editingPassword
                             ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 145.w,
-                              child: ProfileDataField(
-                                fieldName: 'Current',
-                                isPassword: true,
-                                textEditingController:
-                                _currentPasswordTextEditingController,
-                                enabled: true,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 21.w,
-                            ),
-                            SizedBox(
-                              width: 145.w,
-                              child: ProfileDataField(
-                                fieldName: 'New',
-                                isPassword: true,
-                                validator: passwordValidator,
-                                textEditingController:
-                                _newPasswordTextEditingController,
-                                enabled: true,
-                              ),
-                            )
-                          ],
-                        )
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 145.w,
+                                    child: ProfileDataField(
+                                      fieldName: 'Current',
+                                      isPassword: true,
+                                      textEditingController:
+                                          _currentPasswordTextEditingController,
+                                      enabled: true,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 21.w,
+                                  ),
+                                  SizedBox(
+                                    width: 145.w,
+                                    child: ProfileDataField(
+                                      fieldName: 'New',
+                                      isPassword: true,
+                                      validator: passwordValidator,
+                                      textEditingController:
+                                          _newPasswordTextEditingController,
+                                      enabled: true,
+                                    ),
+                                  )
+                                ],
+                              )
                             : ProfileDataField(
-                          fieldName: 'Password',
-                          isPassword: true,
-                          textEditingController: _passwordTextEditingController,
-                          enabled: false,
-                          editable: true,
-                          editCallback: () {
-                            setState(() {
-                              editingPassword = true;
-                            });
-                          },
-                        ),
+                                fieldName: 'Password',
+                                isPassword: true,
+                                textEditingController:
+                                    _passwordTextEditingController,
+                                enabled: false,
+                                editable: true,
+                                editCallback: () {
+                                  setState(() {
+                                    editingPassword = true;
+                                  });
+                                },
+                              ),
                         SizedBox(
                           height: 15.h,
                         ),
-                        SaveButton(onPressed: () => saveProfileData(context), enabled: state is! ProfileLoadingState)
+                        SaveButton(
+                            onPressed: () => saveProfileData(context),
+                            enabled: state is! ProfileLoadingState)
                       ],
                     ),
                   ),
@@ -358,6 +389,5 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-
   }
 }

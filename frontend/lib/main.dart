@@ -22,8 +22,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
-  // await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
-  // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
+  await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
 
   if (Platform.isWindows) {
     Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);

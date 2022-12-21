@@ -7,7 +7,7 @@ import '../../../../core/use_cases/use_case.dart';
 class LogOutUseCase extends UseCase<void, NoParams> {
   final AuthenticationRepository authRepository;
 
-  LogOutUseCase(this.authRepository);
+  LogOutUseCase({required this.authRepository});
 
   @override
   Future<Either<Failure, void>> call(NoParams params) async {

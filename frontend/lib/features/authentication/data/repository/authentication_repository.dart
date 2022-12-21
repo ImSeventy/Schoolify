@@ -63,6 +63,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return Left(ServerFailure());
     } on WrongEmailOrPasswordException {
     return Left(WrongEmailOrPasswordFailure());
+    } on InvalidAccessTokenException {
+      return Left(InvalidAccessTokenFailure());
+    } on InvalidRefreshTokenException {
+      return Left(InvalidRefreshTokenFailure());
     }
   }
 
@@ -116,6 +120,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<Either<Failure, void>> logOut() async {
     tokensDataProvider.removeTokensStoredInCache();
     AuthInfo.clear();
-    return Right(null);
+    return const Right(null);
   }
 }
