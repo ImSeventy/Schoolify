@@ -12,6 +12,7 @@ import 'package:frontend/features/authentication/domain/use_cases/get_current_st
 import 'package:frontend/features/authentication/domain/use_cases/get_student_by_rfid.dart';
 import 'package:frontend/features/authentication/domain/use_cases/load_cached_access_tokens.dart';
 import 'package:frontend/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:frontend/features/authentication/domain/use_cases/logout_use_case.dart';
 import 'package:frontend/features/authentication/domain/use_cases/refresh_access_token.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/grades/domain/repository/grades_repository.dart';
@@ -23,6 +24,7 @@ import 'package:frontend/features/posts/domain/repository/posts_repository.dart'
 import 'package:frontend/features/posts/domain/use_cases/get_all_posts.dart';
 import 'package:frontend/features/posts/domain/use_cases/like_post.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
+import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +38,12 @@ import 'features/grades/data/data_providers/grades_data_provider.dart';
 import 'features/grades/data/repository/grades_repository.py.dart';
 import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'features/posts/domain/use_cases/unlike_post.dart';
+import 'features/profile/data/data_providers/profile_data_provider.dart';
+import 'features/profile/data/repository/profile_repository.dart';
+import 'features/profile/domain/repository/profile_repository.dart';
+import 'features/profile/domain/use_cases/update_student_password_use_case.dart';
+import 'features/profile/domain/use_cases/update_student_profile_image_use_case.dart';
+import 'features/profile/domain/use_cases/update_student_use_case.dart';
 import 'features/warnings/data/data_providers/warnings_data_provider.dart';
 import 'features/warnings/data/repository/warnings_repository.dart';
 import 'features/warnings/domain/reposistory/warnings_repository.dart';
@@ -51,6 +59,7 @@ Future<void> setUp() async {
   _setupWarningsFeature();
   _setupCertificationsFeature();
   _setupPostsFeature();
+  _setupProfileFeature();
   await _setupCore();
 }
 
@@ -85,6 +94,13 @@ void _setupAuthenticationFeature() {
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
       authenticationRepository: getIt(),
+    ),
+  );
+
+
+  getIt.registerLazySingleton<LogOutUseCase>(
+        () => LogOutUseCase(
+      authRepository: getIt(),
     ),
   );
 
@@ -239,13 +255,13 @@ void _setupPostsFeature() {
   );
 
   getIt.registerLazySingleton<LikePostUseCase>(
-        () => LikePostUseCase(
+    () => LikePostUseCase(
       postsRepository: getIt(),
     ),
   );
 
   getIt.registerLazySingleton<UnLikePostUseCase>(
-        () => UnLikePostUseCase(
+    () => UnLikePostUseCase(
       postsRepository: getIt(),
     ),
   );
@@ -259,5 +275,44 @@ void _setupPostsFeature() {
 
   getIt.registerLazySingleton<PostsDataProvider>(
     () => PostsDataProviderImpl(),
+  );
+}
+
+void _setupProfileFeature() {
+  getIt.registerFactory<ProfileCubit>(
+    () => ProfileCubit(
+      updateStudentUseCase: getIt(),
+      updateStudentPasswordUseCase: getIt(),
+      updateStudentProfileImageUseCase: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UpdateStudentUseCase>(
+    () => UpdateStudentUseCase(
+      profileRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UpdateStudentPasswordUseCase>(
+    () => UpdateStudentPasswordUseCase(
+      profileRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UpdateStudentProfileImageUseCase>(
+    () => UpdateStudentProfileImageUseCase(
+      profileRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(
+      networkInfo: getIt(),
+      profileDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<ProfileDataProvider>(
+    () => ProfileDataProviderImpl(),
   );
 }

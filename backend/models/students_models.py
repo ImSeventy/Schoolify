@@ -72,3 +72,7 @@ class StudentResetPassword(BaseModel):
             raise ValueError("Passowrd must be longer than 6 charactars")
         
         return Authentication().hash_password(password)
+
+
+class StudentUpdateImageOut(BaseModel):
+    image_url: str

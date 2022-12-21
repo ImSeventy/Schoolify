@@ -13,3 +13,7 @@ class StudentAlreadyLikedThePostException implements Exception {}
 class PostNotFoundException implements Exception {}
 
 class PostIsNotLikedByStudentException implements Exception {}
+
+class InvalidImageFormatException implements Exception {}
+
+class WrongPasswordException implements Exception {}

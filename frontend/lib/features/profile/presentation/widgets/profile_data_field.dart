@@ -9,7 +9,7 @@ class ProfileDataField extends StatelessWidget {
   final bool editable;
   final VoidCallback? editCallback;
   final TextEditingController textEditingController;
-  final void Function(String? value)? validator;
+  final String? Function(String? value)? validator;
 
   const ProfileDataField({
     Key? key,
@@ -41,7 +41,7 @@ class ProfileDataField extends StatelessWidget {
         Stack(
           alignment: Alignment.bottomRight,
           children: [
-            CredentialsField(isPassword: isPassword, hintText: "", textEditingController: textEditingController, enabled: enabled,),
+            CredentialsField(isPassword: isPassword, hintText: "", textEditingController: textEditingController, enabled: enabled, validator: validator,),
             if (editable) GestureDetector(
               onTap: editCallback,
               child: Container(

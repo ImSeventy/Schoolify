@@ -33,3 +33,8 @@ class GetStudentGradesFailedState extends GradesFailedState{
   @override
   List<Object?> get props => [message];
 }
+
+class GradesRefreshState extends GradesState with EquatableMixin{
+  @override
+  List<Object?> get props => [];
+}

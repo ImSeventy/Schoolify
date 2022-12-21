@@ -24,4 +24,8 @@ class GradesCubit extends Cubit<GradesState> {
       },
     );
   }
+
+  void refresh() async {
+    emit(GradesRefreshState());
+  }
 }
