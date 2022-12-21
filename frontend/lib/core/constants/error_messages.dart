@@ -9,6 +9,7 @@ class ErrorMessages {
   static const String studentAlreadyLikedThePostFailure = "You've already liked this post";
   static const String postNotFoundFailure = "The post doesn't exist";
   static const String postIsNotLikedByStudentFailure = "The post is not liked by the student";
-
+  static const String invalidImageFormat = "The provided image isn't valid";
+  static const String wrongPassword = "Wrong password";
 
 }

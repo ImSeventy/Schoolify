@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:frontend/router/router.dart';
 import 'core/use_cases/use_case.dart';
 import 'dependency_container.dart' as dc;
@@ -21,8 +22,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
-  await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
-  await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+  // await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
+  // await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
 
   if (Platform.isWindows) {
     Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);
@@ -71,6 +72,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginCubit>(
           create: (BuildContext context) {
             return dc.getIt<LoginCubit>();
+          },
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (BuildContext context) {
+            return dc.getIt<ProfileCubit>();
           },
         )
       ],

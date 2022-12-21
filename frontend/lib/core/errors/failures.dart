@@ -96,3 +96,21 @@ class PostIsNotLikedByStudentFailure extends Failure with EquatableMixin {
   @override
   List<Object?> get props => [message];
 }
+
+
+class InvalidImageFormatFailure extends Failure with EquatableMixin {
+
+  InvalidImageFormatFailure() : super(ErrorMessages.invalidImageFormat);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+
+class WrongPasswordFailure extends Failure with EquatableMixin {
+
+  WrongPasswordFailure() : super(ErrorMessages.wrongPassword);
+
+  @override
+  List<Object?> get props => [message];
+}

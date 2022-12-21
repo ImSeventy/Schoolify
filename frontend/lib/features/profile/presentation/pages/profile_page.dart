@@ -1,11 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/core/widgets/avatar_image.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
+import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
+import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
+import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_states.dart';
 import 'package:frontend/features/profile/presentation/widgets/custom_painted_background.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -43,11 +48,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    _nameTextEditingController = TextEditingController(text: widget.student.name);
-    _emailTextEditingController = TextEditingController(text: widget.student.email);
-    _gradeYearTextEditingController = TextEditingController(text: "Grade ${widget.student.gradeYear}");
-    _departmentTextEditingController = TextEditingController(text: widget.student.majorName);
-    _passwordTextEditingController = TextEditingController(text: "*********************");
+    _nameTextEditingController =
+        TextEditingController(text: widget.student.name);
+    _emailTextEditingController =
+        TextEditingController(text: widget.student.email);
+    _gradeYearTextEditingController =
+        TextEditingController(text: "Grade ${widget.student.gradeYear}");
+    _departmentTextEditingController =
+        TextEditingController(text: widget.student.majorName);
+    _passwordTextEditingController =
+        TextEditingController(text: "*********************");
     _newPasswordTextEditingController = TextEditingController();
     _currentPasswordTextEditingController = TextEditingController();
 
@@ -68,12 +78,24 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void saveProfileData(BuildContext context) async {
+    ProfileCubit profileCubit = context.read<ProfileCubit>();
     if (newProfileImage != null) {
-      
+      GradesCubit gradesCubit = context.read<GradesCubit>();
+      await profileCubit.updateStudentProfileImage(image: newProfileImage!);
+      gradesCubit.refresh();
     }
     if (!editingPassword && !editingEmail) return;
-    if (_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) return;
 
+    if (editingEmail) {
+      await profileCubit.updateStudent(email: _emailTextEditingController.text);
+    }
+
+    if (editingPassword) {
+      await profileCubit.updateStudentPassword(
+        currentPassword: _currentPasswordTextEditingController.text,
+        newPassword: _newPasswordTextEditingController.text,
+      );
     }
   }
 
@@ -100,15 +122,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   chooseImage(ImageSource.gallery);
                 },
               ),
-              const Divider(thickness: 1,),
+              const Divider(
+                thickness: 1,
+              ),
               SimpleDialogOption(
                   child: const Text("Camera"),
                   onPressed: () {
                     Navigator.of(context).pop();
                     chooseImage(ImageSource.camera);
-                  }
+                  }),
+              const Divider(
+                thickness: 1,
               ),
-              const Divider(thickness: 1,),
               SimpleDialogOption(
                 child: const Text("Cancel"),
                 onPressed: () {
@@ -122,167 +147,217 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Container(
-              color: const Color(0xFF131524),
-            ),
-            Transform.translate(
-              offset: const Offset(-10, 0),
-              child: SvgPicture.asset(
-                "assets/login_icons_1.svg",
-                color: const Color(0xFF2d407b),
-                width: 170,
-              ),
-            ),
-            const CustomPaintedBackground(),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios_sharp,
-                          color: Colors.white,
+    return BlocConsumer<ProfileCubit, ProfileState>(
+      buildWhen: (oldState, newState) => oldState != newState,
+      listenWhen: (oldState, newState) => oldState != newState,
+      listener: (context, state) {
+        if (state is ProfileFailedState) {
+          showToastMessage(
+            state.message,
+            Colors.red,
+            context,
+          );
+        }
+
+        if (state is UpdateStudentPasswordSucceededState) {
+          editingPassword = false;
+        }
+
+        if (state is UpdateStudentProfileSucceededState) {
+          editingEmail = false;
+        }
+
+        if (state is UpdateStudentProfileFailedState) {
+          _emailTextEditingController.text = widget.student.email;
+        }
+
+        if (state is UpdateStudentProfileImageFailedState) {
+          newProfileImage = null;
+        }
+      },
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                Container(
+                  color: const Color(0xFF131524),
+                ),
+                Transform.translate(
+                  offset: const Offset(-10, 0),
+                  child: SvgPicture.asset(
+                    "assets/login_icons_1.svg",
+                    color: const Color(0xFF2d407b),
+                    width: 170,
+                  ),
+                ),
+                const CustomPaintedBackground(),
+                Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios_sharp,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              "Profile Page",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "Poppins",
+                                  fontSize: 36.sp,
+                                  color: Colors.white),
+                            ),
+                            SizedBox(
+                              width: 50.w,
+                            )
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        "Profile Page",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Poppins",
-                            fontSize: 36.sp,
-                            color: Colors.white),
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      AvatarImage(
-                        imageUrl: widget.student.imageUrl,
-                        width: 110.w,
-                        height: 110.w,
-                        image: newProfileImage,
-                      ),
-                      GestureDetector(
-                        onTap: () => showChooseImageDialog(context),
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFF131524), width: 3, strokeAlign: StrokeAlign.outside),
-                            color: const Color(0xFF40E1D1)
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 25.sp,
-                          ),
+                        SizedBox(
+                          height: 15.h,
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 25.h,),
-                  ProfileDataField(
-                    fieldName: 'Name',
-                    isPassword: false,
-                    textEditingController: _nameTextEditingController,
-                    enabled: false,
-                  ),
-                  SizedBox(height: 12.h,),
-                  ProfileDataField(
-                    fieldName: 'E-mail',
-                    isPassword: false,
-                    textEditingController: _emailTextEditingController,
-                    enabled: editingEmail,
-                    editable: !editingEmail,
-                    validator: emailValidator,
-                    editCallback: () {
-                      setState(() {
-                        editingEmail = true;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 12.h,),
-                  ProfileDataField(
-                    fieldName: 'Grade Year',
-                    isPassword: false,
-                    textEditingController: _gradeYearTextEditingController,
-                    enabled: false,
-                  ),
-                  SizedBox(height: 12.h,),
-                  ProfileDataField(
-                    fieldName: 'Department',
-                    isPassword: false,
-                    textEditingController: _departmentTextEditingController,
-                    enabled: false,
-                  ),
-                  SizedBox(height: 12.h,),
-                  editingPassword
-                      ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 145.w,
-                        child: ProfileDataField(
-                          fieldName: 'Current',
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            AvatarImage(
+                              imageUrl: widget.student.imageUrl,
+                              width: 110.w,
+                              height: 110.w,
+                              image: newProfileImage,
+                            ),
+                            GestureDetector(
+                              onTap: () => showChooseImageDialog(context),
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: const Color(0xFF131524),
+                                        width: 3,
+                                        strokeAlign: StrokeAlign.outside),
+                                    color: const Color(0xFF40E1D1)),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 25.sp,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 25.h,
+                        ),
+                        ProfileDataField(
+                          fieldName: 'Name',
+                          isPassword: false,
+                          textEditingController: _nameTextEditingController,
+                          enabled: false,
+                        ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
+                        ProfileDataField(
+                          fieldName: 'E-mail',
+                          isPassword: false,
+                          textEditingController: _emailTextEditingController,
+                          enabled: editingEmail,
+                          editable: !editingEmail,
+                          validator: emailValidator,
+                          editCallback: () {
+                            setState(() {
+                              editingEmail = true;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
+                        ProfileDataField(
+                          fieldName: 'Grade Year',
+                          isPassword: false,
+                          textEditingController: _gradeYearTextEditingController,
+                          enabled: false,
+                        ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
+                        ProfileDataField(
+                          fieldName: 'Department',
+                          isPassword: false,
+                          textEditingController: _departmentTextEditingController,
+                          enabled: false,
+                        ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
+                        editingPassword
+                            ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 145.w,
+                              child: ProfileDataField(
+                                fieldName: 'Current',
+                                isPassword: true,
+                                textEditingController:
+                                _currentPasswordTextEditingController,
+                                enabled: true,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 21.w,
+                            ),
+                            SizedBox(
+                              width: 145.w,
+                              child: ProfileDataField(
+                                fieldName: 'New',
+                                isPassword: true,
+                                validator: passwordValidator,
+                                textEditingController:
+                                _newPasswordTextEditingController,
+                                enabled: true,
+                              ),
+                            )
+                          ],
+                        )
+                            : ProfileDataField(
+                          fieldName: 'Password',
                           isPassword: true,
-                          textEditingController: _currentPasswordTextEditingController,
-                          enabled: true,
+                          textEditingController: _passwordTextEditingController,
+                          enabled: false,
+                          editable: true,
+                          editCallback: () {
+                            setState(() {
+                              editingPassword = true;
+                            });
+                          },
                         ),
-                      ),
-                      SizedBox(width: 21.w,),
-                      SizedBox(
-                        width: 145.w,
-                        child: ProfileDataField(
-                          fieldName: 'New',
-                          isPassword: true,
-                          validator: passwordValidator,
-                          textEditingController: _newPasswordTextEditingController,
-                          enabled: true,
+                        SizedBox(
+                          height: 15.h,
                         ),
-                      )
-                    ],
-                  )
-                      : ProfileDataField(
-                    fieldName: 'Password',
-                    isPassword: true,
-                    textEditingController: _passwordTextEditingController,
-                    enabled: false,
-                    editable: true,
-                    editCallback: () {
-                      setState(() {
-                        editingPassword = true;
-                      });
-                    },
+                        SaveButton(onPressed: () => saveProfileData(context), enabled: state is! ProfileLoadingState)
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 15.h,),
-                  SaveButton(
-                    onPressed: () {},
-                    enabled: true
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
+
   }
 }

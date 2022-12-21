@@ -10,7 +10,7 @@ from lib.exceptions.auth import WrongEmailOrPassword
 from lib.exceptions.students import EmailAlreadyExists, ImageNotFound, InvalidImageFormat, MajorDoesnotExist, StudentNotFound, WrongPassword
 from lib.images_manager.images_manager import ImagesManager
 
-from models.students_models import StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword, StudentRfidOut
+from models.students_models import StudentEdit, StudentIn, StudentOut, StudentPersonalUpdate, StudentResetPassword, StudentRfidOut, StudentUpdateImageOut
 
 
 students = APIRouter(
@@ -106,7 +106,7 @@ async def refresh_student(token: str = Depends(oauth2_scheme)):
 @students.put("/", status_code=status.HTTP_204_NO_CONTENT)
 async def edit_student(new_student: StudentPersonalUpdate, token: str = Depends(oauth2_scheme)):
     student = await get_user("student", token=token)
-    await DataBaseManager().update_student(student.id, **new_student)
+    await DataBaseManager().update_student(student.id, **new_student.dict())
 
 @students.put("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_student(id: int, new_student: StudentEdit, token: str = Depends(oauth2_scheme)):
@@ -117,7 +117,7 @@ async def update_student(id: int, new_student: StudentEdit, token: str = Depends
 
     await DataBaseManager().update_student(id, **new_student.dict())
 
-@students.patch("/set_image", status_code=status.HTTP_204_NO_CONTENT)
+@students.patch("/set_image", status_code=status.HTTP_200_OK, response_model=StudentUpdateImageOut)
 async def set_student_image(image: UploadFile, token: str = Depends(oauth2_scheme)):
     student = await get_user("student", token=token)
     if not ImagesManager().is_valid_image(image):
@@ -126,10 +126,12 @@ async def set_student_image(image: UploadFile, token: str = Depends(oauth2_schem
     image_url = ImagesManager().save_image(image, ImagesSubPaths.students.value)
 
     await DataBaseManager().update_student(student.id, image_url=image_url)
+    return {"image_url": image_url}
 
 @students.patch("/reset_password", status_code=status.HTTP_204_NO_CONTENT)
 async def reset_password(passwords_scheme: StudentResetPassword, token: str = Depends(oauth2_scheme)):
     student = await get_user("student", token=token)
+    print(passwords_scheme.old_password, student.password)
     if not Authentication().verify_password(passwords_scheme.old_password, student.password):
         raise WrongPassword()
 
