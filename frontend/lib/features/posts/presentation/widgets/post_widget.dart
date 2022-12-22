@@ -13,6 +13,8 @@ import '../../../../core/widgets/zoomable_cached_image.dart';
 import '../../domain/entities/posts_entity.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'animated_heart.dart';
+
 class PostWidget extends StatelessWidget {
   final PostsEntity post;
   bool isLiked = false;
@@ -168,12 +170,8 @@ class PostWidget extends StatelessWidget {
                   onPressed: isLiked
                       ? () => unLikePost(context)
                       : () => likePost(context),
-                  icon: Icon(
-                    isLiked
-                        ? FontAwesomeIcons.solidHeart
-                        : FontAwesomeIcons.heart,
-                    color: const Color(0xFFFF269B),
-                    size: 30,
+                  icon: AnimatedHeart(
+                    isLiked: isLiked,
                   ),
                   splashRadius: 10,
                 )
