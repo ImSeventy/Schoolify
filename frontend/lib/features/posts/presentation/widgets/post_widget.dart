@@ -9,6 +9,7 @@ import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_stat
 import 'package:readmore/readmore.dart';
 
 import '../../../../core/widgets/avatar_image.dart';
+import '../../../../core/widgets/zoomable_cached_image.dart';
 import '../../domain/entities/posts_entity.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -151,11 +152,12 @@ class PostWidget extends StatelessWidget {
                 if (post.imageUrl != null || post.imageUrl != "")
                   Column(
                     children: [
-                      CachedNetworkImage(
+                      ZoomableCachedImage(
                         imageUrl: post.imageUrl!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: 402,
+                        placeHolderAssetPath: 'assets/image_placeholder.png',
                       ),
                       SizedBox(
                         height: 15.h,

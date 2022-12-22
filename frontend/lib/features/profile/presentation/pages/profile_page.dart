@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:filepicker_windows/filepicker_windows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,6 +103,22 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void chooseImageForWindows() async {
+    final filePicker = OpenFilePicker()
+      ..filterSpecification = {
+        'Image (*.jpg, *.png, *.jpeg)': '*.jpg; *.png; *.jpeg',
+      }
+      ..defaultFilterIndex = 0
+      ..title = 'Select an image';
+
+    final image = filePicker.getFile();
+    if (image == null) return;
+
+    setState(() {
+      newProfileImage = File(image.path);
+    });
+  }
+
   void chooseImage(ImageSource source) async {
     XFile? image = await _imagePicker.pickImage(source: source);
 
@@ -113,6 +130,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void showChooseImageDialog(BuildContext context) {
+    if (Platform.isWindows) {
+      chooseImageForWindows();
+      return;
+    }
+
     showDialog(
         context: context,
         builder: (_) {

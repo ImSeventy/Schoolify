@@ -48,6 +48,8 @@ class PostsPage extends StatelessWidget {
               onRefresh: () async {
                 await postsCubit.getAllPosts();
               },
+              color: const Color(0xFF131524),
+              backgroundColor: const Color(0xFF2d407b),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 17.w),
                 child: ListView(

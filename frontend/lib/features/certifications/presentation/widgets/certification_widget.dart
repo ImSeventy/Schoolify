@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +5,7 @@ import 'package:frontend/features/certifications/domain/entities/certification_e
 import 'package:readmore/readmore.dart';
 
 import '../../../../core/widgets/avatar_image.dart';
+import '../../../../core/widgets/zoomable_cached_image.dart';
 
 class CertificationWidget extends StatelessWidget {
   final CertificationEntity certificationEntity;
@@ -82,37 +82,22 @@ class CertificationWidget extends StatelessWidget {
             children: [
               Container(
                 width: 331.w,
-                height: 453.h,
+                height: 550.h,
                 color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
                   alignment: AlignmentDirectional.bottomEnd,
                   children: [
-                    GestureDetector(
-                      onTap: () {
+                    LayoutBuilder(
+                      builder: (_ , constrains) {
+                        return ZoomableCachedImage(
+                          imageUrl: certificationEntity.imageUrl!,
+                          width: constrains.maxWidth,
+                          height: constrains.maxHeight,
+                          fit: BoxFit.fill,
+                          placeHolderAssetPath: "assets/image_placeholder.jpg",
+                        );
                       },
-                      child: LayoutBuilder(
-                        builder: (_ , constrains) {
-                          return CachedNetworkImage(
-                            imageUrl: certificationEntity.imageUrl!,
-                            width: constrains.maxWidth,
-                            height: constrains.maxHeight,
-                            fit: BoxFit.fill,
-                            placeholder: (_, __) => Image.asset(
-                              "assets/image_placeholder.jpg",
-                              width: constrains.maxWidth,
-                              height: constrains.maxHeight,
-                              fit: BoxFit.fill,
-                            ),
-                            errorWidget: (_, __, ___) => Image.asset(
-                              "assets/image_placeholder.jpg",
-                              width: constrains.maxWidth,
-                              height: constrains.maxHeight,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        },
-                      ),
                     ),
                     Transform.translate(
                       offset: Offset(20.w, 30.h),
