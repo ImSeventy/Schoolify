@@ -306,7 +306,7 @@ class DataBaseManager(metaclass=Singleton):
     async def get_post_from_id(self, post_id: int) -> Post | None:
         query = """
         SELECT posts.*,
-        (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as post_likes,
+        (SELECT COUNT(*) FROM likes where likes.post_id = :post_id) as like_count,
         admins.name as by_name,
         admins.image_url as by_image_url
         FROM posts JOIN admins
@@ -319,7 +319,7 @@ class DataBaseManager(metaclass=Singleton):
         query = """
         SELECT posts.*,
         :user_id,
-        COUNT(likes.post_id) as post_likes,
+        COUNT(likes.post_id) as like_count,
         (CASE WHEN likes.by = :user_id THEN true ELSE false END) as liked,
         admins.name as by_name,
         admins.image_url as by_image_url

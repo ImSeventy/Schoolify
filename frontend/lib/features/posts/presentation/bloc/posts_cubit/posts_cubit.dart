@@ -15,11 +15,11 @@ class PostsCubit extends Cubit<PostsState> {
 
   List<PostsEntity> posts = [];
 
-  PostsCubit({
-    required this.getAllPostsUseCase,
-    required this.likePostUseCase,
-    required this.unLikePostUseCase
-  }) : super(PostsInitialState());
+  PostsCubit(
+      {required this.getAllPostsUseCase,
+      required this.likePostUseCase,
+      required this.unLikePostUseCase})
+      : super(PostsInitialState());
 
   Future<void> getAllPosts() async {
     emit(GetAllPostsLoadingState());
@@ -71,6 +71,10 @@ class PostsCubit extends Cubit<PostsState> {
 
   void _setPostLikedState({required int postId, required bool state}) {
     int index = posts.indexWhere((post) => post.id == postId);
-    posts[index] = (posts[index] as PostsModel).copyWith(liked: state);
+    PostsEntity post = posts[index];
+    posts[index] = (post as PostsModel).copyWith(
+      liked: state,
+      likeCount: state ? post.likeCount + 1 : post.likeCount - 1,
+    );
   }
 }

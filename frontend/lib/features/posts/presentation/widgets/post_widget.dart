@@ -18,8 +18,10 @@ import 'animated_heart.dart';
 class PostWidget extends StatelessWidget {
   final PostsEntity post;
   bool isLiked = false;
+  int likeCount = 0;
   PostWidget({Key? key, required this.post}) : super(key: key) {
     isLiked = post.liked;
+    likeCount = post.likeCount;
   }
 
   void likePost(BuildContext context) {
@@ -71,14 +73,17 @@ class PostWidget extends StatelessWidget {
           return false;
         }
 
-
-        if (newState is UnLikePostFailedState || newState is LikePostLoadingState) {
+        if (newState is UnLikePostFailedState ||
+            newState is LikePostLoadingState) {
           isLiked = true;
+          likeCount++;
           return true;
         }
 
-        if (newState is LikePostFailedState || newState is UnLikePostLoadingState) {
+        if (newState is LikePostFailedState ||
+            newState is UnLikePostLoadingState) {
           isLiked = false;
+          likeCount--;
           return true;
         }
 
@@ -166,6 +171,17 @@ class PostWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                Align(
+                  alignment: AlignmentDirectional.topStart,
+                  child: Text(
+                    "${likeCount} likes",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp),
+                  ),
+                ),
                 IconButton(
                   onPressed: isLiked
                       ? () => unLikePost(context)

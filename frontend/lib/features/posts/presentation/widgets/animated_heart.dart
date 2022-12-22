@@ -35,7 +35,6 @@ class _AnimatedHeartState extends State<AnimatedHeart> with SingleTickerProvider
   @override
   void didUpdateWidget(covariant AnimatedHeart oldWidget) {
     if (widget.isLiked != oldWidget.isLiked) {
-      print('isLiked: ${widget.isLiked}');
       _animationController.forward().then((value) => _animationController.reverse());
     }
     super.didUpdateWidget(oldWidget);
