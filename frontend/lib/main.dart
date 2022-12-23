@@ -5,6 +5,7 @@ import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:frontend/router/router.dart';
@@ -19,11 +20,13 @@ import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'router/routes.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await dc.setUp();
   await ScreenUtil.ensureScreenSize();
   await dc.getIt<LoadCachedAccessTokensUseCase>().call(NoParams());
   await dc.getIt<GetCurrentStudentUseCase>().call(NoParams());
+
 
   if (Platform.isWindows) {
     Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);
@@ -36,6 +39,7 @@ Future<void> main() async {
     await DesktopWindow.setMinWindowSize(minSize);
     await DesktopWindow.setMaxWindowSize(maxSize);
   }
+  FlutterNativeSplash.remove();
 
   runApp(const MyApp());
 }
