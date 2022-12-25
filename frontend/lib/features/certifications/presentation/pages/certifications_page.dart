@@ -13,6 +13,7 @@ import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/error_messages.dart';
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../router/routes.dart';
@@ -66,7 +67,7 @@ class CertificationsPage extends StatelessWidget {
                 Transform.translate(
                   offset: const Offset(-10, 0),
                   child: SvgPicture.asset(
-                    "assets/login_icons_1.svg",
+                    ImagesPaths.firstLoginIcons,
                     color: const Color(0xFF2d407b),
                     width: 170,
                   ),

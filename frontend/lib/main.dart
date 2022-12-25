@@ -39,9 +39,8 @@ Future<void> main() async {
     await DesktopWindow.setMinWindowSize(minSize);
     await DesktopWindow.setMaxWindowSize(maxSize);
   }
-  FlutterNativeSplash.remove();
-
   runApp(const MyApp());
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {

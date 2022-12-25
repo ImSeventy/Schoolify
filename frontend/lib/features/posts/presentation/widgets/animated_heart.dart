@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 
 class AnimatedHeart extends StatefulWidget {
   final bool isLiked;
@@ -46,7 +47,7 @@ class _AnimatedHeartState extends State<AnimatedHeart> with SingleTickerProvider
     return ScaleTransition(
       scale: _animation,
       child: SvgPicture.asset(
-        "assets/like_heart.svg",
+        ImagesPaths.likeHeart,
         color: widget.isLiked ? const Color(0xFFFF269B) : Colors.grey,
       ),
     );

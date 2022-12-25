@@ -1,5 +1,5 @@
 name: frontend
-description: A new Flutter project.
+description: An application to manage the schools` absence, grades, warning, certifications and announcements.
 
 
 publish_to: 'none' 
@@ -54,16 +54,16 @@ flutter_icons:
     ios: true
     windows:
       generate: true
-      image_path: "assets/windows_logo.png"
+      image_path: "assets/images/windows_logo.png"
       icon_size: 48
-    image_path: "assets/logo.png"
+    image_path: "assets/images/logo.png"
     adaptive_icon_background: "#465454"
-    adaptive_icon_foreground: "assets/logo_foreground.png"
+    adaptive_icon_foreground: "assets/images/logo_foreground.png"
 
 
 flutter_native_splash:
     color: "#465454"
-    image: "assets/windows_logo.png"
+    image: "assets/images/windows_logo.png"
 
 flutter:
 

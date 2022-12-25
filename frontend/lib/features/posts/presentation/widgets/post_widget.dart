@@ -163,7 +163,7 @@ class PostWidget extends StatelessWidget {
                         imageUrl: post.imageUrl!,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        height: 402,
+                        height: 350.h,
                         placeHolderAssetPath: 'assets/image_placeholder.png',
                       ),
                       SizedBox(

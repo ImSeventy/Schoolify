@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/domain/entities/sutdent_rfid_entity.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
@@ -82,7 +83,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
               width: 555.w,
               height: 1002.h,
               child: SvgPicture.asset(
-                "assets/rf_id_background.svg",
+                ImagesPaths.rfidBackground,
                 width: 555.w,
                 height: 1002.h,
                 fit: BoxFit.fill,
@@ -133,7 +134,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                         child: CircleAvatar(
                           backgroundColor: const Color(0xFFCCC1F0),
                           foregroundImage: widget.student.imageUrl == null || widget.student.imageUrl == ""
-                              ? Image.asset("assets/default_profile.png").image
+                              ? Image.asset(ImagesPaths.defaultProfile).image
                               : CachedNetworkImageProvider(
                                   widget.student.imageUrl!,
                                 ),

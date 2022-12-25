@@ -17,6 +17,7 @@ import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profil
 import 'package:frontend/features/profile/presentation/widgets/custom_painted_background.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/constants/images_paths.dart';
 import '../../../authentication/domain/use_cases/logout_use_case.dart';
 import '../widgets/profile_data_field.dart';
 import '../widgets/save_button.dart';
@@ -212,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Transform.translate(
                   offset: const Offset(-10, 0),
                   child: SvgPicture.asset(
-                    "assets/login_icons_1.svg",
+                    ImagesPaths.firstLoginIcons,
                     color: const Color(0xFF2d407b),
                     width: 170,
                   ),
@@ -245,13 +246,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   fontSize: 36.sp,
                                   color: Colors.white),
                             ),
-                            SizedBox(
-                              width: 50.w,
-                            ),
+                            const Spacer(),
                             GestureDetector(
                               onTap: () async {
-                                await getIt<LogOutUseCase>().call(NoParams());
                                 Navigator.of(context).pushNamedAndRemoveUntil("login", (_) => false,);
+                                await getIt<LogOutUseCase>().call(NoParams());
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(4),
@@ -265,11 +264,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     color: Colors.red,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: "Poppins",
-                                    fontSize: 18.sp,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ),
-                            )
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
                           ],
                         ),
                         SizedBox(

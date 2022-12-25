@@ -16,6 +16,7 @@ import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_page.dart';
 import 'package:frontend/router/routes.dart';
 
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../core/widgets/avatar_image.dart';
 import '../bloc/grades/grades_cubit.dart';
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             Transform.translate(
               offset: const Offset(-10, 0),
               child: SvgPicture.asset(
-                "assets/login_icons_1.svg",
+                ImagesPaths.firstLoginIcons,
                 color: const Color(0xFF2d407b),
                 width: 170,
               ),
@@ -309,7 +310,7 @@ class MainHomePage extends StatelessWidget {
                                 SubPageNavItem(
                                   label: "Warnings",
                                   iconColor: Colors.red,
-                                  iconPath: "assets/pin.svg",
+                                  iconPath: ImagesPaths.pin,
                                   onTap: () {
                                     Navigator.of(context)
                                         .pushNamed(Routes.warnings);
@@ -321,7 +322,7 @@ class MainHomePage extends StatelessWidget {
                                 SubPageNavItem(
                                   label: "Certifications",
                                   iconColor: Colors.green,
-                                  iconPath: "assets/pin.svg",
+                                  iconPath: ImagesPaths.pin,
                                   onTap: () {
                                     Navigator.of(context)
                                         .pushNamed(Routes.certifications);

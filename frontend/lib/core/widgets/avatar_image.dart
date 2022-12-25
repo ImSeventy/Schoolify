@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 import 'package:frontend/core/widgets/cached_image_with_place_holder.dart';
 
 class AvatarImage extends StatelessWidget {
@@ -41,7 +42,7 @@ class AvatarImage extends StatelessWidget {
           context: context,
           conditionBuilder: (BuildContext context) => imageUrl == null || imageUrl == "",
           widgetBuilder: (BuildContext context) => Image.asset(
-            "assets/default_profile.png",
+            ImagesPaths.defaultProfile,
             width: width,
             height: height,
             fit: BoxFit.cover,
@@ -51,7 +52,7 @@ class AvatarImage extends StatelessWidget {
             width: width,
             height: height,
             fit: BoxFit.cover,
-            placeHolderAssetPath: 'assets/profile_placeholder.png',
+            placeHolderAssetPath: ImagesPaths.profilePlaceholder,
           ),
         ) : null,
       ),

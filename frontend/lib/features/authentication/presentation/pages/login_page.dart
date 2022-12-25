@@ -13,6 +13,7 @@ import 'package:frontend/router/routes.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
@@ -137,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Spacer(),
                     SvgPicture.asset(
-                      "assets/logo.svg",
+                      ImagesPaths.logo,
                       width: 102.w,
                       height: 89.h,
                       alignment: Alignment.topRight,
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const IconsGroupWidget(
                       flex: 10,
-                      imagePath: "assets/login_icons_1.svg",
+                      imagePath: ImagesPaths.firstLoginIcons,
                       alignment: Alignment.topLeft,
                     ),
                     SizedBox(
@@ -160,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const IconsGroupWidget(
                       flex: 9,
-                      imagePath: "assets/login_icons_2.svg",
+                      imagePath: ImagesPaths.secondLoginIcons,
                       alignment: Alignment.bottomRight,
                     ),
                   ],

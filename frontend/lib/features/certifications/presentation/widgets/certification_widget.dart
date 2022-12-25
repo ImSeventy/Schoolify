@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
 import 'package:readmore/readmore.dart';
 
@@ -82,7 +83,7 @@ class CertificationWidget extends StatelessWidget {
             children: [
               Container(
                 width: 331.w,
-                height: 550.h,
+                height: 500.h,
                 color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
@@ -95,7 +96,7 @@ class CertificationWidget extends StatelessWidget {
                           width: constrains.maxWidth,
                           height: constrains.maxHeight,
                           fit: BoxFit.fill,
-                          placeHolderAssetPath: "assets/image_placeholder.jpg",
+                          placeHolderAssetPath: ImagesPaths.imagePlaceholder,
                         );
                       },
                     ),
@@ -104,7 +105,7 @@ class CertificationWidget extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: SvgPicture.asset(
-                          "assets/certificate.svg",
+                          ImagesPaths.certificate,
                           width: 71.w,
                           height: 71.h,
                         )
@@ -116,7 +117,7 @@ class CertificationWidget extends StatelessWidget {
               Transform.translate(
                 offset: Offset(13.w, 0),
                 child: SvgPicture.asset(
-                  "assets/stars.svg",
+                  ImagesPaths.stars,
                   width: 35.w,
                   height: 42.h,
                 ),
