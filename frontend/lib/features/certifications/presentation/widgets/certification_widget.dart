@@ -29,56 +29,49 @@ class CertificationWidget extends StatelessWidget {
                 width: 62.w,
                 height: 64.h,
               ),
-              SizedBox(width: 7.w,),
+              SizedBox(
+                width: 7.w,
+              ),
               RichText(
                 text: TextSpan(
-                  text: "Certified by \n",
-                  style: TextStyle(
-                    color: const Color(0xFFE7E7E7),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins"
-                  ),
-                  children: [
-                    TextSpan(
-                      text: certificationEntity.givenByName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    )
-                  ]
-                ),
+                    text: "Certified by \n",
+                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                          color: const Color(0xFFE7E7E7),
+                        ),
+                    children: [
+                      TextSpan(
+                        text: certificationEntity.givenByName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      )
+                    ]),
               )
             ],
           ),
-          SizedBox(height: 8.h,),
+          SizedBox(
+            height: 8.h,
+          ),
           ReadMoreText(
             certificationEntity.content,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins"
-            ),
+            style: Theme.of(context).textTheme.headline3?.copyWith(
+                  color: Colors.white,
+                ),
             trimLines: 2,
             trimMode: TrimMode.Line,
             trimCollapsedText: "Read more",
             trimExpandedText: "  Read less",
             delimiter: "....",
-            moreStyle: TextStyle(
+            moreStyle: Theme.of(context).textTheme.headline4?.copyWith(
+                  color: const Color(0xFFBDBDBD),
+                ),
+            lessStyle: Theme.of(context).textTheme.headline4?.copyWith(
               color: const Color(0xFFBDBDBD),
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins"
-            ),
-            lessStyle: TextStyle(
-                color: const Color(0xFFBDBDBD),
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Poppins"
             ),
           ),
-          SizedBox(height: 8.h,),
+          SizedBox(
+            height: 8.h,
+          ),
           Stack(
             children: [
               Container(
@@ -90,7 +83,7 @@ class CertificationWidget extends StatelessWidget {
                   alignment: AlignmentDirectional.bottomEnd,
                   children: [
                     LayoutBuilder(
-                      builder: (_ , constrains) {
+                      builder: (_, constrains) {
                         return ZoomableCachedImage(
                           imageUrl: certificationEntity.imageUrl!,
                           width: constrains.maxWidth,
@@ -103,13 +96,12 @@ class CertificationWidget extends StatelessWidget {
                     Transform.translate(
                       offset: Offset(20.w, 30.h),
                       child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: SvgPicture.asset(
-                          ImagesPaths.certificate,
-                          width: 71.w,
-                          height: 71.h,
-                        )
-                      ),
+                          alignment: Alignment.bottomRight,
+                          child: SvgPicture.asset(
+                            ImagesPaths.certificate,
+                            width: 71.w,
+                            height: 71.h,
+                          )),
                     )
                   ],
                 ),

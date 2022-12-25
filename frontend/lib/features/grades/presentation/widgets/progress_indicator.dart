@@ -68,12 +68,7 @@ class FancyProgressIndicator extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: "$name  ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
-                  fontFamily: "Poppins",
-                  color: Colors.white
-                ),
+                style: Theme.of(context).textTheme.bodyText1,
                 children: [
                   TextSpan(
                     text: "${percentage.toStringAsFixed(1)} %",

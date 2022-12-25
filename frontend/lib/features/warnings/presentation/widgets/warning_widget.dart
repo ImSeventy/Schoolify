@@ -80,13 +80,9 @@ class WarningWidget extends StatelessWidget {
               trimCollapsedText: 'Show more',
               trimExpandedText: ' Show less',
               moreStyle: const TextStyle(color: Color(0XFFBDBDBD)),
-              lessStyle: const TextStyle(color: const Color(0XFFBDBDBD)),
+              lessStyle: const TextStyle(color: Color(0XFFBDBDBD)),
               delimiter: ".... ",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp,
-                  fontFamily: "Poppins"),
+              style: Theme.of(context).textTheme.subtitle2,
             ),
             SizedBox(height: 30.h,),
             Row(
@@ -94,11 +90,9 @@ class WarningWidget extends StatelessWidget {
                 const Spacer(),
                 Text(
                   warningEntity.date.dateFormat,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22.5.sp,
-                      fontFamily: "Poppins",
-                      color: const Color(0XFFD45A76)),
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                    color: const Color(0XFFD45A76),
+                  ),
                 ),
               ],
             ),

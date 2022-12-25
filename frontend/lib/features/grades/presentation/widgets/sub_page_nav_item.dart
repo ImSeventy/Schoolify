@@ -44,12 +44,9 @@ class SubPageNavItem extends StatelessWidget {
                 child: Text(
                   label,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Poppins",
-                      color: const Color(0xFFBAC5C5)),
-                ),
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: const Color(0xFFBAC5C5))
+                  )
               ),
             )
           ],

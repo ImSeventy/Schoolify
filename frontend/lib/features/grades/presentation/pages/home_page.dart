@@ -186,11 +186,7 @@ class MainHomePage extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                       text: "Welcome!\n",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Poppins",
-                                          fontSize: 16.sp,
-                                          color: Colors.white.withOpacity(0.8)),
+                                      style: Theme.of(context).textTheme.headline3,
                                       children: [
                                         TextSpan(
                                             text: AuthInfo.currentStudent!.name,
@@ -205,10 +201,7 @@ class MainHomePage extends StatelessWidget {
                             children: [
                               Text(
                                 "ST Page",
-                                style: TextStyle(
-                                    color: const Color(0xFFCCC1F0),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500),
+                                style: Theme.of(context).textTheme.bodyText2,
                               ),
                               SizedBox(
                                 height: 10.h,

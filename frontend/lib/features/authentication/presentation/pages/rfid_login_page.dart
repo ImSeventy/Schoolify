@@ -117,12 +117,8 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                             "Welcome ${widget.student.name} !",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                fontSize: 30.sp,
-                                color: Colors.white),
-                          ),
+                            style: Theme.of(context).textTheme.headline2,
+                        ),
                         ),
                       ),
                       SizedBox(
@@ -148,11 +144,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                         children: [
                           Text(
                             "Login",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 45.sp,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.headline1,
                           ),
                           SizedBox(
                             width: 210.w,

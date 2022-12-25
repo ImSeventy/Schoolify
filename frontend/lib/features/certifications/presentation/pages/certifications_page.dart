@@ -94,11 +94,8 @@ class CertificationsPage extends StatelessWidget {
                               const Spacer(),
                               Text(
                                 "Certifications",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 36.sp,
-                                    color: Colors.white
+                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                  fontSize: 36.sp,
                                 ),
                               ),
                               SizedBox(

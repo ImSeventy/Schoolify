@@ -218,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 170,
                   ),
                 ),
-                const CustomPaintedBackground(),
+                // const CustomPaintedBackground(),
                 Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -240,11 +240,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             const Spacer(),
                             Text(
                               "Profile Page",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Poppins",
-                                  fontSize: 36.sp,
-                                  color: Colors.white),
+                              style: Theme.of(context).textTheme.headline1?.copyWith(
+                                fontSize: 36.sp,
+                              ),
                             ),
                             const Spacer(),
                             GestureDetector(
@@ -260,11 +258,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 child: Text(
                                   "Log Out",
-                                  style: TextStyle(
+                                  style:Theme.of(context).textTheme.headline4?.copyWith(
                                     color: Colors.red,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ),
@@ -275,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         SizedBox(
-                          height: 15.h,
+                          height: 20.h,
                         ),
                         Stack(
                           alignment: Alignment.bottomRight,
@@ -307,7 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         SizedBox(
-                          height: 25.h,
+                          height: 20.h,
                         ),
                         ProfileDataField(
                           fieldName: 'Name',

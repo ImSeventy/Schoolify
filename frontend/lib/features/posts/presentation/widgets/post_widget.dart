@@ -117,19 +117,15 @@ class PostWidget extends StatelessWidget {
                   ),
                   title: Text(
                     post.byName,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 22.sp),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                      fontSize: 20.sp,
+                    ),
                   ),
                   subtitle: Text(
                     timeago.format(post.date),
-                    style: TextStyle(
-                        color: const Color(0xFFB9B9B9),
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp),
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: const Color(0xFFB9B9B9),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -139,11 +135,9 @@ class PostWidget extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: ReadMoreText(
                     post.content,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins"),
+                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                      color: Colors.white
+                    ),
                     moreStyle: const TextStyle(color: Color(0xFFBDBDBD)),
                     lessStyle: const TextStyle(color: Color(0xFFBDBDBD)),
                     trimExpandedText: " Read less",
@@ -174,7 +168,7 @@ class PostWidget extends StatelessWidget {
                 Align(
                   alignment: AlignmentDirectional.topStart,
                   child: Text(
-                    "${likeCount} likes",
+                    "$likeCount likes",
                     style: TextStyle(
                         color: Colors.grey,
                         fontFamily: "Poppins",

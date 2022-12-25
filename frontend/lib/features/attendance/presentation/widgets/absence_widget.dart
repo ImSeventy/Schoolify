@@ -35,11 +35,7 @@ class AbsenceWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               text: TextSpan(
                 text: "G${absenceEntity.grade}\n",
-                style: TextStyle(
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 17.sp,
-                ),
+                style: Theme.of(context).textTheme.subtitle2,
                 children: [
                   TextSpan(
                     text: "${absenceEntity.semester == 1 ? '1st' : '2nd'} term\n"

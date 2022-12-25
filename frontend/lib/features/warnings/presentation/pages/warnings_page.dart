@@ -93,11 +93,8 @@ class WarningsPage extends StatelessWidget {
                               const Spacer(),
                               Text(
                                 "Warnings",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 36.sp,
-                                    color: Colors.white
+                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                  fontSize: 36.sp,
                                 ),
                               ),
                               SizedBox(
@@ -143,16 +140,12 @@ class WarningsPage extends StatelessWidget {
                               RichText(
                                 text: TextSpan(
                                     text: "Number of warnings  ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "Poppins",
-                                        fontSize: 24.sp
-                                    ),
+                                    style: Theme.of(context).textTheme.subtitle1,
                                     children: [
                                       TextSpan(
                                           text: warnings.length.toString(),
                                           style: const TextStyle(
-                                              color: const Color(0xFFE23939)
+                                              color: Color(0xFFE23939)
                                           )
                                       )
                                     ]

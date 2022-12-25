@@ -13,10 +13,8 @@ class SaveButton extends StatelessWidget {
       style: TextButton.styleFrom(
         backgroundColor: const Color(0xb300FF94),
         foregroundColor: Colors.white,
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontFamily: "Poppins",
-          fontSize: 25.sp
+        textStyle: Theme.of(context).textTheme.button?.copyWith(
+            fontSize: 25.sp,
         )
       ),
       child: const Text("Save"),

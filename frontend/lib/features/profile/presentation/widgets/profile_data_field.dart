@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/authentication/presentation/widgets/credentials_field.dart';
 
+import '../../../../core/constants/fonts.dart';
+
 class ProfileDataField extends StatelessWidget {
   final String fieldName;
   final bool isPassword;
@@ -30,11 +32,9 @@ class ProfileDataField extends StatelessWidget {
       children: [
         Text(
           fieldName,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+            fontFamily: Fonts.secondaryFont,
             color: const Color(0xFF544E4E),
-            fontFamily: "Overpass",
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w400
           ),
         ),
         SizedBox(height: 4.h,),

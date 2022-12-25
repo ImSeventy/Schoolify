@@ -5,7 +5,6 @@ import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
-import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/error_messages.dart';

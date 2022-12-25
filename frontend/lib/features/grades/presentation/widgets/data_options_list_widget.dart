@@ -48,11 +48,7 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
           onChanged: widget.onChanged,
           icon:
               const Icon(Icons.arrow_drop_down_sharp, color: Color(0xFF9C8D8D)),
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-              fontSize: 14.sp,
-              fontFamily: "Poppins"),
+          style: Theme.of(context).textTheme.headline4,
           dropdownDecoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [Color(0xFF4D4395), Color(0xFF100848)],
