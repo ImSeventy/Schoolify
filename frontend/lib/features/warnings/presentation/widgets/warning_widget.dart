@@ -21,7 +21,7 @@ class WarningWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 13.h),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: const Color(0xFF130B51),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Stack(
@@ -79,8 +79,8 @@ class WarningWidget extends StatelessWidget {
               trimMode: TrimMode.Line,
               trimCollapsedText: 'Show more',
               trimExpandedText: ' Show less',
-              moreStyle: const TextStyle(color: Color(0XFFBDBDBD)),
-              lessStyle: const TextStyle(color: Color(0XFFBDBDBD)),
+              moreStyle: TextStyle(color: Theme.of(context).colorScheme.shadow),
+              lessStyle: TextStyle(color: Theme.of(context).colorScheme.shadow),
               delimiter: ".... ",
               style: Theme.of(context).textTheme.subtitle2,
             ),

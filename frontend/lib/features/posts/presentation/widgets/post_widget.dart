@@ -91,18 +91,18 @@ class PostWidget extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is LikePostFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
         }
 
         if (state is UnLikePostFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
         }
       },
       builder: (context, state) {
         return Container(
             margin: EdgeInsets.only(bottom: 28.h),
             decoration: BoxDecoration(
-              color: const Color(0xB4130B51),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Padding(
@@ -124,7 +124,7 @@ class PostWidget extends StatelessWidget {
                   subtitle: Text(
                     timeago.format(post.date),
                     style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: const Color(0xFFB9B9B9),
+                      color: Theme.of(context).colorScheme.shadow,
                     ),
                   ),
                 ),
@@ -136,10 +136,10 @@ class PostWidget extends StatelessWidget {
                   child: ReadMoreText(
                     post.content,
                     style: Theme.of(context).textTheme.headline3?.copyWith(
-                      color: Colors.white
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                    moreStyle: const TextStyle(color: Color(0xFFBDBDBD)),
-                    lessStyle: const TextStyle(color: Color(0xFFBDBDBD)),
+                    moreStyle: TextStyle(color: Theme.of(context).colorScheme.shadow,),
+                    lessStyle: TextStyle(color: Theme.of(context).colorScheme.shadow,),
                     trimExpandedText: " Read less",
                     trimCollapsedText: "Read more",
                     delimiter: ".....",
@@ -170,7 +170,7 @@ class PostWidget extends StatelessWidget {
                   child: Text(
                     "$likeCount likes",
                     style: TextStyle(
-                        color: Colors.grey,
+                        color: Theme.of(context).colorScheme.shadow,
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp),

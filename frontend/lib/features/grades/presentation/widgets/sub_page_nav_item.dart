@@ -27,7 +27,7 @@ class SubPageNavItem extends StatelessWidget {
         height: 52.h,
         padding: EdgeInsets.symmetric(horizontal: 15.w),
         decoration: BoxDecoration(
-            color: const Color(0xFF111E4B),
+            color: Theme.of(context).colorScheme.background,
             borderRadius: BorderRadius.circular(6)),
         child: Row(
           children: [
@@ -45,7 +45,7 @@ class SubPageNavItem extends StatelessWidget {
                   label,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                      color: const Color(0xFFBAC5C5))
+                      color: Theme.of(context).colorScheme.shadow)
                   )
               ),
             )

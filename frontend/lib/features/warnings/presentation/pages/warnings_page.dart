@@ -38,7 +38,7 @@ class WarningsPage extends StatelessWidget {
           if (state is WarningsFailedState) {
             showToastMessage(
               state.message,
-              Colors.red,
+                Theme.of(context).colorScheme.error,
               context
             );
 
@@ -56,18 +56,18 @@ class WarningsPage extends StatelessWidget {
             onRefresh: () async {
               await warningsCubit.loadStudentWarnings();
             },
-            color: const Color(0xFF131524),
-            backgroundColor: const Color(0xFF2d407b),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.onSurface,
             child: Stack(
               children: [
                 Container(
-                  color: const Color(0xFF131524),
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 Transform.translate(
                   offset: const Offset(-10, 0),
                   child: SvgPicture.asset(
                     ImagesPaths.firstLoginIcons,
-                    color: const Color(0xFF2d407b),
+                    color: Theme.of(context).colorScheme.onSurface,
                     width: 170,
                   ),
                 ),
@@ -85,9 +85,9 @@ class WarningsPage extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.arrow_back_ios_sharp,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onBackground,
                                 ),
                               ),
                               const Spacer(),

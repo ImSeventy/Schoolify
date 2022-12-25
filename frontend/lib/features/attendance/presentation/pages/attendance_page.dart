@@ -31,7 +31,7 @@ class AttendancePage extends StatelessWidget {
         if (state is GetStudentAbsencesFailedState) {
           showToastMessage(
             state.message,
-            Colors.red,
+              Theme.of(context).colorScheme.error,
             context
           );
 
@@ -50,8 +50,8 @@ class AttendancePage extends StatelessWidget {
           onRefresh: () async {
             await attendanceCubit.getStudentAbsences();
           },
-          color: const Color(0xFF131524),
-          backgroundColor: const Color(0xFF2d407b),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.onSurface,
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -104,7 +104,7 @@ class AttendancePage extends StatelessWidget {
                                 percentage: dataHandlerCubit
                                     .calculateAttendancePercentage(
                                         attendanceCubit.absences),
-                                backgroundColor: const Color(0xFF306767),
+                                backgroundColor: Theme.of(context).colorScheme.outline,
                                 name: "Attendance",
                               ),
                               SizedBox(height: 16.h),

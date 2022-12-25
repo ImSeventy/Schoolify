@@ -53,19 +53,15 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF131524),
         bottomNavigationBar:
             CustomNavigationBar(onTap: changePageIndex, initialIndex: 0),
         body: Stack(
           children: [
-            Container(
-              color: const Color(0xFF131524),
-            ),
             Transform.translate(
               offset: const Offset(-10, 0),
               child: SvgPicture.asset(
                 ImagesPaths.firstLoginIcons,
-                color: const Color(0xFF2d407b),
+                color: Theme.of(context).colorScheme.onSurface,
                 width: 170,
               ),
             ),
@@ -115,7 +111,7 @@ class MainHomePage extends StatelessWidget {
       listenWhen: (oldState, newState) => oldState != newState,
       listener: (context, state) {
         if (state is GradesFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure ||
               state.message == ErrorMessages.invalidRefreshTokenFailure) {
@@ -135,8 +131,8 @@ class MainHomePage extends StatelessWidget {
             await gradesCubit.getStudentGrades();
             await attendanceCubit.getStudentAbsences();
           },
-          color: const Color(0xFF131524),
-          backgroundColor: const Color(0xFF2d407b),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.onSurface,
           child: state is GetStudentGradesLoadingState
               ? const LoadingIndicator()
               : SingleChildScrollView(
@@ -190,8 +186,8 @@ class MainHomePage extends StatelessWidget {
                                       children: [
                                         TextSpan(
                                             text: AuthInfo.currentStudent!.name,
-                                            style: const TextStyle(
-                                                color: Colors.white))
+                                            style: TextStyle(
+                                                color: Theme.of(context).colorScheme.onBackground,))
                                       ]),
                                 )
                               ],
@@ -211,7 +207,7 @@ class MainHomePage extends StatelessWidget {
                                 icon: Icon(
                                   Icons.settings,
                                   size: 28.sp,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onBackground,
                                 ),
                               )
                             ],
@@ -265,7 +261,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateGradesPercentage(
                                           gradesCubit.grades),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: Theme.of(context).colorScheme.outline,
                                   name: "Grades",
                                 ),
                               ),
@@ -278,7 +274,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateAttendancePercentage(
                                           attendanceCubit.absences),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: Theme.of(context).colorScheme.outline,
                                   name: "Attendance",
                                 ),
                               ),
@@ -290,7 +286,7 @@ class MainHomePage extends StatelessWidget {
                                 child: FancyProgressIndicator(
                                   percentage:
                                       calculateSuperiorityPercentage(context),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: Theme.of(context).colorScheme.outline,
                                   name: "Superiority",
                                 ),
                               ),
@@ -302,7 +298,7 @@ class MainHomePage extends StatelessWidget {
                                 ),
                                 SubPageNavItem(
                                   label: "Warnings",
-                                  iconColor: Colors.red,
+                                  iconColor: Theme.of(context).colorScheme.error,
                                   iconPath: ImagesPaths.pin,
                                   onTap: () {
                                     Navigator.of(context)

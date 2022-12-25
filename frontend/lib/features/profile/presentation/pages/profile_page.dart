@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (state is ProfileFailedState) {
           showToastMessage(
             state.message,
-            Colors.red,
+            Theme.of(context).colorScheme.error,
             context,
           );
         }
@@ -208,13 +208,13 @@ class _ProfilePageState extends State<ProfilePage> {
             body: Stack(
               children: [
                 Container(
-                  color: const Color(0xFF131524),
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 Transform.translate(
                   offset: const Offset(-10, 0),
                   child: SvgPicture.asset(
                     ImagesPaths.firstLoginIcons,
-                    color: const Color(0xFF2d407b),
+                    color: Theme.of(context).colorScheme.onSurface,
                     width: 170,
                   ),
                 ),
@@ -232,9 +232,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.arrow_back_ios_sharp,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onBackground,
                               ),
                             ),
                             const Spacer(),
@@ -259,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Text(
                                   "Log Out",
                                   style:Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.red,
+                                    color: Theme.of(context).colorScheme.error,
                                   ),
                                 ),
                               ),
@@ -288,13 +288,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                        color: const Color(0xFF131524),
+                                        color: Theme.of(context).scaffoldBackgroundColor,
                                         width: 3,
                                         strokeAlign: StrokeAlign.outside),
-                                    color: const Color(0xFF40E1D1)),
+                                    color: Theme.of(context).colorScheme.tertiary),
                                 child: Icon(
                                   Icons.edit,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onTertiary,
                                   size: 25.sp,
                                 ),
                               ),

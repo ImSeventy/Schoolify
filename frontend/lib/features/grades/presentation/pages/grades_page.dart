@@ -47,7 +47,7 @@ class GradesPage extends StatelessWidget {
         if (state is GradesFailedState) {
           showToastMessage(
             state.message,
-            Colors.red,
+              Theme.of(context).colorScheme.error,
             context
           );
 
@@ -67,8 +67,8 @@ class GradesPage extends StatelessWidget {
           onRefresh: () async {
             await gradesCubit.getStudentGrades();
           },
-          color: const Color(0xFF131524),
-          backgroundColor: const Color(0xFF2d407b),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.onSurface,
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -120,7 +120,7 @@ class GradesPage extends StatelessWidget {
                         FancyProgressIndicator(
                           percentage: dataHandlerCubit
                               .calculateGradesPercentage(gradesCubit.grades),
-                          backgroundColor: const Color(0xFF306767),
+                          backgroundColor: Theme.of(context).colorScheme.outline,
                           name: "Grades",
                         ),
                         SizedBox(height: 16.h),

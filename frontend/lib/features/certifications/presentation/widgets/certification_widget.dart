@@ -36,13 +36,13 @@ class CertificationWidget extends StatelessWidget {
                 text: TextSpan(
                     text: "Certified by \n",
                     style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: const Color(0xFFE7E7E7),
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
                     children: [
                       TextSpan(
                         text: certificationEntity.givenByName,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.shadow,
                         ),
                       )
                     ]),
@@ -55,7 +55,7 @@ class CertificationWidget extends StatelessWidget {
           ReadMoreText(
             certificationEntity.content,
             style: Theme.of(context).textTheme.headline3?.copyWith(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
             trimLines: 2,
             trimMode: TrimMode.Line,
@@ -63,10 +63,10 @@ class CertificationWidget extends StatelessWidget {
             trimExpandedText: "  Read less",
             delimiter: "....",
             moreStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: const Color(0xFFBDBDBD),
+                  color: Theme.of(context).colorScheme.shadow,
                 ),
             lessStyle: Theme.of(context).textTheme.headline4?.copyWith(
-              color: const Color(0xFFBDBDBD),
+              color: Theme.of(context).colorScheme.shadow,
             ),
           ),
           SizedBox(

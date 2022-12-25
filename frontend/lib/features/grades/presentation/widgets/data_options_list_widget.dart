@@ -27,8 +27,11 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
       width: 220.w,
       height: 32.h,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF4D4395), Color(0xFF100848)],
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primaryContainer,
+            Theme.of(context).colorScheme.secondaryContainer,
+          ],
         ),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -50,8 +53,11 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
               const Icon(Icons.arrow_drop_down_sharp, color: Color(0xFF9C8D8D)),
           style: Theme.of(context).textTheme.headline4,
           dropdownDecoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF4D4395), Color(0xFF100848)],
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primaryContainer,
+                Theme.of(context).colorScheme.secondaryContainer,
+              ],
             ),
             borderRadius: BorderRadius.circular(8),
           ),

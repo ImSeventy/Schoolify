@@ -305,7 +305,7 @@ class BackGroundStar extends StatelessWidget {
       offset: offset,
       child: Icon(
         Icons.star_rounded,
-        color: const Color(0xFF132C71),
+        color: Theme.of(context).colorScheme.secondary,
         size: size,
       ),
     );

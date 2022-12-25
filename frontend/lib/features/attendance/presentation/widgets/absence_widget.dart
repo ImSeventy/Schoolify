@@ -19,7 +19,7 @@ class AbsenceWidget extends StatelessWidget {
       height: 94,
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF130B51),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(12)
       ),
       child: Center(
@@ -28,7 +28,7 @@ class AbsenceWidget extends StatelessWidget {
           children: [
             FaIcon(
               FontAwesomeIcons.clipboardUser,
-              color: const Color(0xFF112B6D),
+              color: Theme.of(context).colorScheme.secondary,
               size: 55.sp,
             ),
             RichText(
@@ -42,8 +42,8 @@ class AbsenceWidget extends StatelessWidget {
                   ),
                   TextSpan(
                     text: absenceEntity.date.dateFormat,
-                    style: const TextStyle(
-                      color: Color(0xFFF06482)
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer
                     )
                   )
                 ]

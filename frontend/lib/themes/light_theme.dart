@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../core/constants/fonts.dart';
 
-const Color kPrimaryColor = Color.fromRGBO(45, 121, 224, 1);
+const Color kPrimaryColor = Color(0xFF130B51);
+
+const Color kSecondaryColor = Color(0xFF132C71);
 
 class LightThemeWrapper extends StatelessWidget {
   final Widget child;
@@ -19,6 +21,7 @@ class LightThemeWrapper extends StatelessWidget {
             data: ThemeData(
               brightness: Brightness.light,
               primaryColor: kPrimaryColor,
+              scaffoldBackgroundColor: const Color(0xFF131524),
               appBarTheme: AppBarTheme(
                   color: kPrimaryColor,
                   titleTextStyle: TextStyle(
@@ -83,11 +86,20 @@ class LightThemeWrapper extends StatelessWidget {
                   caption: TextStyle(fontSize: 13.sp, color: Colors.grey)),
               colorScheme: const ColorScheme.light().copyWith(
                   primary: kPrimaryColor,
-                  secondary: Colors.lightBlueAccent,
+                  secondary: kSecondaryColor,
                   onPrimary: Colors.white,
-                  primaryContainer: Colors.grey[400],
-                  secondaryContainer: Colors.grey[200],
-                  onBackground: Colors.black),
+                  primaryContainer: const Color(0xFF4D4395),
+                  secondaryContainer: const Color(0xFF100848),
+                  background: const Color(0xFF111E4B),
+                  onBackground: Colors.white,
+                  shadow: const Color(0xFFB9B9B9),
+                  onSurface: const Color(0xFF2d407b),
+                  error: Colors.red,
+                  onPrimaryContainer: const Color(0xFFF06482),
+                  outline: const Color(0xFF306767),
+                  tertiary: const Color(0xFF40E1D1),
+                  onTertiary: Colors.white,
+              ),
               textButtonTheme: TextButtonThemeData(
                   style: TextButton.styleFrom(
                       primary: kPrimaryColor,

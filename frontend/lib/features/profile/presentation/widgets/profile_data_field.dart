@@ -48,12 +48,12 @@ class ProfileDataField extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFF131524), width: 3, strokeAlign: StrokeAlign.outside),
-                    color: const Color(0xFF40E1D1)
+                    border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3, strokeAlign: StrokeAlign.outside),
+                    color: Theme.of(context).colorScheme.tertiary
                 ),
                 child: Icon(
                   Icons.edit,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onTertiary,
                   size: 25.sp,
                 ),
               ),

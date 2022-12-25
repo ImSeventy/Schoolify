@@ -32,7 +32,7 @@ class PostsPage extends StatelessWidget {
             (newState is! LikeState || newState is! UnLikeState),
         listener: (context, state) {
           if (state is GetAllPostsFailedState) {
-            showToastMessage(state.message, Colors.red, context);
+            showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
@@ -48,8 +48,8 @@ class PostsPage extends StatelessWidget {
               onRefresh: () async {
                 await postsCubit.getAllPosts();
               },
-              color: const Color(0xFF131524),
-              backgroundColor: const Color(0xFF2d407b),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.onSurface,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 17.w),
                 child: ListView(
