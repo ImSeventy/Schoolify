@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/constants/fonts.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
@@ -13,6 +15,7 @@ import 'package:frontend/router/routes.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
@@ -28,7 +31,8 @@ Stream<String> getRfIdStream() {
   StreamController<String> streamController = StreamController<String>();
 
   void setupWebSocketConnection() {
-    WebSocketChannel channel = IOWebSocketChannel.connect(Uri.parse("ws://localhost:8679"));
+    WebSocketChannel channel =
+        IOWebSocketChannel.connect(Uri.parse("ws://localhost:8679"));
     channel.stream.listen((message) {
       streamController.sink.add(message);
     }, onDone: () async {
@@ -86,27 +90,16 @@ class _LoginPageState extends State<LoginPage> {
         listenWhen: (oldState, newState) => oldState != newState,
         listener: (context, newState) async {
           if (newState is LoginFailedState) {
-            showToastMessage(
-              newState.message,
-              Colors.red,
-              context
-            );
+            showToastMessage(newState.message, Colors.red, context);
           } else if (newState is GetStudentByRfidFailedState) {
             currentRfid = null;
-            showToastMessage(
-                newState.message,
-                Colors.red,
-                context
-            );
-          }else if (newState is LoginSucceededState) {
-            showToastMessage(
-              "Logged in successfully",
-              Colors.green,
-              context
-            );
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
+            showToastMessage(newState.message, Colors.red, context);
+          } else if (newState is LoginSucceededState) {
+            showToastMessage("Logged in successfully", Colors.green, context);
+            context.pushNamedAndRemove(Routes.home);
           } else if (newState is GetStudentByRfidSucceededState) {
-            await Navigator.of(context).pushNamed(Routes.rfidLogin, arguments: RfidLoginPageArgs(student: newState.student));
+            await context.pushNamed(Routes.rfidLogin,
+                arguments: RfidLoginPageArgs(student: newState.student));
             currentRfid = null;
           }
         },
@@ -137,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Spacer(),
                     SvgPicture.asset(
-                      "assets/logo.svg",
+                      ImagesPaths.logo,
                       width: 102.w,
                       height: 89.h,
                       alignment: Alignment.topRight,
@@ -152,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const IconsGroupWidget(
                       flex: 10,
-                      imagePath: "assets/login_icons_1.svg",
+                      imagePath: ImagesPaths.firstLoginIcons,
                       alignment: Alignment.topLeft,
                     ),
                     SizedBox(
@@ -160,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const IconsGroupWidget(
                       flex: 9,
-                      imagePath: "assets/login_icons_2.svg",
+                      imagePath: ImagesPaths.secondLoginIcons,
                       alignment: Alignment.bottomRight,
                     ),
                   ],
@@ -183,11 +176,11 @@ class _LoginPageState extends State<LoginPage> {
                                 RichText(
                                   text: TextSpan(
                                       text: "login ",
-                                      style: TextStyle(
-                                          fontFamily: "Overpass",
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 24.sp,
-                                          color: const Color(0xFFA2FF81)),
+                                      style: context.theme.textTheme.subtitle1?.copyWith(
+                                        fontFamily: Fonts.secondaryFont,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFFA2FF81)
+                                      ),
                                       children: const [
                                         TextSpan(
                                             text: "here",

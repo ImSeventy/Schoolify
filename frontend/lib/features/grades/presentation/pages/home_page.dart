@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/constants/error_messages.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/attendance/presentation/pages/attendance_page.dart';
@@ -16,6 +18,7 @@ import 'package:frontend/features/posts/presentation/pages/posts_page.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_page.dart';
 import 'package:frontend/router/routes.dart';
 
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../core/widgets/avatar_image.dart';
 import '../bloc/grades/grades_cubit.dart';
@@ -52,19 +55,15 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF131524),
         bottomNavigationBar:
             CustomNavigationBar(onTap: changePageIndex, initialIndex: 0),
         body: Stack(
           children: [
-            Container(
-              color: const Color(0xFF131524),
-            ),
             Transform.translate(
               offset: const Offset(-10, 0),
               child: SvgPicture.asset(
-                "assets/login_icons_1.svg",
-                color: const Color(0xFF2d407b),
+                ImagesPaths.firstLoginIcons,
+                color: context.colorScheme.onSurface,
                 width: 170,
               ),
             ),
@@ -114,13 +113,12 @@ class MainHomePage extends StatelessWidget {
       listenWhen: (oldState, newState) => oldState != newState,
       listener: (context, state) {
         if (state is GradesFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure ||
               state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            context.pushNamedAndRemove(Routes.login);
           }
         }
       },
@@ -129,13 +127,11 @@ class MainHomePage extends StatelessWidget {
         AttendanceCubit attendanceCubit = context.read<AttendanceCubit>();
         GradesCubit gradesCubit = context.read<GradesCubit>();
 
-        return RefreshIndicator(
+        return RefreshPageHandler(
           onRefresh: () async {
             await gradesCubit.getStudentGrades();
             await attendanceCubit.getStudentAbsences();
           },
-          color: const Color(0xFF131524),
-          backgroundColor: const Color(0xFF2d407b),
           child: state is GetStudentGradesLoadingState
               ? const LoadingIndicator()
               : SingleChildScrollView(
@@ -156,7 +152,7 @@ class MainHomePage extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).pushNamed(
+                                  context.pushNamed(
                                     Routes.profile,
                                     arguments: ProfilePageArgs(
                                       student: AuthInfo.currentStudent!,
@@ -185,16 +181,12 @@ class MainHomePage extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                       text: "Welcome!\n",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Poppins",
-                                          fontSize: 16.sp,
-                                          color: Colors.white.withOpacity(0.8)),
+                                      style: context.theme.textTheme.headline3,
                                       children: [
                                         TextSpan(
                                             text: AuthInfo.currentStudent!.name,
-                                            style: const TextStyle(
-                                                color: Colors.white))
+                                            style: TextStyle(
+                                                color: context.colorScheme.onBackground,))
                                       ]),
                                 )
                               ],
@@ -204,10 +196,7 @@ class MainHomePage extends StatelessWidget {
                             children: [
                               Text(
                                 "ST Page",
-                                style: TextStyle(
-                                    color: const Color(0xFFCCC1F0),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500),
+                                style: context.theme.textTheme.bodyText2,
                               ),
                               SizedBox(
                                 height: 10.h,
@@ -217,7 +206,7 @@ class MainHomePage extends StatelessWidget {
                                 icon: Icon(
                                   Icons.settings,
                                   size: 28.sp,
-                                  color: Colors.white,
+                                  color: context.colorScheme.onBackground,
                                 ),
                               )
                             ],
@@ -230,30 +219,17 @@ class MainHomePage extends StatelessWidget {
                       SizedBox(
                         height: 16.h,
                       ),
-                      DataOptionsListWidget(
+                      DataOptionsListWidget.yearOptions(
                           onChanged: (yearMode) {
                             changeYearMode(context, yearMode);
                           },
-                          optionValues: [
-                            "All Years",
-                            "This Year",
-                            "Last Year",
-                            ...List.generate(AuthInfo.currentStudent!.gradeYear,
-                                (index) => "Grade ${index + 1}")
-                          ],
-                          prefixMsg: "",
+                          studentGradeYear: AuthInfo.currentStudent!.gradeYear,
                           currentValue: dataHandlerCubit.currentYearMode),
                       SizedBox(height: 10.h),
-                      DataOptionsListWidget(
+                      DataOptionsListWidget.semesterOptions(
                         onChanged: (semesterMode) {
                           changeSemesterMode(context, semesterMode);
                         },
-                        optionValues: const [
-                          "Whole Year",
-                          "1st Semester",
-                          "2nd Semester"
-                        ],
-                        prefixMsg: "",
                         currentValue: dataHandlerCubit.currentSemesterMode,
                       ),
                       SizedBox(
@@ -271,7 +247,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateGradesPercentage(
                                           gradesCubit.grades),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Grades",
                                 ),
                               ),
@@ -284,7 +260,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateAttendancePercentage(
                                           attendanceCubit.absences),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Attendance",
                                 ),
                               ),
@@ -296,7 +272,7 @@ class MainHomePage extends StatelessWidget {
                                 child: FancyProgressIndicator(
                                   percentage:
                                       calculateSuperiorityPercentage(context),
-                                  backgroundColor: const Color(0xFF306767),
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Superiority",
                                 ),
                               ),
@@ -308,11 +284,10 @@ class MainHomePage extends StatelessWidget {
                                 ),
                                 SubPageNavItem(
                                   label: "Warnings",
-                                  iconColor: Colors.red,
-                                  iconPath: "assets/pin.svg",
+                                  iconColor: context.colorScheme.error,
+                                  iconPath: ImagesPaths.pin,
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .pushNamed(Routes.warnings);
+                                    context.pushNamed(Routes.warnings);
                                   },
                                 ),
                                 SizedBox(
@@ -321,10 +296,9 @@ class MainHomePage extends StatelessWidget {
                                 SubPageNavItem(
                                   label: "Certifications",
                                   iconColor: Colors.green,
-                                  iconPath: "assets/pin.svg",
+                                  iconPath: ImagesPaths.pin,
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .pushNamed(Routes.certifications);
+                                    context.pushNamed(Routes.certifications);
                                   },
                                 ),
                               ],

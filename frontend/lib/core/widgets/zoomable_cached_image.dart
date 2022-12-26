@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 
 import 'cached_image_with_place_holder.dart';
 
@@ -33,7 +34,7 @@ class ZoomableCachedImage extends StatelessWidget {
                 width: 400.w,
                 height: 650.h,
                 fit: fit,
-                placeHolderAssetPath: "assets/image_placeholder.jpg",
+                placeHolderAssetPath: ImagesPaths.imagePlaceholder,
               ),
             ),
           ),
@@ -51,7 +52,7 @@ class ZoomableCachedImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        placeHolderAssetPath: "assets/image_placeholder.jpg",
+        placeHolderAssetPath: ImagesPaths.imagePlaceholder,
       ),
     );
   }

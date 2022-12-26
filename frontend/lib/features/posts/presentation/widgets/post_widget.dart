@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
@@ -91,18 +92,18 @@ class PostWidget extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is LikePostFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
         }
 
         if (state is UnLikePostFailedState) {
-          showToastMessage(state.message, Colors.red, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
         }
       },
       builder: (context, state) {
         return Container(
             margin: EdgeInsets.only(bottom: 28.h),
             decoration: BoxDecoration(
-              color: const Color(0xB4130B51),
+              color: context.colorScheme.primary.withOpacity(0.8),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Padding(
@@ -117,19 +118,15 @@ class PostWidget extends StatelessWidget {
                   ),
                   title: Text(
                     post.byName,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 22.sp),
+                    style: context.theme.textTheme.subtitle1?.copyWith(
+                      fontSize: 20.sp,
+                    ),
                   ),
                   subtitle: Text(
                     timeago.format(post.date),
-                    style: TextStyle(
-                        color: const Color(0xFFB9B9B9),
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp),
+                    style: context.theme.textTheme.headline4?.copyWith(
+                      color: context.colorScheme.shadow,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -139,13 +136,11 @@ class PostWidget extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: ReadMoreText(
                     post.content,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins"),
-                    moreStyle: const TextStyle(color: Color(0xFFBDBDBD)),
-                    lessStyle: const TextStyle(color: Color(0xFFBDBDBD)),
+                    style: context.theme.textTheme.headline3?.copyWith(
+                      color: context.colorScheme.onPrimary,
+                    ),
+                    moreStyle: TextStyle(color: context.colorScheme.shadow,),
+                    lessStyle: TextStyle(color: context.colorScheme.shadow,),
                     trimExpandedText: " Read less",
                     trimCollapsedText: "Read more",
                     delimiter: ".....",
@@ -163,7 +158,7 @@ class PostWidget extends StatelessWidget {
                         imageUrl: post.imageUrl!,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        height: 402,
+                        height: 350.h,
                         placeHolderAssetPath: 'assets/image_placeholder.png',
                       ),
                       SizedBox(
@@ -174,9 +169,9 @@ class PostWidget extends StatelessWidget {
                 Align(
                   alignment: AlignmentDirectional.topStart,
                   child: Text(
-                    "${likeCount} likes",
+                    "$likeCount likes",
                     style: TextStyle(
-                        color: Colors.grey,
+                        color: context.colorScheme.shadow,
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp),

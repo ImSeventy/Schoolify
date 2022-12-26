@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/utils/extensions.dart';
+import 'package:frontend/core/widgets/common_page_wrapper.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
+import 'package:frontend/core/widgets/previous_page_button.dart';
 import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
 import 'package:frontend/features/warnings/domain/entities/warning_entity.dart';
@@ -12,6 +15,7 @@ import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/error_messages.dart';
+import '../../../../core/constants/images_paths.dart';
 import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../router/routes.dart';
@@ -37,13 +41,13 @@ class WarningsPage extends StatelessWidget {
           if (state is WarningsFailedState) {
             showToastMessage(
               state.message,
-              Colors.red,
+                context.colorScheme.error,
               context
             );
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              context.pushNamedAndRemove(Routes.login);
             }
           }
         },
@@ -51,122 +55,72 @@ class WarningsPage extends StatelessWidget {
           WarningsCubit warningsCubit = context.read<WarningsCubit>();
           DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
           List<WarningEntity> warnings = dataHandlerCubit.filterWarnings(warningsCubit.warnings);
-          return RefreshIndicator(
+          return CommonPageWrapper(
             onRefresh: () async {
               await warningsCubit.loadStudentWarnings();
             },
-            color: const Color(0xFF131524),
-            backgroundColor: const Color(0xFF2d407b),
-            child: Stack(
-              children: [
-                Container(
-                  color: const Color(0xFF131524),
-                ),
-                Transform.translate(
-                  offset: const Offset(-10, 0),
-                  child: SvgPicture.asset(
-                    "assets/login_icons_1.svg",
-                    color: const Color(0xFF2d407b),
-                    width: 170,
-                  ),
-                ),
-                SafeArea(
-                  child: Scaffold(
-                    backgroundColor: Colors.transparent,
-                    body: SingleChildScrollView(
-                      clipBehavior: Clip.none,
-                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_ios_sharp,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "Warnings",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 36.sp,
-                                    color: Colors.white
-                                ),
-                              ),
-                              SizedBox(
-                                width: 50.w,
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 75.h,),
-                          DataOptionsListWidget(
-                            onChanged: (yearMode) {
-                              if (yearMode == null) return;
-                              dataHandlerCubit.changeYearMode(yearMode);
-                            },
-                            optionValues: [
-                              "All Years",
-                              "This Year",
-                              "Last Year",
-                              ...List.generate(AuthInfo.currentStudent!.gradeYear,
-                                      (index) => "Grade ${index + 1}")
-                            ],
-                            prefixMsg: "",
-                            currentValue: dataHandlerCubit.currentYearMode,
-                          ),
-                          SizedBox(height: 10.h),
-                          DataOptionsListWidget(
-                            onChanged: (semesterMode) {
-                              if (semesterMode == null) return;
-                              dataHandlerCubit.changeSemesterMode(semesterMode);
-                            },
-                            optionValues: const [
-                              "Whole Year",
-                              "1st Semester",
-                              "2nd Semester"
-                            ],
-                            prefixMsg: "",
-                            currentValue: dataHandlerCubit.currentSemesterMode,
-                          ),
-                          SizedBox(height: 21.h,),
-                          state is GetStudentWarningsLoadingState
-                          ? const Center(child: LoadingIndicator())
-                          : Column(
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                    text: "Number of warnings  ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "Poppins",
-                                        fontSize: 24.sp
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                          text: warnings.length.toString(),
-                                          style: const TextStyle(
-                                              color: const Color(0xFFE23939)
-                                          )
-                                      )
-                                    ]
-                                ),
-                              ),
-                              SizedBox(height: 21.h),
-                              ...warnings.map((warning) => WarningWidget(warningEntity: warning,)).toList()
-                            ],
-                          )
-                        ],
+            child: SingleChildScrollView(
+              clipBehavior: Clip.none,
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const PreviousPageButton(),
+                      const Spacer(),
+                      Text(
+                        "Warnings",
+                        style: context.theme.textTheme.headline1?.copyWith(
+                          fontSize: 36.sp,
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 50.w,
+                      )
+                    ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 75.h,),
+                  DataOptionsListWidget.yearOptions(
+                    onChanged: (yearMode) {
+                      if (yearMode == null) return;
+                      dataHandlerCubit.changeYearMode(yearMode);
+                    },
+                    studentGradeYear: AuthInfo.currentStudent!.gradeYear,
+                    currentValue: dataHandlerCubit.currentYearMode,
+                  ),
+                  SizedBox(height: 10.h),
+                  DataOptionsListWidget.semesterOptions(
+                    onChanged: (semesterMode) {
+                      if (semesterMode == null) return;
+                      dataHandlerCubit.changeSemesterMode(semesterMode);
+                    },
+                    currentValue: dataHandlerCubit.currentSemesterMode,
+                  ),
+                  SizedBox(height: 21.h,),
+                  state is GetStudentWarningsLoadingState
+                      ? const Center(child: LoadingIndicator())
+                      : Column(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                            text: "Number of warnings  ",
+                            style: context.theme.textTheme.subtitle1,
+                            children: [
+                              TextSpan(
+                                  text: warnings.length.toString(),
+                                  style: const TextStyle(
+                                      color: Color(0xFFE23939)
+                                  )
+                              )
+                            ]
+                        ),
+                      ),
+                      SizedBox(height: 21.h),
+                      ...warnings.map((warning) => WarningWidget(warningEntity: warning,)).toList()
+                    ],
+                  )
+                ],
+              ),
             ),
           );
         },

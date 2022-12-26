@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 Map<int, String> monthsNames = {
   1: "Jan",
   2: "Feb",
@@ -20,10 +22,33 @@ extension DateTimeExtension on DateTime {
   }
 
   String get dateFormat {
-    return "${monthShortName} $day, $year";
+    return "$monthShortName $day, $year";
   }
 
   String get monthShortName {
     return monthsNames[month]!;
+  }
+}
+
+
+extension ContextExtension on BuildContext {
+  ThemeData get theme {
+    return Theme.of(this);
+  }
+
+  ColorScheme get colorScheme {
+    return theme.colorScheme;
+  }
+
+  NavigatorState get navigator {
+    return Navigator.of(this);
+  }
+
+  Future<dynamic> pushNamed(String routeName, {Object? arguments}) {
+    return navigator.pushNamed(routeName, arguments: arguments);
+  }
+
+  Future<dynamic> pushNamedAndRemove(String routeName, {Object? arguments}) {
+    return navigator.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: arguments);
   }
 }

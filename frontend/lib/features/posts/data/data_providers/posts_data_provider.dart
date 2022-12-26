@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/errors/exceptions.dart';
+import 'package:frontend/core/network/interceptors.dart';
 
 import '../../../../core/constants/end_points.dart';
 import '../models/posts_model.dart';
@@ -26,6 +27,12 @@ class PostsDataProviderImpl implements PostsDataProvider {
         validateStatus: (status) {
           return status != null && status < 500;
         },
+      ),
+    );
+
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: onRequestInterceptor,
       ),
     );
   }

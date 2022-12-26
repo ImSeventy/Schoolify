@@ -21,7 +21,7 @@ class WarningWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 13.h),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: const Color(0xFF130B51),
+        color: context.colorScheme.primary,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Stack(
@@ -79,14 +79,10 @@ class WarningWidget extends StatelessWidget {
               trimMode: TrimMode.Line,
               trimCollapsedText: 'Show more',
               trimExpandedText: ' Show less',
-              moreStyle: const TextStyle(color: Color(0XFFBDBDBD)),
-              lessStyle: const TextStyle(color: const Color(0XFFBDBDBD)),
+              moreStyle: TextStyle(color: context.colorScheme.shadow),
+              lessStyle: TextStyle(color: context.colorScheme.shadow),
               delimiter: ".... ",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp,
-                  fontFamily: "Poppins"),
+              style: context.theme.textTheme.subtitle2,
             ),
             SizedBox(height: 30.h,),
             Row(
@@ -94,11 +90,9 @@ class WarningWidget extends StatelessWidget {
                 const Spacer(),
                 Text(
                   warningEntity.date.dateFormat,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22.5.sp,
-                      fontFamily: "Poppins",
-                      color: const Color(0XFFD45A76)),
+                  style: context.theme.textTheme.subtitle2?.copyWith(
+                    color: const Color(0XFFD45A76),
+                  ),
                 ),
               ],
             ),

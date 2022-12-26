@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/constants/images_paths.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
 import 'package:readmore/readmore.dart';
 
@@ -28,87 +30,79 @@ class CertificationWidget extends StatelessWidget {
                 width: 62.w,
                 height: 64.h,
               ),
-              SizedBox(width: 7.w,),
+              SizedBox(
+                width: 7.w,
+              ),
               RichText(
                 text: TextSpan(
-                  text: "Certified by \n",
-                  style: TextStyle(
-                    color: const Color(0xFFE7E7E7),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins"
-                  ),
-                  children: [
-                    TextSpan(
-                      text: certificationEntity.givenByName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    )
-                  ]
-                ),
+                    text: "Certified by \n",
+                    style: context.theme.textTheme.headline3?.copyWith(
+                          color: context.colorScheme.onBackground,
+                        ),
+                    children: [
+                      TextSpan(
+                        text: certificationEntity.givenByName,
+                        style: TextStyle(
+                          color: context.colorScheme.shadow,
+                        ),
+                      )
+                    ]),
               )
             ],
           ),
-          SizedBox(height: 8.h,),
+          SizedBox(
+            height: 8.h,
+          ),
           ReadMoreText(
             certificationEntity.content,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins"
-            ),
+            style: context.theme.textTheme.headline3?.copyWith(
+                  color: context.colorScheme.onBackground,
+                ),
             trimLines: 2,
             trimMode: TrimMode.Line,
             trimCollapsedText: "Read more",
             trimExpandedText: "  Read less",
             delimiter: "....",
-            moreStyle: TextStyle(
-              color: const Color(0xFFBDBDBD),
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins"
-            ),
-            lessStyle: TextStyle(
-                color: const Color(0xFFBDBDBD),
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Poppins"
+            moreStyle: context.theme.textTheme.headline4?.copyWith(
+                  color: context.colorScheme.shadow,
+                ),
+            lessStyle: context.theme.textTheme.headline4?.copyWith(
+              color: context.colorScheme.shadow,
             ),
           ),
-          SizedBox(height: 8.h,),
+          SizedBox(
+            height: 8.h,
+          ),
           Stack(
             children: [
               Container(
                 width: 331.w,
-                height: 550.h,
+                height: 500.h,
                 color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
                   alignment: AlignmentDirectional.bottomEnd,
                   children: [
                     LayoutBuilder(
-                      builder: (_ , constrains) {
+                      builder: (_, constrains) {
                         return ZoomableCachedImage(
                           imageUrl: certificationEntity.imageUrl!,
                           width: constrains.maxWidth,
                           height: constrains.maxHeight,
                           fit: BoxFit.fill,
-                          placeHolderAssetPath: "assets/image_placeholder.jpg",
+                          placeHolderAssetPath: ImagesPaths.imagePlaceholder,
                         );
                       },
                     ),
                     Transform.translate(
                       offset: Offset(20.w, 30.h),
                       child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: SvgPicture.asset(
-                          "assets/certificate.svg",
-                          width: 71.w,
-                          height: 71.h,
-                        )
-                      ),
+                          alignment: Alignment.bottomRight,
+                          child: SvgPicture.asset(
+                            ImagesPaths.certificate,
+                            width: 71.w,
+                            height: 71.h,
+                          )),
                     )
                   ],
                 ),
@@ -116,7 +110,7 @@ class CertificationWidget extends StatelessWidget {
               Transform.translate(
                 offset: Offset(13.w, 0),
                 child: SvgPicture.asset(
-                  "assets/stars.svg",
+                  ImagesPaths.stars,
                   width: 35.w,
                   height: 42.h,
                 ),

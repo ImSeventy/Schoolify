@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit_states.dart';
-import 'package:toast/toast.dart';
 
 import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/error_messages.dart';
@@ -48,13 +49,13 @@ class GradesPage extends StatelessWidget {
         if (state is GradesFailedState) {
           showToastMessage(
             state.message,
-            Colors.red,
+              context.colorScheme.error,
             context
           );
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            context.pushNamedAndRemove(Routes.login);
           }
         }
       },
@@ -64,51 +65,36 @@ class GradesPage extends StatelessWidget {
         List<GradeEntity> grades =
         dataHandlerCubit.filterGrades(gradesCubit.grades);
         List<List<GradeEntity>> gradesGroups = getGradesGroups(grades);
-        return RefreshIndicator(
+        return RefreshPageHandler(
           onRefresh: () async {
             await gradesCubit.getStudentGrades();
           },
-          color: const Color(0xFF131524),
-          backgroundColor: const Color(0xFF2d407b),
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
                 clipBehavior: Clip.none,
                 physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                    parent: AlwaysScrollableScrollPhysics(),),
                 child: Column(
                   children: [
                     SizedBox(
                       height: 75.h,
                     ),
-                    DataOptionsListWidget(
+                    DataOptionsListWidget.yearOptions(
                       onChanged: (yearMode) {
                         if (yearMode == null) return;
                         dataHandlerCubit.changeYearMode(yearMode);
                       },
-                      optionValues: [
-                        "All Years",
-                        "This Year",
-                        "Last Year",
-                        ...List.generate(AuthInfo.currentStudent!.gradeYear,
-                                (index) => "Grade ${index + 1}")
-                      ],
-                      prefixMsg: "",
+                      studentGradeYear: AuthInfo.currentStudent!.gradeYear,
                       currentValue: dataHandlerCubit.currentYearMode,
                     ),
                     SizedBox(height: 10.h),
-                    DataOptionsListWidget(
+                    DataOptionsListWidget.semesterOptions(
                       onChanged: (semesterMode) {
                         if (semesterMode == null) return;
                         dataHandlerCubit.changeSemesterMode(semesterMode);
                       },
-                      optionValues: const [
-                        "Whole Year",
-                        "1st Semester",
-                        "2nd Semester"
-                      ],
-                      prefixMsg: "",
                       currentValue: dataHandlerCubit.currentSemesterMode,
                     ),
                     SizedBox(
@@ -121,7 +107,7 @@ class GradesPage extends StatelessWidget {
                         FancyProgressIndicator(
                           percentage: dataHandlerCubit
                               .calculateGradesPercentage(gradesCubit.grades),
-                          backgroundColor: const Color(0xFF306767),
+                          backgroundColor: context.colorScheme.outline,
                           name: "Grades",
                         ),
                         SizedBox(height: 16.h),

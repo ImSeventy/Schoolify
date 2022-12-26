@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
+
+import '../../../../core/constants/fonts.dart';
 
 class LoginSubmitButton extends StatelessWidget {
   final List<Color> colors;
@@ -23,11 +26,9 @@ class LoginSubmitButton extends StatelessWidget {
             ? FittedBox(
           child: Text(
             "login",
-            style: TextStyle(
-                fontFamily: "Overpass",
-                fontWeight: FontWeight.w400,
-                fontSize: 35.sp,
-                color: Colors.black),
+            style: context.theme.textTheme.button?.copyWith(
+              fontFamily: Fonts.secondaryFont,
+            ),
           ),
         )
             : const FittedBox(child: CircularProgressIndicator(color: Colors.black,)),

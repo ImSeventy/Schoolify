@@ -19,7 +19,7 @@ class AbsenceWidget extends StatelessWidget {
       height: 94,
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF130B51),
+        color: context.colorScheme.primary,
         borderRadius: BorderRadius.circular(12)
       ),
       child: Center(
@@ -28,26 +28,22 @@ class AbsenceWidget extends StatelessWidget {
           children: [
             FaIcon(
               FontAwesomeIcons.clipboardUser,
-              color: const Color(0xFF112B6D),
+              color: context.colorScheme.secondary,
               size: 55.sp,
             ),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 text: "G${absenceEntity.grade}\n",
-                style: TextStyle(
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 17.sp,
-                ),
+                style: context.theme.textTheme.subtitle2,
                 children: [
                   TextSpan(
                     text: "${absenceEntity.semester == 1 ? '1st' : '2nd'} term\n"
                   ),
                   TextSpan(
                     text: absenceEntity.date.dateFormat,
-                    style: const TextStyle(
-                      color: Color(0xFFF06482)
+                    style: TextStyle(
+                      color: context.colorScheme.onPrimaryContainer
                     )
                   )
                 ]

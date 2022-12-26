@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 class SubPageNavItem extends StatelessWidget {
 
@@ -27,7 +28,7 @@ class SubPageNavItem extends StatelessWidget {
         height: 52.h,
         padding: EdgeInsets.symmetric(horizontal: 15.w),
         decoration: BoxDecoration(
-            color: const Color(0xFF111E4B),
+            color: context.colorScheme.background,
             borderRadius: BorderRadius.circular(6)),
         child: Row(
           children: [
@@ -44,12 +45,9 @@ class SubPageNavItem extends StatelessWidget {
                 child: Text(
                   label,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Poppins",
-                      color: const Color(0xFFBAC5C5)),
-                ),
+                  style: context.theme.textTheme.bodyText1?.copyWith(
+                      color: context.colorScheme.shadow)
+                  )
               ),
             )
           ],

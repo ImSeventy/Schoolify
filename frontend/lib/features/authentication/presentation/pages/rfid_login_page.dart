@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/constants/images_paths.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/domain/entities/sutdent_rfid_entity.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:frontend/features/authentication/presentation/widgets/credential
 import 'package:frontend/features/authentication/presentation/widgets/submit_button.dart';
 
 import '../../../../core/utils/utils.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../router/routes.dart';
 
 class RfidLoginPageArgs {
@@ -68,8 +70,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
           showToastMessage(state.message, Colors.red, context);
         } else if (state is LoginSucceededState) {
           showToastMessage("Logged in successfully", Colors.green, context);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          context.pushNamedAndRemove(Routes.home);
         }
       },
       builder: (context, state) {
@@ -82,7 +83,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
               width: 555.w,
               height: 1002.h,
               child: SvgPicture.asset(
-                "assets/rf_id_background.svg",
+                ImagesPaths.rfidBackground,
                 width: 555.w,
                 height: 1002.h,
                 fit: BoxFit.fill,
@@ -94,7 +95,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                 elevation: 0,
                 leading: IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.navigator.pop();
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 ),
@@ -116,12 +117,8 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                             "Welcome ${widget.student.name} !",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                fontSize: 30.sp,
-                                color: Colors.white),
-                          ),
+                            style: context.theme.textTheme.headline2,
+                        ),
                         ),
                       ),
                       SizedBox(
@@ -133,7 +130,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                         child: CircleAvatar(
                           backgroundColor: const Color(0xFFCCC1F0),
                           foregroundImage: widget.student.imageUrl == null || widget.student.imageUrl == ""
-                              ? Image.asset("assets/default_profile.png").image
+                              ? Image.asset(ImagesPaths.defaultProfile).image
                               : CachedNetworkImageProvider(
                                   widget.student.imageUrl!,
                                 ),
@@ -147,11 +144,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                         children: [
                           Text(
                             "Login",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 45.sp,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w500),
+                            style: context.theme.textTheme.headline1,
                           ),
                           SizedBox(
                             width: 210.w,

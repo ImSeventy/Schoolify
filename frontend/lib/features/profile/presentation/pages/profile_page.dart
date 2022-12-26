@@ -4,20 +4,19 @@ import 'package:filepicker_windows/filepicker_windows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/core/use_cases/use_case.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/core/widgets/avatar_image.dart';
-import 'package:frontend/dependency_container.dart';
+import 'package:frontend/core/widgets/previous_page_button.dart';
 import 'package:frontend/features/authentication/domain/entities/student_entity.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_states.dart';
-import 'package:frontend/features/profile/presentation/widgets/custom_painted_background.dart';
+import 'package:frontend/features/profile/presentation/widgets/logout_button.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../authentication/domain/use_cases/logout_use_case.dart';
+import '../../../../core/widgets/common_page_wrapper.dart';
 import '../widgets/profile_data_field.dart';
 import '../widgets/save_button.dart';
 
@@ -143,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                 child: const Text("Gallery"),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.navigator.pop();
                   chooseImage(ImageSource.gallery);
                 },
               ),
@@ -153,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                   child: const Text("Camera"),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.navigator.pop();
                     chooseImage(ImageSource.camera);
                   }),
               const Divider(
@@ -162,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                 child: const Text("Cancel"),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.navigator.pop();
                 },
               ),
             ],
@@ -179,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (state is ProfileFailedState) {
           showToastMessage(
             state.message,
-            Colors.red,
+            context.colorScheme.error,
             context,
           );
         }
@@ -201,211 +200,163 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       },
       builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              children: [
-                Container(
-                  color: const Color(0xFF131524),
-                ),
-                Transform.translate(
-                  offset: const Offset(-10, 0),
-                  child: SvgPicture.asset(
-                    "assets/login_icons_1.svg",
-                    color: const Color(0xFF2d407b),
-                    width: 170,
+        return CommonPageWrapper(
+          onRefresh: () async {},
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const PreviousPageButton(),
+                      const Spacer(),
+                      Text(
+                        "Profile Page",
+                        style: context.theme.textTheme.headline1?.copyWith(
+                          fontSize: 36.sp,
+                        ),
+                      ),
+                      const Spacer(),
+                      const LogOutButton(),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                    ],
                   ),
-                ),
-                const CustomPaintedBackground(),
-                Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios_sharp,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              "Profile Page",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Poppins",
-                                  fontSize: 36.sp,
-                                  color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: 50.w,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                await getIt<LogOutUseCase>().call(NoParams());
-                                Navigator.of(context).pushNamedAndRemoveUntil("login", (_) => false,);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                margin: EdgeInsetsDirectional.only(end: 25.w),
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                                child: Text(
-                                  "Log Out",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 18.sp,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            AvatarImage(
-                              imageUrl: widget.student.imageUrl,
-                              width: 110.w,
-                              height: 110.w,
-                              image: newProfileImage,
-                            ),
-                            GestureDetector(
-                              onTap: () => showChooseImageDialog(context),
-                              child: Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color(0xFF131524),
-                                        width: 3,
-                                        strokeAlign: StrokeAlign.outside),
-                                    color: const Color(0xFF40E1D1)),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 25.sp,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 25.h,
-                        ),
-                        ProfileDataField(
-                          fieldName: 'Name',
-                          isPassword: false,
-                          textEditingController: _nameTextEditingController,
-                          enabled: false,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        ProfileDataField(
-                          fieldName: 'E-mail',
-                          isPassword: false,
-                          textEditingController: _emailTextEditingController,
-                          enabled: editingEmail,
-                          editable: !editingEmail,
-                          validator: emailValidator,
-                          editCallback: () {
-                            setState(() {
-                              editingEmail = true;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        ProfileDataField(
-                          fieldName: 'Grade Year',
-                          isPassword: false,
-                          textEditingController:
-                              _gradeYearTextEditingController,
-                          enabled: false,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        ProfileDataField(
-                          fieldName: 'Department',
-                          isPassword: false,
-                          textEditingController:
-                              _departmentTextEditingController,
-                          enabled: false,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        editingPassword
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 145.w,
-                                    child: ProfileDataField(
-                                      fieldName: 'Current',
-                                      isPassword: true,
-                                      textEditingController:
-                                          _currentPasswordTextEditingController,
-                                      enabled: true,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 21.w,
-                                  ),
-                                  SizedBox(
-                                    width: 145.w,
-                                    child: ProfileDataField(
-                                      fieldName: 'New',
-                                      isPassword: true,
-                                      validator: passwordValidator,
-                                      textEditingController:
-                                          _newPasswordTextEditingController,
-                                      enabled: true,
-                                    ),
-                                  )
-                                ],
-                              )
-                            : ProfileDataField(
-                                fieldName: 'Password',
-                                isPassword: true,
-                                textEditingController:
-                                    _passwordTextEditingController,
-                                enabled: false,
-                                editable: true,
-                                editCallback: () {
-                                  setState(() {
-                                    editingPassword = true;
-                                  });
-                                },
-                              ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        SaveButton(
-                            onPressed: () => saveProfileData(context),
-                            enabled: state is! ProfileLoadingState)
-                      ],
-                    ),
+                  SizedBox(
+                    height: 20.h,
                   ),
-                )
-              ],
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      AvatarImage(
+                        imageUrl: widget.student.imageUrl,
+                        width: 110.w,
+                        height: 110.w,
+                        image: newProfileImage,
+                      ),
+                      GestureDetector(
+                        onTap: () => showChooseImageDialog(context),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: context.theme.scaffoldBackgroundColor,
+                                  width: 3,
+                                  strokeAlign: StrokeAlign.outside),
+                              color: context.colorScheme.tertiary),
+                          child: Icon(
+                            Icons.edit,
+                            color: context.colorScheme.onTertiary,
+                            size: 25.sp,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  ProfileDataField(
+                    fieldName: 'Name',
+                    isPassword: false,
+                    textEditingController: _nameTextEditingController,
+                    enabled: false,
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  ProfileDataField(
+                    fieldName: 'E-mail',
+                    isPassword: false,
+                    textEditingController: _emailTextEditingController,
+                    enabled: editingEmail,
+                    editable: !editingEmail,
+                    validator: emailValidator,
+                    editCallback: () {
+                      setState(() {
+                        editingEmail = true;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  ProfileDataField(
+                    fieldName: 'Grade Year',
+                    isPassword: false,
+                    textEditingController:
+                    _gradeYearTextEditingController,
+                    enabled: false,
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  ProfileDataField(
+                    fieldName: 'Department',
+                    isPassword: false,
+                    textEditingController:
+                    _departmentTextEditingController,
+                    enabled: false,
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  editingPassword
+                      ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 145.w,
+                        child: ProfileDataField(
+                          fieldName: 'Current',
+                          isPassword: true,
+                          textEditingController:
+                          _currentPasswordTextEditingController,
+                          enabled: true,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 21.w,
+                      ),
+                      SizedBox(
+                        width: 145.w,
+                        child: ProfileDataField(
+                          fieldName: 'New',
+                          isPassword: true,
+                          validator: passwordValidator,
+                          textEditingController:
+                          _newPasswordTextEditingController,
+                          enabled: true,
+                        ),
+                      )
+                    ],
+                  )
+                      : ProfileDataField(
+                    fieldName: 'Password',
+                    isPassword: true,
+                    textEditingController:
+                    _passwordTextEditingController,
+                    enabled: false,
+                    editable: true,
+                    editCallback: () {
+                      setState(() {
+                        editingPassword = true;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  SaveButton(
+                      onPressed: () => saveProfileData(context),
+                      enabled: state is! ProfileLoadingState)
+                ],
+              ),
             ),
           ),
         );

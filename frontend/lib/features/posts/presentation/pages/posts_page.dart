@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
 
@@ -32,11 +34,11 @@ class PostsPage extends StatelessWidget {
             (newState is! LikeState || newState is! UnLikeState),
         listener: (context, state) {
           if (state is GetAllPostsFailedState) {
-            showToastMessage(state.message, Colors.red, context);
+            showToastMessage(state.message, context.colorScheme.error, context);
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              context.pushNamedAndRemove(Routes.login);
             }
           }
         },
@@ -44,12 +46,10 @@ class PostsPage extends StatelessWidget {
           PostsCubit postsCubit = context.read<PostsCubit>();
           return Scaffold(
             backgroundColor: Colors.transparent,
-            body: RefreshIndicator(
+            body: RefreshPageHandler(
               onRefresh: () async {
                 await postsCubit.getAllPosts();
               },
-              color: const Color(0xFF131524),
-              backgroundColor: const Color(0xFF2d407b),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 17.w),
                 child: ListView(
