@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 import '../../../../core/use_cases/use_case.dart';
 import '../../../../dependency_container.dart';
@@ -12,7 +13,7 @@ class LogOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        Navigator.of(context).pushNamedAndRemoveUntil("login", (_) => false,);
+        context.pushNamedAndRemove("login");
         await getIt<LogOutUseCase>().call(NoParams());
       },
       child: Container(
@@ -23,8 +24,8 @@ class LogOutButton extends StatelessWidget {
         ),
         child: Text(
           "Log Out",
-          style:Theme.of(context).textTheme.headline4?.copyWith(
-            color: Theme.of(context).colorScheme.error,
+          style:context.theme.textTheme.headline4?.copyWith(
+            color: context.colorScheme.error,
           ),
         ),
       ),

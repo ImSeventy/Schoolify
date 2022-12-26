@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/constants/constants.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 class DataOptionsListWidget extends StatefulWidget {
   final List<String> optionValues;
@@ -56,8 +57,8 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primaryContainer,
-            Theme.of(context).colorScheme.secondaryContainer,
+            context.colorScheme.primaryContainer,
+            context.colorScheme.secondaryContainer,
           ],
         ),
         borderRadius: BorderRadius.circular(8),
@@ -78,12 +79,12 @@ class _DataOptionsListWidgetState extends State<DataOptionsListWidget> {
           onChanged: widget.onChanged,
           icon:
               const Icon(Icons.arrow_drop_down_sharp, color: Color(0xFF9C8D8D)),
-          style: Theme.of(context).textTheme.headline4,
+          style: context.theme.textTheme.headline4,
           dropdownDecoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Theme.of(context).colorScheme.primaryContainer,
-                Theme.of(context).colorScheme.secondaryContainer,
+                context.colorScheme.primaryContainer,
+                context.colorScheme.secondaryContainer,
               ],
             ),
             borderRadius: BorderRadius.circular(8),

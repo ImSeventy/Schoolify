@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
@@ -12,6 +12,7 @@ import '../../../../core/auth_info/auth_info.dart';
 import '../../../../core/constants/error_messages.dart';
 import '../../../../core/use_cases/use_case.dart';
 import '../../../../core/widgets/loading_indicator.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../dependency_container.dart';
 import '../../../../router/routes.dart';
 import '../../../authentication/domain/use_cases/logout_use_case.dart';
@@ -32,13 +33,13 @@ class AttendancePage extends StatelessWidget {
         if (state is GetStudentAbsencesFailedState) {
           showToastMessage(
             state.message,
-              Theme.of(context).colorScheme.error,
+              context.colorScheme.error,
             context
           );
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            context.pushNamedAndRemove(Routes.login);
           }
         }
       },
@@ -89,7 +90,7 @@ class AttendancePage extends StatelessWidget {
                               percentage: dataHandlerCubit
                                   .calculateAttendancePercentage(
                                       attendanceCubit.absences),
-                              backgroundColor: Theme.of(context).colorScheme.outline,
+                              backgroundColor: context.colorScheme.outline,
                               name: "Attendance",
                             ),
                             SizedBox(height: 16.h),

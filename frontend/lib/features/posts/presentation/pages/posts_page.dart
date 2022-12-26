@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
@@ -33,11 +34,11 @@ class PostsPage extends StatelessWidget {
             (newState is! LikeState || newState is! UnLikeState),
         listener: (context, state) {
           if (state is GetAllPostsFailedState) {
-            showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
+            showToastMessage(state.message, context.colorScheme.error, context);
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              context.pushNamedAndRemove(Routes.login);
             }
           }
         },

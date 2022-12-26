@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/common_page_wrapper.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
 import 'package:frontend/core/widgets/previous_page_button.dart';
@@ -40,13 +41,13 @@ class WarningsPage extends StatelessWidget {
           if (state is WarningsFailedState) {
             showToastMessage(
               state.message,
-                Theme.of(context).colorScheme.error,
+                context.colorScheme.error,
               context
             );
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              context.pushNamedAndRemove(Routes.login);
             }
           }
         },
@@ -69,7 +70,7 @@ class WarningsPage extends StatelessWidget {
                       const Spacer(),
                       Text(
                         "Warnings",
-                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                        style: context.theme.textTheme.headline1?.copyWith(
                           fontSize: 36.sp,
                         ),
                       ),
@@ -103,7 +104,7 @@ class WarningsPage extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                             text: "Number of warnings  ",
-                            style: Theme.of(context).textTheme.subtitle1,
+                            style: context.theme.textTheme.subtitle1,
                             children: [
                               TextSpan(
                                   text: warnings.length.toString(),

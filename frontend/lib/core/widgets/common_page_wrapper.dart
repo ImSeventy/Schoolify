@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/refresh_page_handler.dart';
 
 import '../constants/images_paths.dart';
@@ -16,13 +17,13 @@ class CommonPageWrapper extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: context.theme.scaffoldBackgroundColor,
           ),
           Transform.translate(
             offset: const Offset(-10, 0),
             child: SvgPicture.asset(
               ImagesPaths.firstLoginIcons,
-              color: Theme.of(context).colorScheme.onSurface,
+              color: context.colorScheme.onSurface,
               width: 170,
             ),
           ),

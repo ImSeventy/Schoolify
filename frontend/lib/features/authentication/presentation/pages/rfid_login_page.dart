@@ -12,6 +12,7 @@ import 'package:frontend/features/authentication/presentation/widgets/credential
 import 'package:frontend/features/authentication/presentation/widgets/submit_button.dart';
 
 import '../../../../core/utils/utils.dart';
+import '../../../../core/utils/extensions.dart';
 import '../../../../router/routes.dart';
 
 class RfidLoginPageArgs {
@@ -69,8 +70,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
           showToastMessage(state.message, Colors.red, context);
         } else if (state is LoginSucceededState) {
           showToastMessage("Logged in successfully", Colors.green, context);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          context.pushNamedAndRemove(Routes.home);
         }
       },
       builder: (context, state) {
@@ -95,7 +95,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                 elevation: 0,
                 leading: IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.navigator.pop();
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 ),
@@ -117,7 +117,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                             "Welcome ${widget.student.name} !",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.headline2,
+                            style: context.theme.textTheme.headline2,
                         ),
                         ),
                       ),
@@ -144,7 +144,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                         children: [
                           Text(
                             "Login",
-                            style: Theme.of(context).textTheme.headline1,
+                            style: context.theme.textTheme.headline1,
                           ),
                           SizedBox(
                             width: 210.w,

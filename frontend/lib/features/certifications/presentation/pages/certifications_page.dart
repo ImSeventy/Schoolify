@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
 import 'package:frontend/dependency_container.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
@@ -38,13 +39,13 @@ class CertificationsPage extends StatelessWidget {
           if (state is CertificationsFailedState) {
             showToastMessage(
               state.message,
-                Theme.of(context).colorScheme.error,
+                context.colorScheme.error,
               context
             );
 
             if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
               getIt<LogOutUseCase>().call(NoParams());
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              context.pushNamedAndRemove(Routes.login);
             }
           }
         },
@@ -67,7 +68,7 @@ class CertificationsPage extends StatelessWidget {
                       const Spacer(),
                       Text(
                         "Certifications",
-                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                        style: context.theme.textTheme.headline1?.copyWith(
                           fontSize: 36.sp,
                         ),
                       ),

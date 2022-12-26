@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/constants/constants.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/grades/presentation/widgets/grade.dart';
 
 import '../../domain/entities/grade.py.dart';
@@ -243,7 +244,7 @@ class GradesGroupWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   "G${grades[0].gradeYear} ${grades[0].semester == 1 ? '1st' : '2nd'} Term",
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: context.theme.textTheme.bodyText1,
                 ),
               ),
               SizedBox(
@@ -270,7 +271,7 @@ class GradesGroupWidget extends StatelessWidget {
               RichText(
                 text: TextSpan(
                     text: "Total ",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: context.theme.textTheme.subtitle1,
                     children: [
                       TextSpan(
                           text: "${totalPercentage.toStringAsFixed(2)}%",
@@ -300,7 +301,7 @@ class BackGroundStar extends StatelessWidget {
       offset: offset,
       child: Icon(
         Icons.star_rounded,
-        color: Theme.of(context).colorScheme.secondary,
+        color: context.colorScheme.secondary,
         size: size,
       ),
     );

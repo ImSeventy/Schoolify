@@ -4,6 +4,7 @@ import 'package:filepicker_windows/filepicker_windows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/core/widgets/avatar_image.dart';
@@ -141,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                 child: const Text("Gallery"),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.navigator.pop();
                   chooseImage(ImageSource.gallery);
                 },
               ),
@@ -151,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                   child: const Text("Camera"),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.navigator.pop();
                     chooseImage(ImageSource.camera);
                   }),
               const Divider(
@@ -160,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SimpleDialogOption(
                 child: const Text("Cancel"),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.navigator.pop();
                 },
               ),
             ],
@@ -177,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (state is ProfileFailedState) {
           showToastMessage(
             state.message,
-            Theme.of(context).colorScheme.error,
+            context.colorScheme.error,
             context,
           );
         }
@@ -214,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       const Spacer(),
                       Text(
                         "Profile Page",
-                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                        style: context.theme.textTheme.headline1?.copyWith(
                           fontSize: 36.sp,
                         ),
                       ),
@@ -244,13 +245,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color: context.theme.scaffoldBackgroundColor,
                                   width: 3,
                                   strokeAlign: StrokeAlign.outside),
-                              color: Theme.of(context).colorScheme.tertiary),
+                              color: context.colorScheme.tertiary),
                           child: Icon(
                             Icons.edit,
-                            color: Theme.of(context).colorScheme.onTertiary,
+                            color: context.colorScheme.onTertiary,
                             size: 25.sp,
                           ),
                         ),

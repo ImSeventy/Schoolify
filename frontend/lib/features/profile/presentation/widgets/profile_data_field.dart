@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/authentication/presentation/widgets/credentials_field.dart';
 
 import '../../../../core/constants/fonts.dart';
@@ -32,7 +33,7 @@ class ProfileDataField extends StatelessWidget {
       children: [
         Text(
           fieldName,
-          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+          style: context.theme.textTheme.bodyText1?.copyWith(
             fontFamily: Fonts.secondaryFont,
             color: const Color(0xFF544E4E),
           ),
@@ -48,12 +49,12 @@ class ProfileDataField extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3, strokeAlign: StrokeAlign.outside),
-                    color: Theme.of(context).colorScheme.tertiary
+                    border: Border.all(color: context.theme.scaffoldBackgroundColor, width: 3, strokeAlign: StrokeAlign.outside),
+                    color: context.colorScheme.tertiary
                 ),
                 child: Icon(
                   Icons.edit,
-                  color: Theme.of(context).colorScheme.onTertiary,
+                  color: context.colorScheme.onTertiary,
                   size: 25.sp,
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 class RefreshPageHandler extends StatelessWidget {
   final Widget child;
@@ -12,8 +13,8 @@ class RefreshPageHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: context.colorScheme.onSurface,
+      color: context.theme.scaffoldBackgroundColor,
       onRefresh: onRefresh,
       child: child,
     );

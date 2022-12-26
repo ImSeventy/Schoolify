@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
@@ -48,13 +49,13 @@ class GradesPage extends StatelessWidget {
         if (state is GradesFailedState) {
           showToastMessage(
             state.message,
-              Theme.of(context).colorScheme.error,
+              context.colorScheme.error,
             context
           );
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure || state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            context.pushNamedAndRemove(Routes.login);
           }
         }
       },
@@ -106,7 +107,7 @@ class GradesPage extends StatelessWidget {
                         FancyProgressIndicator(
                           percentage: dataHandlerCubit
                               .calculateGradesPercentage(gradesCubit.grades),
-                          backgroundColor: Theme.of(context).colorScheme.outline,
+                          backgroundColor: context.colorScheme.outline,
                           name: "Grades",
                         ),
                         SizedBox(height: 16.h),

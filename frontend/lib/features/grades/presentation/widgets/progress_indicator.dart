@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -65,7 +66,7 @@ class FancyProgressIndicator extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: "$name  ",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: context.theme.textTheme.bodyText1,
                 children: [
                   TextSpan(
                     text: "${percentage.toStringAsFixed(1)} %",

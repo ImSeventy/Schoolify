@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/core/constants/images_paths.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
 import 'package:readmore/readmore.dart';
 
@@ -35,14 +36,14 @@ class CertificationWidget extends StatelessWidget {
               RichText(
                 text: TextSpan(
                     text: "Certified by \n",
-                    style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                    style: context.theme.textTheme.headline3?.copyWith(
+                          color: context.colorScheme.onBackground,
                         ),
                     children: [
                       TextSpan(
                         text: certificationEntity.givenByName,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.shadow,
+                          color: context.colorScheme.shadow,
                         ),
                       )
                     ]),
@@ -54,19 +55,19 @@ class CertificationWidget extends StatelessWidget {
           ),
           ReadMoreText(
             certificationEntity.content,
-            style: Theme.of(context).textTheme.headline3?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
+            style: context.theme.textTheme.headline3?.copyWith(
+                  color: context.colorScheme.onBackground,
                 ),
             trimLines: 2,
             trimMode: TrimMode.Line,
             trimCollapsedText: "Read more",
             trimExpandedText: "  Read less",
             delimiter: "....",
-            moreStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: Theme.of(context).colorScheme.shadow,
+            moreStyle: context.theme.textTheme.headline4?.copyWith(
+                  color: context.colorScheme.shadow,
                 ),
-            lessStyle: Theme.of(context).textTheme.headline4?.copyWith(
-              color: Theme.of(context).colorScheme.shadow,
+            lessStyle: context.theme.textTheme.headline4?.copyWith(
+              color: context.colorScheme.shadow,
             ),
           ),
           SizedBox(

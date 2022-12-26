@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/constants/fonts.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 class CredentialsField extends StatelessWidget {
   final bool isPassword;
@@ -31,7 +32,7 @@ class CredentialsField extends StatelessWidget {
             ? TextInputType.visiblePassword
             : TextInputType.emailAddress,
         controller: textEditingController,
-        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+        style: context.theme.textTheme.bodyText1?.copyWith(
           color: const Color(0xFF544E4E),
           fontWeight: FontWeight.w400,
           fontFamily: Fonts.secondaryFont

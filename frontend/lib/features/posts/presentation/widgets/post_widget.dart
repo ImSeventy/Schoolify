@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
@@ -91,18 +92,18 @@ class PostWidget extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is LikePostFailedState) {
-          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
         }
 
         if (state is UnLikePostFailedState) {
-          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
         }
       },
       builder: (context, state) {
         return Container(
             margin: EdgeInsets.only(bottom: 28.h),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              color: context.colorScheme.primary.withOpacity(0.8),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Padding(
@@ -117,14 +118,14 @@ class PostWidget extends StatelessWidget {
                   ),
                   title: Text(
                     post.byName,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                    style: context.theme.textTheme.subtitle1?.copyWith(
                       fontSize: 20.sp,
                     ),
                   ),
                   subtitle: Text(
                     timeago.format(post.date),
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Theme.of(context).colorScheme.shadow,
+                    style: context.theme.textTheme.headline4?.copyWith(
+                      color: context.colorScheme.shadow,
                     ),
                   ),
                 ),
@@ -135,11 +136,11 @@ class PostWidget extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: ReadMoreText(
                     post.content,
-                    style: Theme.of(context).textTheme.headline3?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                    style: context.theme.textTheme.headline3?.copyWith(
+                      color: context.colorScheme.onPrimary,
                     ),
-                    moreStyle: TextStyle(color: Theme.of(context).colorScheme.shadow,),
-                    lessStyle: TextStyle(color: Theme.of(context).colorScheme.shadow,),
+                    moreStyle: TextStyle(color: context.colorScheme.shadow,),
+                    lessStyle: TextStyle(color: context.colorScheme.shadow,),
                     trimExpandedText: " Read less",
                     trimCollapsedText: "Read more",
                     delimiter: ".....",
@@ -170,7 +171,7 @@ class PostWidget extends StatelessWidget {
                   child: Text(
                     "$likeCount likes",
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.shadow,
+                        color: context.colorScheme.shadow,
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp),

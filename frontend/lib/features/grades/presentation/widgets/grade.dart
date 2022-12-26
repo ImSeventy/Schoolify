@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 
 class GradeCard extends StatelessWidget {
@@ -18,7 +19,7 @@ class GradeCard extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(
           text: "${grade.subjectName.toUpperCase()}\n",
-          style: Theme.of(context)
+          style: context.theme
               .textTheme
               .bodyText1
               ?.copyWith(fontWeight: FontWeight.bold),

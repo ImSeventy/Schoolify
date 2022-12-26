@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/extensions.dart';
 
 import '../../../../core/constants/fonts.dart';
 
@@ -25,7 +26,7 @@ class LoginSubmitButton extends StatelessWidget {
             ? FittedBox(
           child: Text(
             "login",
-            style: Theme.of(context).textTheme.button?.copyWith(
+            style: context.theme.textTheme.button?.copyWith(
               fontFamily: Fonts.secondaryFont,
             ),
           ),

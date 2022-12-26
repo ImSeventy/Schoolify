@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/constants/fonts.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
@@ -95,10 +96,9 @@ class _LoginPageState extends State<LoginPage> {
             showToastMessage(newState.message, Colors.red, context);
           } else if (newState is LoginSucceededState) {
             showToastMessage("Logged in successfully", Colors.green, context);
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Routes.home, (route) => false);
+            context.pushNamedAndRemove(Routes.home);
           } else if (newState is GetStudentByRfidSucceededState) {
-            await Navigator.of(context).pushNamed(Routes.rfidLogin,
+            await context.pushNamed(Routes.rfidLogin,
                 arguments: RfidLoginPageArgs(student: newState.student));
             currentRfid = null;
           }
@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                 RichText(
                                   text: TextSpan(
                                       text: "login ",
-                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                      style: context.theme.textTheme.subtitle1?.copyWith(
                                         fontFamily: Fonts.secondaryFont,
                                         fontWeight: FontWeight.w500,
                                         color: const Color(0xFFA2FF81)

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
 import 'package:frontend/core/constants/error_messages.dart';
 import 'package:frontend/core/use_cases/use_case.dart';
+import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/widgets/loading_indicator.dart';
 import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/dependency_container.dart';
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               offset: const Offset(-10, 0),
               child: SvgPicture.asset(
                 ImagesPaths.firstLoginIcons,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: context.colorScheme.onSurface,
                 width: 170,
               ),
             ),
@@ -112,13 +113,12 @@ class MainHomePage extends StatelessWidget {
       listenWhen: (oldState, newState) => oldState != newState,
       listener: (context, state) {
         if (state is GradesFailedState) {
-          showToastMessage(state.message, Theme.of(context).colorScheme.error, context);
+          showToastMessage(state.message, context.colorScheme.error, context);
 
           if (state.message == ErrorMessages.invalidAccessTokenFailure ||
               state.message == ErrorMessages.invalidRefreshTokenFailure) {
             getIt<LogOutUseCase>().call(NoParams());
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Routes.login, (route) => false);
+            context.pushNamedAndRemove(Routes.login);
           }
         }
       },
@@ -152,7 +152,7 @@ class MainHomePage extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).pushNamed(
+                                  context.pushNamed(
                                     Routes.profile,
                                     arguments: ProfilePageArgs(
                                       student: AuthInfo.currentStudent!,
@@ -181,12 +181,12 @@ class MainHomePage extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                       text: "Welcome!\n",
-                                      style: Theme.of(context).textTheme.headline3,
+                                      style: context.theme.textTheme.headline3,
                                       children: [
                                         TextSpan(
                                             text: AuthInfo.currentStudent!.name,
                                             style: TextStyle(
-                                                color: Theme.of(context).colorScheme.onBackground,))
+                                                color: context.colorScheme.onBackground,))
                                       ]),
                                 )
                               ],
@@ -196,7 +196,7 @@ class MainHomePage extends StatelessWidget {
                             children: [
                               Text(
                                 "ST Page",
-                                style: Theme.of(context).textTheme.bodyText2,
+                                style: context.theme.textTheme.bodyText2,
                               ),
                               SizedBox(
                                 height: 10.h,
@@ -206,7 +206,7 @@ class MainHomePage extends StatelessWidget {
                                 icon: Icon(
                                   Icons.settings,
                                   size: 28.sp,
-                                  color: Theme.of(context).colorScheme.onBackground,
+                                  color: context.colorScheme.onBackground,
                                 ),
                               )
                             ],
@@ -247,7 +247,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateGradesPercentage(
                                           gradesCubit.grades),
-                                  backgroundColor: Theme.of(context).colorScheme.outline,
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Grades",
                                 ),
                               ),
@@ -260,7 +260,7 @@ class MainHomePage extends StatelessWidget {
                                   percentage: dataHandlerCubit
                                       .calculateAttendancePercentage(
                                           attendanceCubit.absences),
-                                  backgroundColor: Theme.of(context).colorScheme.outline,
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Attendance",
                                 ),
                               ),
@@ -272,7 +272,7 @@ class MainHomePage extends StatelessWidget {
                                 child: FancyProgressIndicator(
                                   percentage:
                                       calculateSuperiorityPercentage(context),
-                                  backgroundColor: Theme.of(context).colorScheme.outline,
+                                  backgroundColor: context.colorScheme.outline,
                                   name: "Superiority",
                                 ),
                               ),
@@ -284,11 +284,10 @@ class MainHomePage extends StatelessWidget {
                                 ),
                                 SubPageNavItem(
                                   label: "Warnings",
-                                  iconColor: Theme.of(context).colorScheme.error,
+                                  iconColor: context.colorScheme.error,
                                   iconPath: ImagesPaths.pin,
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .pushNamed(Routes.warnings);
+                                    context.pushNamed(Routes.warnings);
                                   },
                                 ),
                                 SizedBox(
@@ -299,8 +298,7 @@ class MainHomePage extends StatelessWidget {
                                   iconColor: Colors.green,
                                   iconPath: ImagesPaths.pin,
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .pushNamed(Routes.certifications);
+                                    context.pushNamed(Routes.certifications);
                                   },
                                 ),
                               ],
