@@ -1,19 +1,46 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/constants/constants.dart';
 
 class DataOptionsListWidget extends StatefulWidget {
   final List<String> optionValues;
   final void Function(String?) onChanged;
-  final String prefixMsg;
   final String currentValue;
+
   const DataOptionsListWidget({
     Key? key,
     required this.optionValues,
     required this.onChanged,
-    required this.prefixMsg,
     required this.currentValue,
   }) : super(key: key);
+
+  factory DataOptionsListWidget.semesterOptions({
+    required void Function(String?) onChanged,
+    required String currentValue,
+  }) {
+    return DataOptionsListWidget(
+      optionValues: semesterOptions,
+      onChanged: onChanged,
+      currentValue: currentValue,
+    );
+  }
+
+  factory DataOptionsListWidget.yearOptions({
+    required void Function(String?) onChanged,
+    required String currentValue,
+    required int studentGradeYear,
+  }) {
+    List<String> options = [
+      ...yearOptions,
+      ...List.generate(studentGradeYear, (index) => "Grade ${index + 1}",),
+    ];
+    return DataOptionsListWidget(
+      optionValues: options,
+      onChanged: onChanged,
+      currentValue: currentValue,
+    );
+  }
 
   @override
   State<DataOptionsListWidget> createState() => _DataOptionsListWidgetState();

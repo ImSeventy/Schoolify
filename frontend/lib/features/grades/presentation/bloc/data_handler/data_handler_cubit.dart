@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:frontend/core/auth_info/auth_info.dart';
+import 'package:frontend/core/constants/constants.dart';
 import 'package:frontend/core/constants/semesters_timeline.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
 import 'package:frontend/features/certifications/domain/entities/certification_entity.dart';
@@ -68,8 +69,8 @@ class DataHandlerCubit extends Cubit<DataHandlerState> {
   };
 
 
-  String currentYearMode = "All Years";
-  String currentSemesterMode = "Whole Year";
+  String currentYearMode = yearOptions[0];
+  String currentSemesterMode = semesterOptions[0];
 
   DataHandlerCubit() : super(DataHandlerInitialState());
 

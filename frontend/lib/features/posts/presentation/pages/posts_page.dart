@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
 
@@ -44,12 +45,10 @@ class PostsPage extends StatelessWidget {
           PostsCubit postsCubit = context.read<PostsCubit>();
           return Scaffold(
             backgroundColor: Colors.transparent,
-            body: RefreshIndicator(
+            body: RefreshPageHandler(
               onRefresh: () async {
                 await postsCubit.getAllPosts();
               },
-              color: Theme.of(context).scaffoldBackgroundColor,
-              backgroundColor: Theme.of(context).colorScheme.onSurface,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 17.w),
                 child: ListView(

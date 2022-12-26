@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-const colors = [
-  Color(0xFFEE6482),
-  Color(0xFFF3CFC5),
-  Color(0xFF40E1D1),
-];
+import '../../../../core/constants/constants.dart';
+
 
 class FancyProgressIndicator extends StatelessWidget {
   final Color backgroundColor;
@@ -16,9 +13,9 @@ class FancyProgressIndicator extends StatelessWidget {
   const FancyProgressIndicator({Key? key, required this.backgroundColor, required this.percentage, required this.name,}) : super(key: key);
 
   get color {
-    int colorIndex = ((percentage * colors.length / 100) - 1).round();
+    int colorIndex = ((percentage * percentageColors.length / 100) - 1).round();
     if (colorIndex < 0) colorIndex = 0;
-    return colors[colorIndex];
+    return percentageColors[colorIndex];
   }
 
   bool getPieceState(int pieceIndex) {

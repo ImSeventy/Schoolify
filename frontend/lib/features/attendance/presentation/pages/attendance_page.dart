@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/utils/utils.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/attendance/domain/entities/absence_entity.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_cubit.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
@@ -46,92 +47,75 @@ class AttendancePage extends StatelessWidget {
         DataHandlerCubit dataHandlerCubit = context.watch<DataHandlerCubit>();
         List<AbsenceEntity> absences =
             dataHandlerCubit.filterAbsences(attendanceCubit.absences);
-        return RefreshIndicator(
+        return RefreshPageHandler(
           onRefresh: () async {
             await attendanceCubit.getStudentAbsences();
           },
-          color: Theme.of(context).scaffoldBackgroundColor,
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: SingleChildScrollView(
-                clipBehavior: Clip.none,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 75.h,
-                    ),
-                    DataOptionsListWidget(
-                      onChanged: (yearMode) {
-                        if (yearMode == null) return;
-                        dataHandlerCubit.changeYearMode(yearMode);
-                      },
-                      optionValues: [
-                        "All Years",
-                        "This Year",
-                        "Last Year",
-                        ...List.generate(AuthInfo.currentStudent!.gradeYear,
-                            (index) => "Grade ${index + 1}")
-                      ],
-                      prefixMsg: "",
-                      currentValue: dataHandlerCubit.currentYearMode,
-                    ),
-                    SizedBox(height: 10.h),
-                    DataOptionsListWidget(
-                      onChanged: (semesterMode) {
-                        if (semesterMode == null) return;
-                        dataHandlerCubit.changeSemesterMode(semesterMode);
-                      },
-                      optionValues: const [
-                        "Whole Year",
-                        "1st Semester",
-                        "2nd Semester"
-                      ],
-                      prefixMsg: "",
-                      currentValue: dataHandlerCubit.currentSemesterMode,
-                    ),
-                    SizedBox(
-                      height: 49.h,
-                    ),
-                    state is GetStudentAbsencesLoadingState
-                        ? const Center(child: LoadingIndicator())
-                        : Column(
-                            children: [
-                              FancyProgressIndicator(
-                                percentage: dataHandlerCubit
-                                    .calculateAttendancePercentage(
-                                        attendanceCubit.absences),
-                                backgroundColor: Theme.of(context).colorScheme.outline,
-                                name: "Attendance",
-                              ),
-                              SizedBox(height: 16.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: GridView.builder(
-                                  itemCount: absences.length,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                    childAspectRatio: 1.34,
-                                    mainAxisSpacing: 15.h,
-                                    crossAxisSpacing: 6.w,
-                                    maxCrossAxisExtent: 126.w,
-                                  ),
-                                  itemBuilder: (_, index) {
-                                    return AbsenceWidget(
-                                      absenceEntity: absences[index],
-                                    );
-                                  },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SingleChildScrollView(
+              clipBehavior: Clip.none,
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 75.h,
+                  ),
+                  DataOptionsListWidget.yearOptions(
+                    onChanged: (yearMode) {
+                      if (yearMode == null) return;
+                      dataHandlerCubit.changeYearMode(yearMode);
+                    },
+                    studentGradeYear: AuthInfo.currentStudent!.gradeYear,
+                    currentValue: dataHandlerCubit.currentYearMode,
+                  ),
+                  SizedBox(height: 10.h),
+                  DataOptionsListWidget.semesterOptions(
+                    onChanged: (semesterMode) {
+                      if (semesterMode == null) return;
+                      dataHandlerCubit.changeSemesterMode(semesterMode);
+                    },
+                    currentValue: dataHandlerCubit.currentSemesterMode,
+                  ),
+                  SizedBox(
+                    height: 49.h,
+                  ),
+                  state is GetStudentAbsencesLoadingState
+                      ? const Center(child: LoadingIndicator())
+                      : Column(
+                          children: [
+                            FancyProgressIndicator(
+                              percentage: dataHandlerCubit
+                                  .calculateAttendancePercentage(
+                                      attendanceCubit.absences),
+                              backgroundColor: Theme.of(context).colorScheme.outline,
+                              name: "Attendance",
+                            ),
+                            SizedBox(height: 16.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 17.w),
+                              child: GridView.builder(
+                                itemCount: absences.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                  childAspectRatio: 1.34,
+                                  mainAxisSpacing: 15.h,
+                                  crossAxisSpacing: 6.w,
+                                  maxCrossAxisExtent: 126.w,
                                 ),
+                                itemBuilder: (_, index) {
+                                  return AbsenceWidget(
+                                    absenceEntity: absences[index],
+                                  );
+                                },
                               ),
-                            ],
-                          )
-                  ],
-                ),
+                            ),
+                          ],
+                        )
+                ],
               ),
             ),
           ),

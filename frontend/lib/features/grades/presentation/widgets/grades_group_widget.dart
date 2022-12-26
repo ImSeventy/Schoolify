@@ -2,15 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/constants/constants.dart';
 import 'package:frontend/features/grades/presentation/widgets/grade.dart';
 
 import '../../domain/entities/grade.py.dart';
-
-const colors = [
-  Color(0xFFEE6482),
-  Color(0xFFF3CFC5),
-  Color(0xFF40E1D1),
-];
 
 
 class GradesGroupWidget extends StatelessWidget {
@@ -26,9 +21,9 @@ class GradesGroupWidget extends StatelessWidget {
   }
 
   Color getColor(double percentage) {
-    int colorIndex = ((percentage * colors.length / 100) - 1).round();
+    int colorIndex = ((percentage * percentageColors.length / 100) - 1).round();
     if (colorIndex < 0) colorIndex = 0;
-    return colors[colorIndex];
+    return percentageColors[colorIndex];
   }
 
   @override

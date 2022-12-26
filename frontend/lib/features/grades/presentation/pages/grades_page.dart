@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/widgets/refresh_page_handler.dart';
 import 'package:frontend/features/attendance/presentation/bloc/attendance_cubit/attendance_states.dart';
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.dart';
@@ -63,51 +64,36 @@ class GradesPage extends StatelessWidget {
         List<GradeEntity> grades =
         dataHandlerCubit.filterGrades(gradesCubit.grades);
         List<List<GradeEntity>> gradesGroups = getGradesGroups(grades);
-        return RefreshIndicator(
+        return RefreshPageHandler(
           onRefresh: () async {
             await gradesCubit.getStudentGrades();
           },
-          color: Theme.of(context).scaffoldBackgroundColor,
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
                 clipBehavior: Clip.none,
                 physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                    parent: AlwaysScrollableScrollPhysics(),),
                 child: Column(
                   children: [
                     SizedBox(
                       height: 75.h,
                     ),
-                    DataOptionsListWidget(
+                    DataOptionsListWidget.yearOptions(
                       onChanged: (yearMode) {
                         if (yearMode == null) return;
                         dataHandlerCubit.changeYearMode(yearMode);
                       },
-                      optionValues: [
-                        "All Years",
-                        "This Year",
-                        "Last Year",
-                        ...List.generate(AuthInfo.currentStudent!.gradeYear,
-                                (index) => "Grade ${index + 1}")
-                      ],
-                      prefixMsg: "",
+                      studentGradeYear: AuthInfo.currentStudent!.gradeYear,
                       currentValue: dataHandlerCubit.currentYearMode,
                     ),
                     SizedBox(height: 10.h),
-                    DataOptionsListWidget(
+                    DataOptionsListWidget.semesterOptions(
                       onChanged: (semesterMode) {
                         if (semesterMode == null) return;
                         dataHandlerCubit.changeSemesterMode(semesterMode);
                       },
-                      optionValues: const [
-                        "Whole Year",
-                        "1st Semester",
-                        "2nd Semester"
-                      ],
-                      prefixMsg: "",
                       currentValue: dataHandlerCubit.currentSemesterMode,
                     ),
                     SizedBox(
