@@ -10,8 +10,8 @@ class OnBoardingRepositoryImpl implements OnBoardingRepository {
   OnBoardingRepositoryImpl({required this.onBoardingDataProvider});
 
   @override
-  Future<Either<Failure, bool>> getOnBoardingStatus() async {
-    bool status = await onBoardingDataProvider.getOnBoardingStatus();
+  Either<Failure, bool> getOnBoardingStatus() {
+    bool status = onBoardingDataProvider.getOnBoardingStatus();
     return Right(status);
   }
 

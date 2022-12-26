@@ -12,4 +12,8 @@ class ImagesPaths {
   static const String profilePlaceholder = "assets/images/profile_placeholder.png";
   static const String rfidBackground = "assets/images/rf_id_background.svg";
   static const String stars = "assets/images/stars.svg";
+  static const String post = "assets/images/post.png";
+  static const String progressIndicatorsChain = "assets/images/progress_indicators_chain.png";
+  static const String yearSemesterSelector = "assets/images/year_semester_selector.png";
+
 }

@@ -42,7 +42,6 @@ import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
 import 'features/onboarding/data/data_providers/onboarding_data_provider.dart';
 import 'features/onboarding/data/repository/onboarding_repository.dart';
 import 'features/onboarding/domain/repository/onboarding_repository.dart';
-import 'features/onboarding/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'features/posts/domain/use_cases/unlike_post.dart';
 import 'features/profile/data/data_providers/profile_data_provider.dart';
 import 'features/profile/data/repository/profile_repository.dart';
@@ -325,11 +324,6 @@ void _setupProfileFeature() {
 }
 
 void _setupOnBoardingFeature() {
-  getIt.registerFactory<OnBoardingCubit>(
-    () => OnBoardingCubit(
-      markOnBoardingShownUseCase: getIt(),
-    ),
-  );
 
   getIt.registerLazySingleton<MarkOnBoardingShownUseCase>(
     () => MarkOnBoardingShownUseCase(

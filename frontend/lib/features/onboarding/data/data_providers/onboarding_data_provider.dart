@@ -4,7 +4,7 @@ import '../../../../core/constants/constants.dart';
 
 abstract class OnBoardingDataProvider {
   Future<void> markShown();
-  Future<bool> getOnBoardingStatus();
+  bool getOnBoardingStatus();
 }
 
 
@@ -14,7 +14,7 @@ class OnBoardingDataProviderImpl implements OnBoardingDataProvider {
   OnBoardingDataProviderImpl({required this.sharedPreferences});
 
   @override
-  Future<bool> getOnBoardingStatus() async {
+  bool getOnBoardingStatus() {
     return sharedPreferences.getBool(onBoardingShownKey) ?? false;
   }
 

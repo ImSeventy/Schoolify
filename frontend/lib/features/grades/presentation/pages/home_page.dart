@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const List<Widget> pages = [
+    List<Widget> pages = [
       MainHomePage(),
       AttendancePage(),
       GradesPage(),
