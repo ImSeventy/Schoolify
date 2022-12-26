@@ -18,6 +18,8 @@ import 'package:frontend/features/authentication/presentation/bloc/login_cubit/l
 import 'package:frontend/features/grades/domain/repository/grades_repository.dart';
 import 'package:frontend/features/grades/domain/use_cases/get_student_grades.dart';
 import 'package:frontend/features/grades/presentation/bloc/data_handler/data_handler_cubit.dart';
+import 'package:frontend/features/onboarding/domain/use_cases/get_onboarding_status.dart';
+import 'package:frontend/features/onboarding/domain/use_cases/mark_onboarding_shown.dart';
 import 'package:frontend/features/posts/data/data_providers/posts_data_provider.dart';
 import 'package:frontend/features/posts/data/repository/posts_repository.dart';
 import 'package:frontend/features/posts/domain/repository/posts_repository.dart';
@@ -37,6 +39,9 @@ import 'features/certifications/presentation/bloc/certifications_cubit/certifica
 import 'features/grades/data/data_providers/grades_data_provider.dart';
 import 'features/grades/data/repository/grades_repository.py.dart';
 import 'features/grades/presentation/bloc/grades/grades_cubit.dart';
+import 'features/onboarding/data/data_providers/onboarding_data_provider.dart';
+import 'features/onboarding/data/repository/onboarding_repository.dart';
+import 'features/onboarding/domain/repository/onboarding_repository.dart';
 import 'features/posts/domain/use_cases/unlike_post.dart';
 import 'features/profile/data/data_providers/profile_data_provider.dart';
 import 'features/profile/data/repository/profile_repository.dart';
@@ -60,6 +65,7 @@ Future<void> setUp() async {
   _setupCertificationsFeature();
   _setupPostsFeature();
   _setupProfileFeature();
+  _setupOnBoardingFeature();
   await _setupCore();
 }
 
@@ -314,5 +320,30 @@ void _setupProfileFeature() {
 
   getIt.registerLazySingleton<ProfileDataProvider>(
     () => ProfileDataProviderImpl(),
+  );
+}
+
+void _setupOnBoardingFeature() {
+
+  getIt.registerLazySingleton<MarkOnBoardingShownUseCase>(
+    () => MarkOnBoardingShownUseCase(
+      onBoardingRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetOnBoardingStatus>(
+    () => GetOnBoardingStatus(
+      onBoardingRepository: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<OnBoardingRepository>(
+    () => OnBoardingRepositoryImpl(
+      onBoardingDataProvider: getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<OnBoardingDataProvider>(
+    () => OnBoardingDataProviderImpl(sharedPreferences: getIt()),
   );
 }

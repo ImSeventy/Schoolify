@@ -17,7 +17,7 @@ dependencies:
   dartz: ^0.10.1
   cupertino_icons: ^1.0.2
   equatable: ^2.0.5
-  flutter_screenutil: ^5.5.3+2
+  flutter_screenutil: ^5.6.0
   flutter_svg: ^1.1.6
   dio: ^4.0.6
   bloc: ^8.1.0
@@ -41,6 +41,7 @@ dependencies:
   http_parser: ^4.0.2
   filepicker_windows: ^2.0.2
   flutter_native_splash: ^2.2.16
+  smooth_page_indicator: ^1.0.0+2
 
 dev_dependencies:
   flutter_test:
