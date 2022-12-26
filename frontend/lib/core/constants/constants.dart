@@ -4,6 +4,8 @@ final RegExp emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
 
 const tokensInCacheKey = "access_tokens";
 
+const String onBoardingShownKey = "onboarding_shown";
+
 const List<Color> percentageColors = [
   Color(0xFFEE6482),
   Color(0xFFF3CFC5),
