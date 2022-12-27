@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/rfid_stream_handler.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:frontend/router/router.dart';
 import 'core/use_cases/use_case.dart';
@@ -29,7 +30,8 @@ Future<void> main() async {
 
 
   if (Platform.isWindows) {
-    Process.run('cd %RFID_SERVER% && py main.py', [], runInShell: true);
+    Process.run('cd ./rfid_reader_server && main.exe', [], runInShell: true);
+    RfidStreamHandler.getRfIdStream();
   }
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {

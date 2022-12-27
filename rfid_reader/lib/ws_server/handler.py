@@ -2,6 +2,7 @@ import asyncio
 import logging
 from websockets import WebSocketServerProtocol
 from lib.serial_reader import SerialReader
+import sys
 
 
 
@@ -18,6 +19,9 @@ class ServerHandler:
         logging.error(f"Remote: {websocket.remote_address}")
         logging.error(f"Local: {websocket.local_address}")
         self.subscribers.discard(websocket)
+        if not self.subscribers:
+            logging.error("No more subscribers, exiting")
+            sys.exit(1)
 
     async def start_loop(self):
         for rfid_value in await asyncio.to_thread(self.serial_port.values_generator):

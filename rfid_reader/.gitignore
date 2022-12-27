@@ -2,3 +2,6 @@ logs/*
 *.json
 __pycache__/*
 *.pyc
+*.spec
+build/*
+dist/*
