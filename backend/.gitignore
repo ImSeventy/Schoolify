@@ -2,3 +2,4 @@
 *.db
 test.py
 images/*
+env/*
