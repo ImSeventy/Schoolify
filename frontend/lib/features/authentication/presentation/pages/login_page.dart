@@ -6,14 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/constants/fonts.dart';
 import 'package:frontend/core/utils/extensions.dart';
+import 'package:frontend/core/utils/rfid_stream_handler.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
 import 'package:frontend/features/authentication/presentation/pages/rfid_login_page.dart';
 import 'package:frontend/features/authentication/presentation/widgets/icons_group_widget.dart';
 import 'package:frontend/router/routes.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../../core/constants/images_paths.dart';
 import '../../../../core/utils/utils.dart';
@@ -21,31 +20,7 @@ import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
 import '../widgets/submit_button.dart';
 
-Stream<String>? rfIdStream;
 String? currentRfid;
-
-Stream<String> getRfIdStream() {
-  if (rfIdStream != null) {
-    return rfIdStream!;
-  }
-  StreamController<String> streamController = StreamController<String>();
-
-  void setupWebSocketConnection() {
-    WebSocketChannel channel =
-        IOWebSocketChannel.connect(Uri.parse("ws://localhost:8679"));
-    channel.stream.listen((message) {
-      streamController.sink.add(message);
-    }, onDone: () async {
-      await Future.delayed(const Duration(seconds: 5));
-      setupWebSocketConnection();
-    }, onError: (e) {});
-  }
-
-  setupWebSocketConnection();
-
-  rfIdStream = streamController.stream.asBroadcastStream();
-  return rfIdStream!;
-}
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -105,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
         },
         builder: (context, state) {
           LoginCubit loginCubit = context.read<LoginCubit>();
-          rfidStreamSub = getRfIdStream().listen((rfid) async {
+          rfidStreamSub = RfidStreamHandler.getRfIdStream().listen((rfid) async {
             if (currentRfid != null) return;
             currentRfid = rfid;
             loginCubit.getStudentByRfid(rfid: int.parse(rfid));

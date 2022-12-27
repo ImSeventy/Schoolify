@@ -1,7 +1,5 @@
 from typing import Optional
 import serial
-import time
-
 
 class SerialReader:
     def __init__(self, port: str, baudrate: int, timeout: Optional[int] = None):

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/core/constants/images_paths.dart';
 import 'package:frontend/core/utils/validators.dart';
+import 'package:frontend/core/widgets/avatar_image.dart';
 import 'package:frontend/features/authentication/domain/entities/sutdent_rfid_entity.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_cubit.dart';
 import 'package:frontend/features/authentication/presentation/bloc/login_cubit/login_states.dart';
@@ -118,23 +119,16 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: context.theme.textTheme.headline2,
-                        ),
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: 20.h,
                       ),
-                      SizedBox(
+                      AvatarImage(
+                        imageUrl: widget.student.imageUrl,
                         width: 156.w,
                         height: 161.h,
-                        child: CircleAvatar(
-                          backgroundColor: const Color(0xFFCCC1F0),
-                          foregroundImage: widget.student.imageUrl == null || widget.student.imageUrl == ""
-                              ? Image.asset(ImagesPaths.defaultProfile).image
-                              : CachedNetworkImageProvider(
-                                  widget.student.imageUrl!,
-                                ),
-                        ),
                       ),
                       SizedBox(
                         height: 83.h,
