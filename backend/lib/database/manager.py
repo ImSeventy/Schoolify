@@ -226,7 +226,7 @@ class DataBaseManager(metaclass=Singleton):
         SELECT grades.*,
         subjects.name as subject_name,
         subjects.full_degree as full_degree,
-        subjects.grade as grade_year,
+        subjects.grade as grade_year
         FROM grades JOIN subjects
         ON grades.subject_id = subjects.id
         WHERE grades.student_id = :student_id
@@ -240,7 +240,7 @@ class DataBaseManager(metaclass=Singleton):
         SELECT grades.*,
         subjects.name as subject_name,
         subjects.full_degree as full_degree,
-        subjects.grade as grade_year,
+        subjects.grade as grade_year
         FROM grades
         JOIN subjects
         ON grades.subject_id = subjects.id

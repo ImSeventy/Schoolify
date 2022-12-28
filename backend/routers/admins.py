@@ -6,7 +6,7 @@ from constants.enums import ImagesSubPaths
 from lib.authentication.authentication import Authentication, oauth2_scheme, get_user
 from lib.checks.checks import admin_exists
 from lib.database.manager import DataBaseManager
-from lib.exceptions.admins import AdminNotFound, EmailIsAlreadyUsed, ImageNotFound, InvalidImageForamt, WrongPassowrd
+from lib.exceptions.admins import AdminNotFound, EmailIsAlreadyUsed, ImageNotFound, InvalidImageForamt, WrongEmailOrPassword, WrongPassword
 from lib.images_manager.images_manager import ImagesManager
 
 from models.admins_models import AdminEdit, AdminIn, AdminOut, AdminResetPassword
@@ -30,10 +30,10 @@ async def create_admin(admin: AdminIn, token: str = Depends(oauth2_scheme)):
 async def login_admin(credintials: OAuth2PasswordRequestForm = Depends()):
     admin = await DataBaseManager().get_admin(credintials.username)
     if admin is None:
-        raise AdminNotFound()
+        raise WrongEmailOrPassword()
 
     if not Authentication.verify_password(credintials.password, admin.password):
-        raise WrongPassowrd()
+        raise WrongEmailOrPassword()
 
     data = {
         "id": admin.id,
@@ -120,6 +120,6 @@ async def reset_password(
     if not Authentication().verify_password(
         passwords_scheme.old_password, admin.password
     ):
-        raise WrongPassowrd()
+        raise WrongPassword()
 
-    await DataBaseManager().update_admin(id, password=passwords_scheme.new_password)
+    await DataBaseManager().update_admin(admin.id, password=passwords_scheme.new_password)

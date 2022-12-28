@@ -17,11 +17,11 @@ class AdminNotFound(HTTPException):
         )
 
 
-class WrongPassowrd(HTTPException):
+class WrongEmailOrPassword(HTTPException):
     def __init__(self):
         super().__init__(
             status.HTTP_400_BAD_REQUEST,
-            "Wrong password"
+            "Wrong email or password"
         )
 
 
@@ -30,6 +30,14 @@ class InvalidImageForamt(HTTPException):
         super().__init__(
             status.HTTP_400_BAD_REQUEST,
             "Invalid image format"
+        )
+
+
+class WrongPassword(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status.HTTP_400_BAD_REQUEST,
+            "Wrong password"
         )
 
 

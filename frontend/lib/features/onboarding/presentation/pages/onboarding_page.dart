@@ -72,7 +72,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 ),
                 SizedBox(height: 29.h),
                 SizedBox(
-                  height: 640.h,
+                  height: 630.h,
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _pageController,
@@ -95,7 +95,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     ),
                   )  ,
                 ),
-                SizedBox(height: 30.h,),
+                SizedBox(height: 40.h,),
                 Align(
                   alignment: AlignmentDirectional.topEnd,
                   child: NextButton(

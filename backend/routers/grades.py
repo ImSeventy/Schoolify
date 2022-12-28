@@ -110,7 +110,7 @@ async def create_grade(grade: GradeIn, token: str = Depends(oauth2_scheme)):
         raise DegreeTooHigh(grade.grade, subject.full_degree)
 
     id =  await DataBaseManager().create_grade(grade)
-    return {**grade.dict(), "id": id, "subject_name": subject.name, "full_degree": subject.full_degree}
+    return {**grade.dict(), "id": id, "subject_name": subject.name, "full_degree": subject.full_degree, "grade_year": subject.grade}
 
 
 @grades.patch("/{id}", status_code=status.HTTP_204_NO_CONTENT)

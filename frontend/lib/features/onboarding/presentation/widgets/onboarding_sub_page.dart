@@ -15,7 +15,7 @@ class OnBoardingSubPage extends StatelessWidget {
         Center(
           child: Image.asset(
             imagePath,
-            height: 330.h,
+            height: 320.h,
             width: double.infinity,
           ),
         ),
