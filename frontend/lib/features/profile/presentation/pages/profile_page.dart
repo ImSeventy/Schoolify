@@ -138,28 +138,45 @@ class _ProfilePageState extends State<ProfilePage> {
         context: context,
         builder: (_) {
           return SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            backgroundColor: context.theme.scaffoldBackgroundColor,
             children: [
               SimpleDialogOption(
-                child: const Text("Gallery"),
+                child: Text(
+                  "Gallery",
+                  style: context.theme.textTheme.subtitle2,
+                ),
                 onPressed: () {
                   context.navigator.pop();
                   chooseImage(ImageSource.gallery);
                 },
               ),
               const Divider(
-                thickness: 1,
+                color: Colors.black,
+                thickness: 2,
               ),
               SimpleDialogOption(
-                  child: const Text("Camera"),
+                  child: Text(
+                    "Camera",
+                    style: context.theme.textTheme.subtitle2,
+                  ),
                   onPressed: () {
                     context.navigator.pop();
                     chooseImage(ImageSource.camera);
                   }),
               const Divider(
-                thickness: 1,
+                color: Colors.black,
+                thickness: 2,
               ),
               SimpleDialogOption(
-                child: const Text("Cancel"),
+                child: Text(
+                  "Cancel",
+                  style: context.theme.textTheme.subtitle2?.copyWith(
+                    color: Colors.red
+                  ),
+                ),
                 onPressed: () {
                   context.navigator.pop();
                 },
