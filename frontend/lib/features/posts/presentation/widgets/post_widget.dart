@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/core/utils/utils.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_cubit.dart';
 import 'package:frontend/features/posts/presentation/bloc/posts_cubit/posts_states.dart';
+import 'package:numeral/ext.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../core/widgets/avatar_image.dart';
@@ -169,7 +170,7 @@ class PostWidget extends StatelessWidget {
                 Align(
                   alignment: AlignmentDirectional.topStart,
                   child: Text(
-                    "$likeCount likes",
+                    "${likeCount.numeral()} likes",
                     style: TextStyle(
                         color: context.colorScheme.shadow,
                         fontFamily: "Poppins",

@@ -320,7 +320,7 @@ class DataBaseManager(metaclass=Singleton):
         SELECT posts.*,
         :user_id,
         COUNT(likes.post_id) as like_count,
-        (CASE WHEN likes.by = :user_id THEN true ELSE false END) as liked,
+        EXISTS (SELECT * FROM likes where likes.by = :user_id and likes.post_id = posts.id) as liked,
         admins.name as by_name,
         admins.image_url as by_image_url
         FROM posts LEFT JOIN admins LEFT JOIN likes

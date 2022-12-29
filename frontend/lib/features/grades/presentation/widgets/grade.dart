@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/utils/extensions.dart';
 import 'package:frontend/features/grades/domain/entities/grade.py.dart';
 

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/constants/constants.dart';
@@ -34,7 +35,7 @@ class GradesGroupWidget extends StatelessWidget {
       constraints: BoxConstraints(
         minHeight: 137.h,
       ),
-      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 30.w),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: const Color(0xFF130B51)),
@@ -237,6 +238,402 @@ class GradesGroupWidget extends StatelessWidget {
             size: 45,
             offset: Offset(280.w, 500.h),
           ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-35.w, 520.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(23.w, 530.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(63.w, 505.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(118.w, 535.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(200.w, 540.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(295.w, 545.h),
+          ),
+          BackGroundStar(
+            size: 20,
+            offset: Offset(-20.w, 550.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(30.w, 540.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 555.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(150.w, 560.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 570.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(250.w, 565.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(345.w, 580.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(-45.w, 575.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(10.w, 590.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 600.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(160.w, 595.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 610.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 615.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 625.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(5.w, 620.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(50.w, 630.h),
+          ),
+          BackGroundStar(
+            size: 45,
+            offset: Offset(180.w, 640.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(100.w, 645.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(280.w, 660.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 655.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 670.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(20.w, 680.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(70.w, 685.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(148.w, 690.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(220.w, 700.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 710.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(305.w, 705.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-35.w, 520.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(23.w, 530.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(63.w, 505.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(118.w, 535.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(200.w, 540.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(295.w, 545.h),
+          ),
+          BackGroundStar(
+            size: 20,
+            offset: Offset(-20.w, 550.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(30.w, 540.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 555.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(150.w, 560.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 570.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(250.w, 565.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(345.w, 580.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(-45.w, 575.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(10.w, 590.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 600.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(160.w, 595.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 610.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 615.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 625.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(5.w, 620.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(50.w, 630.h),
+          ),
+          BackGroundStar(
+            size: 45,
+            offset: Offset(180.w, 640.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(100.w, 645.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(280.w, 660.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 655.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 670.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(20.w, 680.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(70.w, 685.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(148.w, 690.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(220.w, 700.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 710.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(305.w, 705.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-35.w, 715.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(23.w, 725.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(63.w, 720.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(118.w, 740.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(200.w, 750.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(295.w, 760.h),
+          ),
+          BackGroundStar(
+            size: 20,
+            offset: Offset(-20.w, 780.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(30.w, 800.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 815.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(150.w, 830.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 825.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(250.w, 845.h),
+          ),
+          BackGroundStar(
+            size: 35,
+            offset: Offset(345.w, 860.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(-45.w, 875.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(10.w, 890.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(80.w, 910.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(160.w, 925.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(220.w, 935.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 950.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 940.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(5.w, 965.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(50.w, 980.h),
+          ),
+          BackGroundStar(
+            size: 45,
+            offset: Offset(180.w, 1000.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(100.w, 1020.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(280.w, 1035.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 1050.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(-25.w, 1070.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(20.w, 1085.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(70.w, 1100.h),
+          ),
+          BackGroundStar(
+            size: 40,
+            offset: Offset(148.w, 1125.h),
+          ),
+          BackGroundStar(
+            size: 30,
+            offset: Offset(220.w, 1120.h),
+          ),
+          BackGroundStar(
+            size: 25,
+            offset: Offset(320.w, 1150.h),
+          ),
+          BackGroundStar(
+            size: 28,
+            offset: Offset(305.w, 1175.h),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -250,19 +647,27 @@ class GradesGroupWidget extends StatelessWidget {
               SizedBox(
                 height: 8.h,
               ),
+              // Wrap(
+              //   alignment: WrapAlignment.spaceBetween,
+              //   runSpacing: 8.h,
+              //   spacing: 10.w,
+              //   children: [
+              //     ...grades.map((grade) => GradeCard(grade: grade, color: getColor(getPercentage(grade),),)).toList(),
+              //   ],
+              // ),
               GridView.builder(
                 itemCount: grades.length,
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
                   childAspectRatio: 1.5,
                   crossAxisSpacing: 10.w,
                   mainAxisSpacing: 10.h,
+                  crossAxisCount: 3,
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   GradeEntity grade = grades[index];
-                  return GradeCard(grade: grade, color: getColor(getPercentage(grade),),);
+                  return FittedBox(fit: BoxFit.scaleDown,child: GradeCard(grade: grade, color: getColor(getPercentage(grade),),));
                 },
               ),
               SizedBox(
