@@ -43,6 +43,7 @@ dependencies:
   flutter_native_splash: ^2.2.16
   smooth_page_indicator: ^1.0.0+2
   numeral: ^2.0.1
+  image_cropper: ^3.0.1
 
 dev_dependencies:
   flutter_test:

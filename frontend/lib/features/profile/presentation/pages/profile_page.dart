@@ -14,6 +14,7 @@ import 'package:frontend/features/grades/presentation/bloc/grades/grades_cubit.d
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_cubit.dart';
 import 'package:frontend/features/profile/presentation/bloc/profile_cubit/profile_states.dart';
 import 'package:frontend/features/profile/presentation/widgets/logout_button.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/widgets/common_page_wrapper.dart';
@@ -102,6 +103,38 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<CroppedFile?> cropImageForMobile(String imagePath) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imagePath,
+      maxHeight: 200,
+      maxWidth: 200,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      compressFormat: ImageCompressFormat.png,
+      compressQuality: 100,
+      cropStyle: CropStyle.circle,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: "Crop your image",
+            toolbarColor: context.colorScheme.onSurface,
+            backgroundColor: context.theme.scaffoldBackgroundColor,
+            toolbarWidgetColor: context.colorScheme.onBackground,
+            activeControlsWidgetColor: context.colorScheme.tertiary,
+            initAspectRatio: CropAspectRatioPreset.square,
+            showCropGrid: false,
+            lockAspectRatio: true,
+        ),
+        IOSUiSettings(
+          title: "Crop your image",
+          aspectRatioLockEnabled: true,
+        ),
+      ],
+    );
+
+    return croppedFile;
+  }
+
   void chooseImageForWindows() async {
     final filePicker = OpenFilePicker()
       ..filterSpecification = {
@@ -118,13 +151,17 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void chooseImage(ImageSource source) async {
+  void chooseImageForMobile(ImageSource source) async {
     XFile? image = await _imagePicker.pickImage(source: source);
 
     if (image == null) return;
 
+    CroppedFile? croppedFile = await cropImageForMobile(image.path);
+
+    if (croppedFile == null) return;
+
     setState(() {
-      newProfileImage = File(image.path);
+      newProfileImage = File(croppedFile.path);
     });
   }
 
@@ -150,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 onPressed: () {
                   context.navigator.pop();
-                  chooseImage(ImageSource.gallery);
+                  chooseImageForMobile(ImageSource.gallery);
                 },
               ),
               const Divider(
@@ -164,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   onPressed: () {
                     context.navigator.pop();
-                    chooseImage(ImageSource.camera);
+                    chooseImageForMobile(ImageSource.camera);
                   }),
               const Divider(
                 color: Colors.black,
