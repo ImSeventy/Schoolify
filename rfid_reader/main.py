@@ -17,25 +17,11 @@ console_stdout = logging.StreamHandler()
 console_stdout.setLevel(logging.INFO)
 console_stdout.setFormatter(ColoredFormatter(console_format))
 
-if os.path.exists("./logs/latest.log"):
-    os.rename(
-        "./logs/latest.log",
-        f"./logs/server-{datetime.now():%h-%d-%H-%M-%S}-bb.log",
-    )
-
-log_file = TimedRotatingFileHandler(
-    filename=f"./logs/latest.log",
-    encoding="utf-8",
-    when="d",
-    interval=1,
-)
-
-log_file.setLevel(logging.DEBUG)
 logging.basicConfig(
     level=logging.DEBUG,
     datefmt="%I:%M:%S %p",
     format="[%(asctime)s] [%(module)s] [%(funcName)s] [%(levelname)s]: %(message)s",
-    handlers=[console_stdout, log_file],
+    handlers=[console_stdout],
     force=True,
 )
 
@@ -52,7 +38,6 @@ def DEBUG_FILTER(record):
     )
 
 console_stdout.addFilter(DEBUG_FILTER)
-log_file.addFilter(DEBUG_FILTER)
 
 port = SerialReader(
     config["serial_port"],
