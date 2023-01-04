@@ -31,23 +31,25 @@ class AbsenceWidget extends StatelessWidget {
               color: context.colorScheme.secondary,
               size: 55.sp,
             ),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                text: "G${absenceEntity.grade}\n",
-                style: context.theme.textTheme.subtitle2,
-                children: [
-                  TextSpan(
-                    text: "${absenceEntity.semester == 1 ? '1st' : '2nd'} term\n"
-                  ),
-                  TextSpan(
-                    text: absenceEntity.date.dateFormat,
-                    style: TextStyle(
-                      color: context.colorScheme.onPrimaryContainer
+            FittedBox(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: "G${absenceEntity.grade}\n",
+                  style: context.theme.textTheme.subtitle2,
+                  children: [
+                    TextSpan(
+                      text: "${absenceEntity.semester == 1 ? '1st' : '2nd'} term\n"
+                    ),
+                    TextSpan(
+                      text: absenceEntity.date.dateFormat,
+                      style: TextStyle(
+                        color: context.colorScheme.onPrimaryContainer
+                      )
                     )
-                  )
-                ]
+                  ]
 
+                ),
               ),
             ),
           ],

@@ -19,7 +19,13 @@ class GradesGroupWidget extends StatelessWidget {
   }
 
   double get totalPercentage {
-    return grades.map(getPercentage).reduce((a, b) => a + b) / grades.length;
+    double degree = 0;
+    double fullDegree = 0;
+    for (GradeEntity grade in grades) {
+      degree += grade.grade;
+      fullDegree += grade.fullDegree;
+    }
+    return (degree / max(fullDegree, 1)) * 100;
   }
 
   Color getColor(double percentage) {
