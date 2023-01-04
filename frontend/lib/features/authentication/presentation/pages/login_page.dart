@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
             showToastMessage(newState.message, Colors.red, context);
           } else if (newState is LoginSucceededState) {
             showToastMessage("Logged in successfully", Colors.green, context);
+            setCubitsData(context);
             context.pushNamedAndRemove(Routes.home);
           } else if (newState is GetStudentByRfidSucceededState) {
             currentRfid = null;
