@@ -20,13 +20,14 @@ import '../../../../dependency_container.dart';
 import '../widgets/credentials_field.dart';
 import '../widgets/submit_button.dart';
 
-String? currentRfid;
+// String? currentRfid;
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _emailTextEditingController;
   late TextEditingController _passwordTextEditingController;
   StreamSubscription? rfidStreamSub;
+  String? currentRfid;
 
   @override
   void initState() {
@@ -73,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
             showToastMessage("Logged in successfully", Colors.green, context);
             context.pushNamedAndRemove(Routes.home);
           } else if (newState is GetStudentByRfidSucceededState) {
+            currentRfid = null;
             await context.pushNamed(Routes.rfidLogin,
                 arguments: RfidLoginPageArgs(student: newState.student));
-            currentRfid = null;
           }
         },
         builder: (context, state) {
