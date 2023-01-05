@@ -72,7 +72,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
         } else if (state is LoginSucceededState) {
           setCubitsData(context);
           showToastMessage("Logged in successfully", Colors.green, context);
-          context.pushNamedAndRemove(Routes.home);
+          context.navigator.pop(true);
         }
       },
       builder: (context, state) {

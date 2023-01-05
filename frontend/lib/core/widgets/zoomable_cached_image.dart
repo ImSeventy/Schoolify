@@ -8,6 +8,8 @@ class ZoomableCachedImage extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
+  final double zoomHeight;
+  final double zoomWidth;
   final BoxFit fit;
   final String placeHolderAssetPath;
   const ZoomableCachedImage({
@@ -17,6 +19,8 @@ class ZoomableCachedImage extends StatelessWidget {
     required this.height,
     required this.fit,
     required this.placeHolderAssetPath,
+    this.zoomHeight = 650,
+    this.zoomWidth = 400
   }) : super(key: key);
 
   void showImageDialog(BuildContext context) {
@@ -25,8 +29,8 @@ class ZoomableCachedImage extends StatelessWidget {
       builder: (context) {
         return Dialog(
           child: SizedBox(
-            width: 400.w,
-            height: 650.h,
+            width: zoomWidth.w,
+            height: zoomHeight.h,
             child: InteractiveViewer(
               minScale: 0.5,
               child: CachedImageWithPlaceHolder(

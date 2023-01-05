@@ -75,9 +75,12 @@ class _LoginPageState extends State<LoginPage> {
             setCubitsData(context);
             context.pushNamedAndRemove(Routes.home);
           } else if (newState is GetStudentByRfidSucceededState) {
-            currentRfid = null;
-            await context.pushNamed(Routes.rfidLogin,
+            bool succeeded = await context.pushNamed(Routes.rfidLogin,
                 arguments: RfidLoginPageArgs(student: newState.student));
+            currentRfid = null;
+            if (succeeded) {
+              context.pushNamedAndRemove(Routes.home);
+            }
           }
         },
         builder: (context, state) {

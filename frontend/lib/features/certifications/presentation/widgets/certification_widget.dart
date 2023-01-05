@@ -76,8 +76,8 @@ class CertificationWidget extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: 331.w,
-                height: 500.h,
+                width: 600.w,
+                height: 350.h,
                 color: Colors.grey[900],
                 padding: EdgeInsets.symmetric(horizontal: 44.w, vertical: 44.h),
                 child: Stack(
@@ -89,6 +89,8 @@ class CertificationWidget extends StatelessWidget {
                           imageUrl: certificationEntity.imageUrl!,
                           width: constrains.maxWidth,
                           height: constrains.maxHeight,
+                          zoomHeight: 400,
+                          zoomWidth: 600,
                           fit: BoxFit.fill,
                           placeHolderAssetPath: ImagesPaths.imagePlaceholder,
                         );
