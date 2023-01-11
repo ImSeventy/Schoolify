@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, state) {
           LoginCubit loginCubit = context.read<LoginCubit>();
           rfidStreamSub = RfidStreamHandler.getRfIdStream().listen((rfid) async {
+            print(currentRfid);
             if (currentRfid != null) return;
             currentRfid = rfid;
             loginCubit.getStudentByRfid(rfid: int.parse(rfid));

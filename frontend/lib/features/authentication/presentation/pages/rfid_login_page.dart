@@ -97,7 +97,7 @@ class _RfidLoginPageState extends State<RfidLoginPage> {
                 elevation: 0,
                 leading: IconButton(
                   onPressed: () {
-                    context.navigator.pop();
+                    context.navigator.pop(false);
                   },
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 ),
