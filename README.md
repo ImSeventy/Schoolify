@@ -1,29 +1,58 @@
-# Streamline Your School's Administrative Tasks
+# Schoolify Mobile and Desktop App
 
-As a school administrator, you have a lot on your plate. From managing student absences and tracking grades to issuing warnings and organizing certifications, it can be overwhelming to keep everything organized and running smoothly. That's where our innovative application comes in!
+Schoolify is a comprehensive academic management system that provides both mobile and desktop applications to facilitate students' academic progress tracking. The system utilizes Python FastAPI for the backend and Flutter for the frontend, offering a robust and efficient user experience.
 
-With our comprehensive tool, you can easily manage all of your school's administrative tasks in one place. Here's a closer look at some of the features our application offers:
+## Features
 
-## Absence Management
+### 1. Home
 
-Keeping track of student absences can be a headache, especially when you have to communicate with multiple parents and guardians. With our absence management feature, you can easily record and track student absences, and send automatic notifications to parents and guardians to keep them informed. Plus, you can set up customizable absence policies to ensure that all absences are properly documented and accounted for.
+The Home page serves as the central hub of the Schoolify app, providing a summary of the student's grades and absences across all years and semesters. This page offers a quick glance at the student's academic performance and attendance.
 
-## Grade Tracking
+![Home](https://media.discordapp.net/attachments/748306934179823627/1115238054504964096/Screenshot_2023-01-08-10-52-41-52_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
 
-Stay on top of student progress with our real-time grade tracking feature. You can quickly and easily view student grades, as well as set up alerts for when grades fall below a certain threshold. This helps you identify struggling students early on, so you can intervene and provide support before it's too late.
+### 2. Warnings
 
-## Warning Issuance
+The Warnings page displays any notifications or warnings received by the student for each year and semester. It alerts the student about potential issues or concerns that require attention, such as low grades, attendance irregularities, or disciplinary actions.
 
-Sometimes, students may need a little extra guidance or support to get back on track. With our warning issuance feature, you can quickly and easily issue warnings for behavior or academic concerns. This allows you to communicate with students and their parents or guardians and provide the necessary support to help them succeed.
+![Warnings](https://media.discordapp.net/attachments/748306934179823627/1115238053427040286/Screenshot_2023-01-08-10-52-47-02_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
 
-## Certification Organization
+### 3. Grades
 
-Stay organized with all of your school's certifications in one place. Our certification organization feature allows you to upload and store all of your school's certifications, making it easy to access and reference them whenever you need to.
+The Grades page allows students to view their grades for each year and semester. It provides a comprehensive overview of their academic performance, showcasing the grades obtained in various subjects or courses throughout their academic journey.
 
-## Announcement Dissemination
+![Grades](https://media.discordapp.net/attachments/748306934179823627/1115238054270095450/Screenshot_2023-01-08-10-53-06-92_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
 
-Easily disseminate announcements to students, parents, and staff with our announcement dissemination feature. Whether you need to share important news, updates, or upcoming events, our application makes it easy to get the word out.
+### 4. Absences
 
-But that's not all – our application is fully customizable to fit your specific needs and preferences and offers an easy-to-use interface that even those with minimal tech skills can navigate. Plus, it's mobile accessible, so you can access it from any device, anytime, anywhere.
+The Absences page tracks and displays the student's attendance record for each year and semester. It helps students monitor their attendance history and identify any patterns of irregular attendance, which can impact their academic progress.
 
-But we understand the importance of security, which is why we've implemented strict measures to protect sensitive student and school information. Save time and streamline your administrative tasks with our secure and convenient application. Try it out today!
+![Absences](https://media.discordapp.net/attachments/748306934179823627/1115238053129228319/Screenshot_2023-01-08-10-52-56-85_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
+
+### 5. Certifications
+
+The Certifications page showcases the certifications or achievements earned by the student during their academic journey. It provides a space for students to store and display their accomplishments, such as course completion certificates, participation certificates, or any other relevant recognition.
+
+![Certifications](https://media.discordapp.net/attachments/748306934179823627/1115238054014226432/Screenshot_2023-01-08-10-52-52-77_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
+
+### 6. School Announcements
+
+The School Announcements page keeps students updated with important news and announcements from the school administration. It serves as a communication channel between the school and the students, ensuring that students are aware of any upcoming events, deadlines, or changes in the academic calendar.
+
+![School Announcements](https://media.discordapp.net/attachments/748306934179823627/1115238053712240640/Screenshot_2023-01-08-10-53-10-53_426fed783bb7bd69c67b69d46db5ccdc.jpg?width=306&height=662)
+
+### 7. Profile Info
+
+The Profile Info page allows students to view and manage their personal information within the Schoolify app. Students can update their contact details, profile picture, or make any necessary changes to ensure the accuracy of their information.
+
+
+### Desktop App
+
+In addition to the mobile app, Schoolify also provides a desktop application. The desktop app offers the same features and functionalities as the mobile app but with a user interface optimized for larger screens, providing students with flexibility in accessing their academic information.
+
+### Backend with Python FastAPI
+
+The Schoolify backend is developed using Python FastAPI, a modern, fast (high-performance), web framework for building APIs with Python. FastAPI provides robust features and performance optimizations, ensuring efficient data processing and secure communication between the frontend and backend components of Schoolify.
+
+### Frontend with Flutter
+
+The Schoolify frontend is built using Flutter, a cross-platform framework for developing mobile and desktop applications. Flutter enables the creation of beautiful, responsive user interfaces and delivers a smooth user experience across multiple platforms. With Flutter, Schoolify offers a visually appealing and intuitive interface for students to access their academic information.
